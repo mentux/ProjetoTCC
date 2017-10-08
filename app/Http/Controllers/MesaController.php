@@ -74,19 +74,32 @@ class MesaController extends Controller{
         return Response::json($produto);
 
     }
-
     public function Adicionar(Request $request) {
         $id_produto = $request->get('botao');
-        if($id_produto != null){
-           $est = Produto::find($id_produto);
-       
-        $this->carrinho->add($id_produto,$request->get('quant'));
-                
-            
-        return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho');                      
+
+        $itens = $this->carrinho->getItens();
+
+        foreach($itens as $item){
+            //die('cheguei aqui');
+            $est = Produto::find($id_produto);
+            if($id_produto == null){
+                return \Redirect::back()->with('mensagens-sucesso', 'Erro, Não há produto Selecionado');
+            }elseif($item->produto->id == $id_produto){
+                $item->qtde++;
+                return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho');  
+            }else{
+                $this->carrinho->add($id_produto,1);
+                return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho');  
+            }
+
+        }
+
+        if($this->carrinho->add($id_produto,1)){   
+            return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho');
         }else{
-            return \Redirect::back()
-                            ->withErrors('Nenhum código de produto informado para adicionar ao carrinho.');
+            return redirect()->back()
+           ->with('mensagens-danger', 'Erro não é possivel adicionar Produto desejado')
+           ->withInput();    
         }
         
     }

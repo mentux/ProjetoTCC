@@ -39,17 +39,10 @@
 	        <img style='height:200px; width:200px;' class="imagem" />
             <br/>
             <form class="action_carrinho"  action="{{route('adicionar')}}">
-                <select name="quant">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
 	           <button value="" type="submit" name="botao" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
+            <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
             </form>
 	      </div>
 	    </div>
@@ -72,7 +65,9 @@
                     <tr>
                         <th></th>
                         <th>Produto</th>
-                        <th class="text-right">Preço</th>
+                        <th class="text-right">Preço Unitário</th>
+                        <th>Quantidade</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,8 +81,11 @@
                                 {{$item->produto->nome}}
                             </a>
                         </td>
-                        <td class="text-right">
+                        <td class="text-center">
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
+                        </td>
+                        <td class="text-center"> 
+                            {{$item->qtde}}
                         </td>
                         <td> <a href="{{route('remover', $item->produto->id)}}" 
                                 class="btn btn-danger btn-xs pull-right">Excluir item </a>
@@ -101,7 +99,7 @@
                             Total
                         </td>
                         <td>
-                            <h4 class="text-right text-danger">
+                            <h4 class="text-center text-danger">
                                 R${{number_format($total,2,',','.')}}
                             </h4>
                         </td>
@@ -143,6 +141,7 @@ $(function() {
                 $('.valor').html('R$: '+id.preco_venda);
                 $(".imagem").attr("src",'http://localhost:8000/imagem/arquivo/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
+                //$('.btn_excluir').attr('value',id.id); adicionar o value no <a> de excluir o item do carrinho caso for testar
   				console.log(id);
                   //$("#alerta").fadeIn().html("Avaliado com sucesso");
                 },
@@ -150,11 +149,9 @@ $(function() {
             
         });
 });
-/*$(document).on("click", ".teste", function(){
-        var teste = $(this).find('.teste').last();
-        alert(teste);
-    });*/
+/*$('tr.teste').click(function(){
+    var teste = $(this);
+    console.log(teste);
+});*/
 </script>
-
-
 @stop
