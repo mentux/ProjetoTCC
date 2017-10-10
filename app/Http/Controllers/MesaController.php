@@ -70,6 +70,7 @@ class MesaController extends Controller{
         $produto = Produto::all();
         $itens = $this->carrinho->getItens();
         $total = $this->carrinho->getTotal();
+        \Session::put('id_mesa',$id);
         return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total]);
     }
 
@@ -152,12 +153,12 @@ class MesaController extends Controller{
             $pedido = new Venda();
         
         DB::beginTransaction();
-        
-        $pedido->user_id = $request->id;
+        $pedido->user_id = \Session::get('id_mesa');//só por questoes de teste
         $pedido->data_venda = \Carbon\Carbon::now();
         $pedido->valor_venda = $this->carrinho->getTotal();
         //$pedido->pagseguro_transaction_id = $req->transaction_id;
-        $pedido->id_mesa = $request->id;
+        $pedido->id_mesa = \Session::get('id_mesa');
+        $pedido->status = 1;
         $pedido->save();
         
         foreach ($this->carrinho->getItens() as $idx => $itemCarrinho) {
@@ -176,8 +177,13 @@ class MesaController extends Controller{
 
         $this->carrinho->esvaziar();
 
-        return redirect('/')->with('mensagens-sucesso', 'Pedido realizado com sucesso.');
+        return redirect('mesa_pedido/'.$pedido->id_venda)->with('mensagens-sucesso', 'Pedido realizado com sucesso.');
         
         }
+
+    public function MesaPedido($id_pedido){
+        $pedido = Venda::find($id_pedido);
+        return view('frente.mesa_pedido',['pedido'=>$pedido]);
+    }
           
 }

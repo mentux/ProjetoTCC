@@ -166,7 +166,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
 });
 
 
-
+Route::get('mesa_pedido/{id_pedido}','MesaController@MesaPedido');
 Route::get('getmesa/{id}','MesaController@getMesaId');
 
 ///////////Rotas usuário

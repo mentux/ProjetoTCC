@@ -21,6 +21,8 @@
         </button>
         {!! Form::close() !!}
         <div class="navbar-collapse collapse navbar-right">
+        @if((Route::getCurrentRoute()->getPath()) == 'mesa_pedido/{id_pedido}')
+        @else
           <ul class="nav navbar-nav">
                 <li><a href="{{url('/')}}">Home</a></li>
                 <li><a href="{{route('categoria.listar')}}">Categorias</a></li>
@@ -45,6 +47,7 @@
                 @endif
               </ul>
             </li>
+        @endif
           </ul>
         </div><!--/.nav-collapse -->
     </div>
