@@ -1,8 +1,7 @@
 @extends('layouts.admin')
 
 @section('conteudo')
-<h2>Painel de controle - {{Auth::user()->name}}</h3>
-
+<h2>Painel de controle</h3>
 <div class="container">
     <div class="row">
         <div class="col-sm-4 col-sm-offset-1">

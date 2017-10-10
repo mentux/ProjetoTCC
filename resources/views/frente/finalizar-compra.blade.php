@@ -89,13 +89,14 @@ $(function() {
             //var dados = ava;
             
             $.ajax({
-                type: "POST",
+                type: "GET",
                 url: '{{route("carrinho.avaliar")}}',
                 data: {id_produto: id_produto, avaliacao: avaliacao},
                 success: function( msg ) {
                   elementToHide.hide();  
                   $("#alerta").hide();
-                  //$("#alerta").fadeIn().html("Avaliado com sucesso");
+                  //$("#alerta").fadeIn().html("Avaliado com sucesso"); //vc ta tirando o ajax do mais detalhes do produtos../vou chamar a rota
+
                     $("#alerta").html("Avaliado com sucesso").show().fadeOut(3000);
                 },
             });

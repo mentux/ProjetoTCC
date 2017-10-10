@@ -110,13 +110,13 @@ class AuthController extends Controller
     /** 
      * sobrescreve o método authenticated para testar qual layout mostrar
      */
-    public function authenticated($request, $user ) {
+    /*public function authenticated($request, $user ) {
         if ($user->role == 'admin') {
             return redirect()->route('admin.dashboard');
         }
         
         return redirect()->intended($this->redirectPath());
-    }
+    }*/
         protected $redirectPath = '/';
 
     /**

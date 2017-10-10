@@ -23,16 +23,16 @@
                 <li><a href="{{route('admin.marca.listar')}}">Marcas</a>
                 <li><a href="{{route('admin.produto.listar')}}">Produtos</a>
                 <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a>       
-                @if (Auth::guest())
+                @if(session('admin') == '')
                 <li><a href="{{ url('/login') }}">Login</a></li>
                 @else
                 <li>
                 <a href="{{route('admin.dashboard')}}">
-                   {{ Auth::user()->name }}
+                   {{ \Session::get('nome')}}
                 </a>
                 </li>
                 <li>
-                <a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                <a href="{{url('logout_admin')}}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                 </li>
                 @endif
               </ul>

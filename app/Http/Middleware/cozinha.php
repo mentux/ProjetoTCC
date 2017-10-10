@@ -17,7 +17,7 @@ class cozinha {
         
         if(\Session::get('cozinha') == false){
     
-            return redirect('login_teste');
+            return redirect('login');
         }
             
         return $next($request);

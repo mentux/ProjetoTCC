@@ -31,16 +31,16 @@
                 @endif
                 <li><a href="{{route('sobre')}}">Sobre</a></li>            
 
-                @if (Auth::guest())
+                @if (session('cozinha') == '')
                     <li><a href="{{ url('/login') }}">Login</a></li>
                 @else
                     <li class="small">
-                        <a href="{{route('cliente.dashboard')}}">
-                            {{ Auth::user()->name }}
+                        <a href="{{url('cozinha_dashboard')}}">
+                            {{ \Session::get('nome') }}
                         </a>
                     </li>
                 <li>
-                    <a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                    <a href="{{ url('logout_cozinha') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                 </li>
                 @endif
               </ul>

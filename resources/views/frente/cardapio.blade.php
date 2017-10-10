@@ -41,7 +41,7 @@
             <form class="action_carrinho"  action="{{route('adicionar')}}">
 	      </div>
 	      <div class="modal-footer">
-	           <button value="" type="submit" name="botao" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
+	           <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
             <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
             </form>
 	      </div>
@@ -109,7 +109,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
-            <button value="" type="submit" name="botao" class="btn btn-primary btn-lg  pull-left add_carrinho" > Confirmar pedido</button>
+                <button type="submit" name="botao" class="btn btn-primary btn-lg  pull-left add_carrinho" > Confirmar pedido</button>
           </div>
         </div>
       </div>
@@ -123,13 +123,6 @@ $(function() {
         }
     });
         $('.getid').click(function(){
-            //evt.preventDefatult;
-            //var avaliacao = $(this).prev('select').val();//$(".avaliado option:selected").val();
-            //var elementToHide = $(this);
-            //console.log($(this).data('id'));
-            //console.log(ava);
-            //var dados = id_produto;
-            //var dados = ava;
             var id = $(this).attr('value');
             $.ajax({
                 type: "GET",
@@ -141,17 +134,21 @@ $(function() {
                 $('.valor').html('R$: '+id.preco_venda);
                 $(".imagem").attr("src",'http://localhost:8000/imagem/arquivo/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
-                //$('.btn_excluir').attr('value',id.id); adicionar o value no <a> de excluir o item do carrinho caso for testar
-  				console.log(id);
-                  //$("#alerta").fadeIn().html("Avaliado com sucesso");
+  				//console.log($('.add_carrinho').val());
+                console.log(id.id);
                 },
             });
             
         });
 });
-/*$('tr.teste').click(function(){
-    var teste = $(this);
-    console.log(teste);
-});*/
+</script>
+<script type="text/javascript">
+$(function() {
+    
+        $('.add_carrinho').click(function(){
+            window.location.href =  "http://localhost:8000/finalizar_cardapio/";    
+            
+        });
+});
 </script>
 @stop

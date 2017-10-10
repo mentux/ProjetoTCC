@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row" style="margin-top: 30px;">
         
-        @include('auth.login.form')
+        @include('frente.login_form')
         
         @include('auth.register.form')
 

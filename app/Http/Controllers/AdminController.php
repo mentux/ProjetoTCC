@@ -14,17 +14,19 @@ use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller {
 
+    public function logout_admin(){
+        \Session::forget('admin');
+        return redirect('login');
+    }
+
     public function getDashboard() {
-        $u = Auth::guard()->user();
-        if($u['role'] != 'admin'){
-                return redirect()->action('FrenteLojaController@getIndex');
-            }else{    
+          
                 $models['qtdePedidos']['total'] = Venda::count();
                 $models['qtdePedidos']['pendentes-pagamento'] = Venda::naoPagas()->count();
                 $models['qtdePedidos']['pagos'] = Venda::pagas()->count();
                 $models['qtdePedidos']['finalizados'] = Venda::finalizadas()->count();
                 return view('admin.dashboard', $models);    
-            }
+            
     }
     
     public function getPerfil() {

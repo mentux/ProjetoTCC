@@ -8,11 +8,22 @@ use Shoppvel\Http\Requests;
 
 use Shoppvel\Models\Venda;
 
+
 class CozinhaController extends Controller{
 
+    public function getCozinhaDetalhes($id){
+        $venda = Venda::find($id);
+        return view('frente.cozinha.detalhes',['venda'=>$venda]);
+    }
+
+
 	public function dashboard(){
-		return view('frente.cozinha.cozinha_dashboard');
-	}
+        $pendente = Venda::where('status',1)->count();
+        $andamento = Venda::where('status',2)->count();
+        $prontos = Venda::where('status',3)->count();
+        $array = ['pendente'=>$pendente,'andamento'=>$andamento,'prontos'=>$prontos];
+        return view('frente.cozinha.cozinha_dashboard',$array);
+    }
 
 	public function getPendentes(){
 		$venda = Venda::where('status',1)->get();

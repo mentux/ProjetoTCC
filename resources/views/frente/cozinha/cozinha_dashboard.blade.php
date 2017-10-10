@@ -1,6 +1,6 @@
-@extends('layouts.cliente')
+@extends('layouts.cozinha_cabecalho')
 
-@section('conteudo')
+@section('cozinha')
 <h2>Cozinha</h3>
 
 <div class="container">
@@ -12,7 +12,7 @@
                 </div>
                 <div class="panel-body text-center">
                     <h1 class="text-info">
-                        
+                        {{$pendente}}
                     </h1>
                 </div>
             </div>
@@ -24,34 +24,21 @@
                 </div>
                 <div class="panel-body text-center">
                     <h1 class="text-info">
-                        
+                        {{$andamento}}
                     </h1>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4 col-sm-offset-1 ">
+        <div class="col-sm-4 col-sm-offset-3 ">
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <a href="{{url('pedidos_pronto')}}"><h3 class="text-center">Prontos</h3></a>
                 </div>
                 <div class="panel-body text-center">
                     <h1 class="text-info">
-                        
-                    </h1>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-4">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <a href="{{url('logout_teste_cozinha')}}"><h3 class="text-center">LOGOUT</h3></a>
-                </div>
-                <div class="panel-body text-center">
-                    <h1 class="text-info">
-                        
+                        {{$prontos}}
                     </h1>
                 </div>
             </div>
