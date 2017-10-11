@@ -7,6 +7,7 @@ use Shoppvel\Http\Requests;
 use Shoppvel\Models\Mesa;
 use Shoppvel\Models\Venda;
 use Shoppvel\Models\VendaItem;
+use Shoppvel\Models\CarrinhoItem;
 use Shoppvel\Models\Carrinho;
 use Shoppvel\Models\Produto;
 use Illuminate\Support\Facades\Response;
@@ -68,7 +69,7 @@ class MesaController extends Controller{
         //dd($request->id); 
         $mesa = Mesa::find($id);
         $produto = Produto::all();
-        $itens = $this->carrinho->getItens();
+        $itens = $this->carrinho->getItens();// o esquema funciona como se fosse esse carrinho
         $total = $this->carrinho->getTotal();
         \Session::put('id_mesa',$id);
         return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total]);
@@ -82,10 +83,9 @@ class MesaController extends Controller{
     public function Adicionar(Request $request) {
         $id_produto = $request->get('botao');
         $itens = $this->carrinho->getItens();
-        //$carrinho_item = array($itens['CarrinhoItem']);
+
         try{
             foreach($itens as $item){
-                //dd($item->produto->id);
                 $est = Produto::find($id_produto);
                 if($id_produto == null){
                     return \Redirect::back()->with('mensagens-erro', 'Erro, Não há produto Selecionado');
@@ -115,13 +115,15 @@ class MesaController extends Controller{
            ->withInput();    
         }
         
-    }
+    
     //dd($itens[0]->CarrinhoItem->produto->id);
-            //$flag=0;//avisar se encontrou ou nn;
-            //procura o id se é igual    
-            /*for($i=0;$i<count($itens);$i++){
-                dd($itens);
-                if($itens['id'][$i]==$id_produto){
+            /*for ( $i=0; count($itens)<$i; $i++ ) {
+                echo $itens['CarrinhoItem']['Produto'][$i];
+            }*/
+            /*$flag=0; 
+            for($i=0;$i<count($itens[$i]->produto[]->id);$i++){
+                
+                if($itens[$i]->produto->id ==$id_produto){
                 $item->qtde++;
                         return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 1');
                 $flag=1;
@@ -131,7 +133,7 @@ class MesaController extends Controller{
                     $this->carrinho->add($id_produto);
                         return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 1');    
             }*/
-
+    }
     /*public function Adicionar(Request $request){
         $id_produto = $request->get('botao');
         $itens = $this->carrinho->getItens();

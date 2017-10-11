@@ -3,6 +3,7 @@
 namespace Shoppvel\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Shoppvel\Models\Venda;
 
 class Mesa extends Model{
 

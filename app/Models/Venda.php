@@ -4,6 +4,7 @@ namespace Shoppvel\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Shoppvel\User;
+//use Shoppvel\Models\Mesa;
 
 /**
  * Modelo de acesso aos dados de venda, tratados na frente como Pedidos.
@@ -15,6 +16,7 @@ class Venda extends Model {
     private $pagseguro = null;
     protected $dates = ['data_venda'];
     protected $primaryKey = 'id_venda';
+    protected $foreignKey = 'id_mesa';
 
     private function initPagSeguro() {
         if ($this->pagseguro == null) {
@@ -29,6 +31,11 @@ class Venda extends Model {
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function mesa() {
+        return $this->belongsTo('\Shoppvel\Models\Mesa','id_mesa');
+    }
+
 
     public function itens() {
         return $this->hasMany(VendaItem::class);

@@ -51,7 +51,7 @@ class CozinhaController extends Controller{
         $pedido->status = 2;
         $pedido->save();
         
-        return redirect('pedidos_andamento');
+        return redirect('pedidos_andamento')->with('mensagens-sucesso', 'Status alterado com sucesso');
     }
 
     public function putPronto(Request $request, $id) {
@@ -64,7 +64,7 @@ class CozinhaController extends Controller{
         $pedido->status = 3;
         $pedido->save();
         
-        return redirect('pedidos_pronto');
+        return redirect('pedidos_pronto')->with('mensagens-sucesso', 'Status alterado com sucesso');
     }
 
 

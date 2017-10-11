@@ -18,13 +18,23 @@
     </thead>
     <tbody>
         @foreach($venda as $pedido)
-        <tr>    
+        <tr>   
             <td>
-            2               
+                {{$pedido->mesa->numero}}
             </td>
+            @if($pedido->status == 1)
             <td>
                 Pendente
             </td>
+            @elseif($pedido->status == 2)
+            <td>
+                Em andamento
+            </td>
+            @else
+            <td>
+                Pronto
+            </td>
+            @endif
             <td class="text-left small">
              <a href="{{route('cozinha.detalhes',$pedido->id_venda)}}" class="btn btn-primary" >Mais detalhes</a>
             </td>
@@ -35,9 +45,11 @@
                 {{ Form::close() }}
             </td>
             @elseif($pedido->status == 2)
+            <td class='text-left small'>
             {{ Form::open (['route' => ['status_pronto', $pedido->id_venda], 'method' => 'PUT']) }}
                         {{ Form::submit('Finalizar', ['class'=>'btn btn-warning']) }}
                 {{ Form::close() }}
+            </td>
             @else
             <td class="text-left small">
                 
