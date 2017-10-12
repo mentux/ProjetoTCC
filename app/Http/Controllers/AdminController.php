@@ -7,9 +7,9 @@ use Shoppvel\Http\Requests;
 use Shoppvel\Models\Carrinho;
 use Shoppvel\Models\Produto;
 use Shoppvel\Models\Venda;
+use Shoppvel\Models\Mesa;
 use Shoppvel\Models\VendaItem ;
 use Illuminate\Support\Facades\Auth;
-
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller {
@@ -67,7 +67,7 @@ class AdminController extends Controller {
         $pedido->pago = TRUE;
         $pedido->save();
         
-        return redirect()->route('admin.pedidos', '?status=pagos')->with('mensagens-sucesso', 'Pedido atualizado');
+        return redirect()->route('admin.pedidos', '?status=pagos')->with('mensagens-sucesso', 'Pedido pago');
     }
     
     public function putPedidoFinalizado(Request $request, $id) {
@@ -81,5 +81,23 @@ class AdminController extends Controller {
         $pedido->save();
         
         return redirect()->route('admin.pedidos', '?status=finalizados')->with('mensagens-sucesso', 'Pedido finalizado');
+    }
+
+    public function listarMesasOcupadas(){
+        $mesas = Mesa::where('status',2)->get();
+        return view('admin.mesas_ocupadas',['mesas'=>$mesas]);
+    }
+
+    public function putLiberarMesa(Request $request, $id) {
+        $mesa = Mesa::find($id);
+        
+        if ($mesa == null) {
+            return back()->withErrors('Mesa não encontrada');
+        }
+        
+        $mesa->status = 1;
+        $mesa->save();
+        
+        return redirect('mesas_ocupadas')->with('mensagens-sucesso', 'Mesa liberada');
     }
 }

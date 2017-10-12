@@ -17,4 +17,8 @@ class Mesa extends Model{
     public function filhos(){
     	return $this->hasMany(Produto::class,"id");
     }
+
+    public function pedidos(){
+    	return $this->hasMany('\Shoppvel\Models\Venda','id_mesa');
+    }
 }

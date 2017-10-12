@@ -6,13 +6,13 @@
     <thead>
         <tr>
             <th>Data</th>
-            <th class="text-right">Cliente</th>
+            <th class="text-right">Mesa</th>
             <th class="text-right">Valor</th>
             <th class="text-right">Método de Pagamento</th>
-            <th class="text-right">Status no Pagseguro</th>
+            <!--<th class="text-right">Status no Pagseguro</th>-->
             <th class="text-right">Status Local</th>
             <th class="text-right">Enviado / Finalizado</th>
-            <th class="text-right">Id no Pagseguro</th>
+            <!-- <th class="text-right">Id no Pagseguro</th> -->
             <th class="text-right"></th>
         </tr>
     </thead>
@@ -20,12 +20,12 @@
         @forelse($pedidos as $pedido)
         <tr>
             <td>
-                <a href="{{route('admin.pedidos', $pedido->id)}}">
-                    {{$pedido->data_venda->format('d/m/Y H:i')}}
+                <a href="{{route('admin.pedidos', $pedido->id_venda)}}">
+                    {{$pedido->data_venda->format('d/m/Y h:m')}}
                 </a>
             </td>
             <td>
-                {{$pedido->user->name}}
+                {{$pedido->mesa->numero}}
             </td>
             <td>
                 {{number_format($pedido->valor_venda, 2, ',', '.')}}
@@ -33,9 +33,9 @@
             <td class="text-right">
                 {{$pedido->metodo_pagamento}}
             </td>
-            <td class="text-right">
+            <!--<td class="text-right">
                 {{$pedido->status_pagamento}}
-            </td>
+            </td>-->
             <td class="text-right small">
                 @if ($pedido->pago)
                     @if ($pedido->enviado)
@@ -53,18 +53,16 @@
                     : '<b class="text-warning">Aguardando atualização de status de pagamento</b>'
                 !!}
             </td>
-            <td class="text-right text-muted small">
-                {{$pedido->pagseguro_transaction_id}}
-            </td>
+            
             <td class="text-right small">
                 @if ($pedido->pago == false)
-                    {{ Form::open (['route' => ['admin.pedido.pago', $pedido->id], 'method' => 'PUT']) }}
+                    {{ Form::open (['route' => ['admin.pedido.pago', $pedido->id_venda], 'method' => 'PUT']) }}
                         {{ Form::submit('Baixa de Pagamento', ['class'=>'btn btn-success btn-sm col-sm-12']) }}
                     {{ Form::close() }}
                 @endif
                 @if ($pedido->pago && $pedido->enviado == false)
-                    {{ Form::open (['route' => ['admin.pedido.finalizado', $pedido->id], 'method' => 'PUT']) }}
-                        {{ Form::submit('Marcar Finalizado/Enviado', ['class'=>'btn btn-warning btn-sm col-sm-12']) }}
+                    {{ Form::open (['route' => ['admin.pedido.finalizado', $pedido->id_venda], 'method' => 'PUT']) }}
+                        {{ Form::submit('Marcar Finalizado', ['class'=>'btn btn-warning btn-sm col-sm-12']) }}
                     {{ Form::close() }}
                 @endif
             </td>

@@ -47,6 +47,11 @@
                             </a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{url('mesas_ocupadas')}}">
+                                Mesas ocupadas
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{route('admin.pedidos')}}">
                                 Todos os pedidos
                             </a>

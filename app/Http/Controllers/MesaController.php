@@ -65,14 +65,16 @@ class MesaController extends Controller{
             return redirect()->action('MesaController@listar');
     }
 
-    public function getMesaId(Request $request,$id){
-        //dd($request->id); 
+    public function getMesaId(Request $request,$id){ 
         $mesa = Mesa::find($id);
+        $mesa->status = 2;
+        $mesa->save();
         $produto = Produto::all();
+        $produto_destacado = Produto::where('destacado',1)->get();
         $itens = $this->carrinho->getItens();// o esquema funciona como se fosse esse carrinho
         $total = $this->carrinho->getTotal();
         \Session::put('id_mesa',$id);
-        return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total]);
+        return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total,'produto_destacado'=>$produto_destacado]);
     }
 
     public function getProdutoModal($id){
@@ -152,8 +154,11 @@ class MesaController extends Controller{
 
 
     public function FecharPedido(Request $request){
-            $pedido = new Venda();
-        
+        $itens = $this->carrinho->getItens();
+        if(count($itens) == 0){
+            return redirect()->back()->with('mensagens-danger', 'Nenhum produto adicionado no carrinho.');
+        }else{
+        $pedido = new Venda();
         DB::beginTransaction();
         $pedido->user_id = \Session::get('id_mesa');//só por questoes de teste
         $pedido->data_venda = \Carbon\Carbon::now();
@@ -180,8 +185,10 @@ class MesaController extends Controller{
         $this->carrinho->esvaziar();
 
         return redirect('mesa_pedido/'.$pedido->id_venda)->with('mensagens-sucesso', 'Pedido realizado com sucesso.');
-        
         }
+        
+        
+    }
 
     public function MesaPedido($id_pedido){
         $pedido = Venda::find($id_pedido);

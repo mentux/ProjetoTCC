@@ -153,8 +153,11 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
 
     Route::get('cozinha_dashboard','CozinhaController@dashboard');
     Route::get('pedidos_pendentes','CozinhaController@getPendentes');
+    Route::get('pedidos_pendentes_hoje','CozinhaController@getPendentesHoje');
     Route::get('pedidos_andamento','CozinhaController@getAndamentos');
+    Route::get('pedidos_andamento_hoje','CozinhaController@getAndamentosHoje');
     Route::get('pedidos_pronto','CozinhaController@getProntos');
+    Route::get('pedidos_pronto_hoje','CozinhaController@getProntosHoje');
     Route::put('pedido_pendente_status/{id}', [
                 'as' => 'status_pendente',
                 'uses' => 'CozinhaController@putAndamento'
@@ -205,6 +208,14 @@ Route::any('finalizar_cardapio','MesaController@FecharPedido');
 Route::get('logout_admin','AdminController@logout_admin');
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
+
+     Route::put('mesa_liberada/{id}', [
+                'as' => 'liberar_mesa',
+                'uses' => 'AdminController@putLiberarMesa'
+    ]);
+
+    Route::get('mesas_ocupadas','AdminController@listarMesasOcupadas');
+
     Route::get('admin', [
                 'as' => 'admin',
                 'uses' => 'AdminController@getDashboard'

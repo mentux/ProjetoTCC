@@ -46,22 +46,22 @@ class Venda extends Model {
      * 
      * @link https://laravel.com/docs/5.2/eloquent-mutators
      */
-    public function getStatusPagamentoAttribute() {
+    /*public function getStatusPagamentoAttribute() {
         $this->initPagSeguro();
 
         return $this->pagseguro->getStatus()->getName();
-    }
+    }*/
 
     /**
      * Veja attribute mutators na documentação do Eloquent
      * 
      * @link https://laravel.com/docs/5.2/eloquent-mutators
      */
-    public function getMetodoPagamentoAttribute() {
+    /*public function getMetodoPagamentoAttribute() {
         $this->initPagSeguro();
 
         return $this->pagseguro->getPaymentMethod()->getTypeName();
-    }
+    }*/
 
     public function scopeNaoPagas($query) {
         return $query->where('pago', false);

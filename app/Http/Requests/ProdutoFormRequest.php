@@ -25,7 +25,7 @@ class ProdutoFormRequest extends Request
     {
         return [
             'nome' => 'required|min:3|unique:produtos',
-            'qtde_estoque' => 'required|numeric',
+            'qtde_estoque' => 'required|integer|min:0',
             'preco_venda' => 'required',
             'categoria_id' => 'required',
             'marca_id' => 'required',

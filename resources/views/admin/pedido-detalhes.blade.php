@@ -18,12 +18,12 @@
     <tbody>
         <tr>
             <td>
-                <a href="{{route('cliente.pedidos', $pedido->id)}}">
+                <a href="{{route('cliente.pedidos', $pedido->id_venda)}}">
                     {{$pedido->data_venda->format('d/m/Y H:i')}}
                 </a>
             </td>
             <td>
-                {{$pedido->user->name}}
+                
             </td>
             <td>
                 {{number_format($pedido->valor_venda, 2, ',', '.')}}
@@ -47,7 +47,7 @@
                 !!}
             </td>
             <td class="text-right text-muted small">
-                {{$pedido->pagseguro_transaction_id}}
+                
             </td>
         </tr>
     </tbody>

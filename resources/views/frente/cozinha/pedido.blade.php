@@ -3,11 +3,37 @@
 @section('cozinha')
 	@if((Route::getCurrentRoute()->getPath()) == 'pedidos_pendentes')
     <h2>Pedidos Pendentes </h2>
+    <a class='btn btn-primary' href="{{url('pedidos_pendentes_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_pendentes')}}">Todos</a>
+
     @elseif((Route::getCurrentRoute()->getPath()) == 'pedidos_andamento')
     <h2>Pedidos em Andamento</h2>
-    @else
+    <a class='btn btn-primary' href="{{url('pedidos_andamento_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_andamento')}}">Todos</a>
+
+    @elseif((Route::getCurrentRoute()->getPath()) == 'pedidos_andamento_hoje')
+    <h2>Pedidos em Andamento Hoje</h2>
+    <a class='btn btn-primary' href="{{url('pedidos_andamento_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_andamento')}}">Todos</a>
+
+    @elseif((Route::getCurrentRoute()->getPath()) == 'pedidos_pendentes_hoje')
+    <h2>Pedidos Pendentes Hoje</h2>
+    <a class='btn btn-primary' href="{{url('pedidos_pendentes_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_pendentes')}}">Todos</a>
+
+
+    @elseif((Route::getCurrentRoute()->getPath()) == 'pedidos_pronto_hoje')
+    <h2>Pedidos Prontos Hoje</h2>
+    <a class='btn btn-primary' href="{{url('pedidos_pronto_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_pronto')}}">Todos</a>
+
+    @elseif((Route::getCurrentRoute()->getPath()) == 'pedidos_pronto')
     <h2>Pedidos Prontos</h2>
+    <a class='btn btn-primary' href="{{url('pedidos_pronto_hoje')}}">Hoje</a>
+    <a class='btn btn-primary' href="{{url('pedidos_pronto')}}">Todos</a>
+
     @endif
+
 <table class="table table-striped">
     <thead>
         <tr>

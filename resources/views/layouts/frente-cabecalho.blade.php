@@ -11,6 +11,7 @@
             </button>
             <a class="navbar-brand" href="#">Lanchonete</a>
         </div>
+        @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}')
         {!! Form::open(array('route' => 'produto.buscar', 'class'=>'navbar-form navbar-right')) !!} 
         <div class="form-group">
             {!! Form::text('termo-pesquisa', null,['placeholder'=>'Pesquisar',
@@ -19,19 +20,18 @@
         <button type="submit" class="btn btn-primary">
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </button>
+        @endif
         {!! Form::close() !!}
         <div class="navbar-collapse collapse navbar-right">
         @if((Route::getCurrentRoute()->getPath()) == 'mesa_pedido/{id_pedido}')
         @else
           <ul class="nav navbar-nav">
-                <li><a href="{{url('/')}}">Home</a></li>
-                <li><a href="{{route('categoria.listar')}}">Categorias</a></li>
                 @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}')
                 <li><a data-toggle="modal" data-target="#carrinho_id">Carrinho</a></li>
                 @else
-                <li><a href="{{route('carrinho.listar')}}">Carrinho</a></li>
                 @endif
-                <li><a href="{{route('sobre')}}">Sobre</a></li>            
+
+                @if((Route::getCurrentRoute()->getPath()) == '/')
 
                 @if (session('cozinha') == '')
                     <li><a href="{{ url('/login') }}">Login</a></li>
@@ -44,6 +44,7 @@
                 <li>
                     <a href="{{ url('logout_cozinha') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                 </li>
+                @endif
                 @endif
               </ul>
             </li>

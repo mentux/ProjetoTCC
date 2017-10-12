@@ -3,7 +3,37 @@
 @section('conteudo')
 
 	<br/>
+    <h1>Produtos em Destaque:</h1>
+    <div class='col-sm-12'>
+        <div class="page-header text-muted">
+            {{count($produto_destacado)}} produtos em destaque
+        </div>
+    </div>
+    <div class="col-md-12">
+    @foreach($produto_destacado->chunk(3) as $chunked)
+    <div class="row">
+    @foreach($chunked as $produto_destacado)
+        <div class="col-sm-6 col-md-4">
+            <div class="panel panel-primary">
+                <div class="thumbnail">
+                    <img style='height:300px; width:300px;' src="{{route('imagem.file',$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}" data-lightbox="roadtrip">
+                    <div class="caption">
+                        <div><h3>{{$produto_destacado->nome}}</h3></div>
+                        <h4 class="text-muted">{{$produto_destacado->marca->nome}}</h4>
+                        <p>{{str_limit($produto_destacado->descricao,100)}}</p>
+                        <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto_destacado->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
+                        <h4>R$:{{$produto_destacado->preco_venda}}</h4>
+                    </div>
+                </div>
+            </div>
+      </div>
+    @endforeach
+    </div>
+    @endforeach
+
+
 	<h2>Cardápio</h2>
+
 	@foreach($produto as $produto)
 
    	<div class="col-lg-4 col-md-6 mb-4">
@@ -60,10 +90,10 @@
             <h4 class="modal-title">Carrinho</h4>
           </div>
           <div class="modal-body">
-            <table class="table table-striped">
+            <table style="display: block !important;" class="table table-responsive">
                 <thead>
                     <tr>
-                        <th></th>
+                        <th>Imagem</th>
                         <th>Produto</th>
                         <th class="text-right">Preço Unitário</th>
                         <th>Quantidade</th>
@@ -135,7 +165,7 @@ $(function() {
                 $(".imagem").attr("src",'http://localhost:8000/imagem/arquivo/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
   				//console.log($('.add_carrinho').val());
-                console.log(id.id);
+                //console.log(id.id);
                 },
             });
             

@@ -48,7 +48,7 @@
 	        function(){
 	            window.location = "http://localhost:8000/getmesa/"+id; 
 	        },
-	    10000);
+	    5000);
 	   </script>
    @endif
 @endsection

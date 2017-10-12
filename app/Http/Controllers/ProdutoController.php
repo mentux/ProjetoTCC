@@ -44,12 +44,34 @@ class ProdutoController extends Controller {
 
         }
     
-    function salvar(ProdutoFormRequest $request) { 
+    function salvar(ProdutoFormRequest  $request) {
+    $this->validate($request,[
+        'qtde_estoque'=>'numeric'
+        ]
+        ); 
         $produto = new Produto();
-        //dd($produto);
-        $produto->create($request->all());
-        str_replace(',','.',$produto->preco_venda);
-        number_format($produto->preco_venda, 2, ',', '.');
+        $produto->categoria_id = $request->input('categoria_id');
+        $produto->marca_id = $request->input('marca_id');
+        $produto->nome = $request->input('nome');
+        $produto->descricao = $request->input('descricao');
+        $produto->qtde_estoque = $request->input('qtde_estoque');
+        $produto->preco_venda = $request->input('preco_venda');
+        $produto->destacado = $request->input('destacado');
+        $path = 'uploads';
+        $imagem_upload = $request->file('imagem_nome');
+        $formato = $imagem_upload->getClientOriginalExtension();
+        $arquivo = rand(902802,398432).'.'.$formato;
+        $request->file('imagem_nome')->move($path,$arquivo);
+        $produto->imagem_nome = $arquivo;
+        for($i=0; $i<count($produto->preco_venda[$i]);$i++){
+            if($produto->preco_venda[$i] ==","){
+                number_format($produto->preco_venda, 2, ',', '.');
+            }elseif($produto->preco_venda[$i] =="-"){
+                str_replace(array("-", ""), array("-", ""), $produto->preco_venda);
+            }
+        }
+        $produto->save();
+
         //dd($produto);
 
         \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
@@ -62,7 +84,7 @@ class ProdutoController extends Controller {
             return view('admin.produto.form', $models);
         }
 
-    public function atualizar(ProdutoUpdateRequest $request, $id) {
+    public function atualizar(Request $request, $id) {
 
         $data = $request->all();
         $produto= Produto::find($id);

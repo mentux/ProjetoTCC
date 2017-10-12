@@ -5,28 +5,29 @@
 <!-- TEMPORARIAMENTE -->
 <style>
 .btn-lg{
-   padding: 8px 18px;
-   font-size: 25px;
-   line-height: 1.3333333;
+   font-size: 90px;
    border-radius: 5px;
-   margin: 10px;
-   margin-left: 0;
+   margin: 30px;
+   margin-left:10px;
+   width:150px;
 }
 </style>
 <br/>
 <div class='container'>
     <h3>Mesas disponíveis</h3>
     @foreach($mesa as $m)
-        <a  href="{{url('getmesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
+        <a href="{{url('getmesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
     @endforeach
 </div>
-<div class='col-sm-12'>
+<!--<div class='col-sm-12'>
     <div class="page-header text-muted">
         {{count($produtos)}} produtos em destaque
     </div>
 </div>
+<div class="col-md-12">
+@foreach($produtos->chunk(3) as $chunked)
 <div class="row">
-@foreach($produtos as $produto)
+@foreach($chunked as $produto)
     <div class="col-sm-6 col-md-4">
         <div class="panel panel-primary">
             <div class="thumbnail">
@@ -39,7 +40,8 @@
                 </div>
             </div>
         </div>
-</div>
+  </div>
 @endforeach
 </div>
+@endforeach-->
 @stop
