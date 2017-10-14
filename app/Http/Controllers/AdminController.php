@@ -34,20 +34,21 @@ class AdminController extends Controller {
     }
     
     public function getPedidos(Request $req, $id = null) {
+        //alterado aqui 13/10 19:38
         if ($id == null) {
             if ($req->has('status') == false) {
                 $models['tipoVisao'] = 'Todos';
-                $models['pedidos'] = Venda::all();
+                $models['pedidos'] = Venda::orderBy('data_venda','DESC')->get();
             } else {
                 if ($req->status == 'nao-pagos') {
                     $models['tipoVisao'] = 'Não Pagos';
-                    $models['pedidos'] = Venda::naoPagas()->get();
+                    $models['pedidos'] = Venda::where('pago',0)->orderBy('data_venda','DESC')->get();
                 } else if ($req->status == 'pagos') {
                     $models['tipoVisao'] = 'Pagos';
-                    $models['pedidos'] = Venda::pagas()->get();
+                    $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->get();
                 } else if ($req->status == 'finalizados') {
                     $models['tipoVisao'] = 'Finalizados/Enviados';
-                    $models['pedidos'] = Venda::finalizadas()->get();
+                    $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->get();
                 }
             }
             return view('admin.pedidos-listar', $models);
@@ -84,7 +85,7 @@ class AdminController extends Controller {
     }
 
     public function listarMesasOcupadas(){
-        $mesas = Mesa::where('status',2)->get();
+        $mesas = DB::table('mesa')->select('mesa.id_mesa','mesa.numero','vendas.status','vendas.pago','vendas.enviado')->join('vendas','vendas.id_mesa','=','mesa.id_mesa')->where('vendas.status',3)->where('vendas.pago',1)->where('vendas.enviado',1)->where('mesa.status',2)->get();
         return view('admin.mesas_ocupadas',['mesas'=>$mesas]);
     }
 

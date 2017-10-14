@@ -64,7 +64,7 @@ class Venda extends Model {
     }*/
 
     public function scopeNaoPagas($query) {
-        return $query->where('pago', false);
+        return $query->where('pago')!= true;
     }
 
     public function scopePagas($query) {

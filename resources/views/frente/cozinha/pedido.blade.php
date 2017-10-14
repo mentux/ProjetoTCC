@@ -48,11 +48,11 @@
             <td>
                 {{$pedido->mesa->numero}}
             </td>
-            @if($pedido->status == 1)
+            @if($pedido->status === 1)
             <td>
                 Pendente
             </td>
-            @elseif($pedido->status == 2)
+            @elseif($pedido->status === 2)
             <td>
                 Em andamento
             </td>

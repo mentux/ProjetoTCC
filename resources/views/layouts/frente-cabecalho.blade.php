@@ -10,6 +10,9 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Lanchonete</a>
+            @if((Route::getCurrentRoute()->getPath()) == '/' OR (Route::getCurrentRoute()->getPath()) == 'login')
+            <a style="font-size:10px; margin-left:5px;" class="navbar-brand" href="{{url('/')}}">Home</a>
+            @endif
         </div>
         @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}')
         {!! Form::open(array('route' => 'produto.buscar', 'class'=>'navbar-form navbar-right')) !!} 

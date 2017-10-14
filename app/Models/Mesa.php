@@ -13,11 +13,6 @@ class Mesa extends Model{
 	protected $foreignKey = 'id_venda';
 	protected $connection = 'pgsql';
 
-
-    public function filhos(){
-    	return $this->hasMany(Produto::class,"id");
-    }
-
     public function pedidos(){
     	return $this->hasMany('\Shoppvel\Models\Venda','id_mesa');
     }

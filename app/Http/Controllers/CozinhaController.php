@@ -85,8 +85,5 @@ class CozinhaController extends Controller{
         $pedido->save();
         
         return redirect('pedidos_pronto')->with('mensagens-sucesso', 'Status alterado com sucesso');
-    }
-
-
-    
+    }   
 }

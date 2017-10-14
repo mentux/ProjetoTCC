@@ -21,13 +21,13 @@
         <tr>
             <td>
                 <a href="{{route('admin.pedidos', $pedido->id_venda)}}">
-                    {{$pedido->data_venda->format('d/m/Y h:m')}}
+                    {{$pedido->data_venda->format('d/m/Y')}}
                 </a>
             </td>
-            <td>
+            <td class="text-center">
                 {{$pedido->mesa->numero}}
             </td>
-            <td>
+            <td class="text-right">
                 {{number_format($pedido->valor_venda, 2, ',', '.')}}
             </td>
             <td class="text-right">

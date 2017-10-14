@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('conteudo')
-
+</br>
 <div class="panel panel-default ">
   	<div class="panel-heading">
     	<h3 class="panel-title">Nova Produto</h3>
@@ -19,7 +19,7 @@
 			@endif
 
 			        {!! Form::label('categoria_id', 'Categoria', ['class'=>'col-sm-2 form-label']) !!}
-			        {!! Form::select('categoria_id', $listcategorias->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Categoria']) !!}<br>
+			        {!! Form::select('id', $listcategorias->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Categoria']) !!}<br>
 
 			        {!! Form::label('marca_id', 'Marca', ['class'=>'col-sm-2 form-label']) !!}
 			        {!! Form::select('marca_id', $marcas->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Marca']) !!}<br>
@@ -40,7 +40,8 @@
 					{!! Form::select('destacado', ['1'=>'Sim','0'=>'Não'], null, ['class'=>'form-control']) !!}<br><br><br>
 
 					<div class="col-md-12">{!! Form::label('imagem_nome', 'Imagem', ['class'=>'col-md-12 col-sm-2 form-label']) !!}</div>
-					<input type='file' name='imagem_nome' class='col-md-12'><br><br>
+					{!! Form::input('file', 'imagem_nome', 'null', ['class'=>'form-control','','placeholder'=>'Imagem do Produto']) !!}</div>
+					<br><br>
 
 					<div class="col-md-12">
 					{!! Form::submit('Salvar', ['class'=>'btn btn-primary']) !!}
