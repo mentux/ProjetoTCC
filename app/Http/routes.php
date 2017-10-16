@@ -178,6 +178,11 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
 });
 
 
+Route::get('volte_sempre','MesaController@MesaVolteSempre');
+Route::get('volte_sempre_liberar/{id}','MesaController@VolteSempreLiberar');
+Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
+
+
 Route::any('mesa', [
                 'as' => 'admin.mesa',
                 'uses' => 'MesaController@mesa_form'
@@ -199,10 +204,10 @@ Route::any('remover/{id}', [
 
 Route::post('cadastrar_mesa','MesaController@criar_mesa');
 
-//Route::get('/home', 'HomeController@index');
-
 
 Route::any('finalizar_cardapio','MesaController@FecharPedido');
+
+
 
 
 Route::get('logout_admin','AdminController@logout_admin');
@@ -214,7 +219,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'uses' => 'AdminController@putLiberarMesa'
     ]);
 
-    Route::get('mesas_ocupadas','AdminController@listarMesasOcupadas');
 
     Route::get('admin', [
                 'as' => 'admin',
@@ -237,6 +241,15 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.pedidos',
                 'uses' => 'AdminController@getPedidos'
             ]);
+
+            Route::get('todosHoje','AdminController@getTodosHoje');
+            Route::get('pendentesHoje','AdminController@getPendentesHoje');
+            Route::get('pagosHoje','AdminController@getPagosHoje');
+            Route::get('enviadosHoje','AdminController@getPagosHoje');
+
+
+
+
             Route::get('admin/perfil', [
                 'as' => 'admin.perfil',
                 'uses' => 'AdminController@getPerfil'

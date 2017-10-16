@@ -31,7 +31,6 @@ class Carrinho {
         session()->save();
     }
     public function setProductAvaliate($idProduto){
-        //TODO implementation of product avaliate
         $avaliado = VendaItem::find('id');
         $avaliado = new VendaItem();
         $avaliado = $idProduto;

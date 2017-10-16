@@ -9,7 +9,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Lanchonete</a>
+            <a class="navbar-brand" href="#">L & C</a>
             @if((Route::getCurrentRoute()->getPath()) == '/' OR (Route::getCurrentRoute()->getPath()) == 'login')
             <a style="font-size:10px; margin-left:5px;" class="navbar-brand" href="{{url('/')}}">Home</a>
             @endif

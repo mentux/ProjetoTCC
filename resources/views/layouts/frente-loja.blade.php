@@ -9,7 +9,7 @@
         <meta name="author" content="">
         <link rel="icon" href="../../favicon.ico">
 
-        <title>Lanchonete</title>
+        <title>L & C</title>
 
         <!-- Bootstrap core CSS -->
         <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -37,6 +37,7 @@
 
             @include('layouts.frente-cabecalho')
             <!-- Example row of columns -->
+            
                 <div class="row">
                     <div class="col-lg-2 ">
                         <h3>Categoria</h3>
@@ -62,6 +63,7 @@
                         @yield('conteudo')
                     </div>
                 </div>
+
 
         </div> <!-- /container -->
 

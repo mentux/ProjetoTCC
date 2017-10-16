@@ -41,14 +41,21 @@
     		
    @if($pedido->status == 3)
 	   <h3 class='text-success text-center' >Bom apetite :)</h3>
-	   <h3 class='text-success text-center' >O sistema ira retornar ao cardápio automaticamente.</h3> 
-	   <script type="text/javascript">
-	   var id = '<?php echo $pedido->id_mesa;?>';
-	   	setTimeout(
-	        function(){
-	            window.location = "http://localhost:8000/getmesa/"+id; 
-	        },
-	    5000);
-	   </script>
+	   <h3 class='text-success text-center' >O sistema ira retornar ao cardápio automaticamente.</h3>
+
+	   <div class="container">
+        <a class="btn btn-success btn-lg" href="{{url('getmesa',\Session::get('id_mesa'))}}">Voltar para o cardápio</a>
+        <a class="btn btn-danger btn-lg" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair</a>
+   </div>
    @endif
+
+   <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+    <script type="text/javascript">
+        var id = '<?php echo $pedido->id_venda ?>';
+        setTimeout(
+            function(){
+                window.location = "http://localhost:8000/mesa_pedido/"+id; 
+            },
+        2000);
+       </script>
 @endsection

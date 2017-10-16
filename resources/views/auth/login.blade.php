@@ -6,7 +6,7 @@
         
         @include('frente.login_form')
         
-        @include('auth.register.form')
+        <!--@include('auth.register.form') colocar no dontpad-->
 
     </div>
 </div>

@@ -61,20 +61,24 @@
 	    <div class="modal-content">
 	      <div class="modal-header">
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	        <h4 class="modal-title">Modal Header</h4>
-	      </div>
-	      <div class="modal-body">
-	        <p class='conteudo'></p>
-	        <p class='valor'></p>
-	        <img style='height:200px; width:200px;' class="imagem" />
-            <br/>
+	           <h4 class="modal-title">Modal Header</h4>
+	    </div>
+	    <div class="modal-body">
+	           <p class='conteudo'></p>
+	           <p class='valor'></p>
+	           <img style='height:200px; width:200px;' class="imagem" />
+                <br/>
             <form class="action_carrinho"  action="{{route('adicionar')}}">
-	      </div>
-	      <div class="modal-footer">
-	           <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
+	    </div>
+	    <div class="modal-footer">
+                <p class='text-left' >Quantidade</p>
+                <input type="numeric" value="1" name="quant" class="col-sm-2">
+                <br/>
+                <br/>
+	            <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
             <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
             </form>
-	      </div>
+	    </div>
 	    </div>
 
 	  </div>

@@ -67,14 +67,26 @@ class MesaController extends Controller{
 
     public function getMesaId(Request $request,$id){ 
         $mesa = Mesa::find($id);
-        $mesa->status = 2;
-        $mesa->save();
+        if($mesa->status == 1){
+           return redirect('/')->withErrors('Essa mesa não foi reservada'); 
+       }else{
         $produto = Produto::all();
         $produto_destacado = Produto::where('destacado',1)->get();
         $itens = $this->carrinho->getItens();// o esquema funciona como se fosse esse carrinho
         $total = $this->carrinho->getTotal();
         \Session::put('id_mesa',$id);
         return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total,'produto_destacado'=>$produto_destacado]);
+       }
+        
+    }
+
+    public function ReservarMesa($id){
+        $mesa = Mesa::find($id);
+        $mesa->status = 2;
+        $mesa->save();
+        return redirect('/')->with('mensagens-sucesso','Mesa reservada com sucesso');
+        
+        
     }
 
     public function getProdutoModal($id){
@@ -83,65 +95,32 @@ class MesaController extends Controller{
 
     }
     public function Adicionar(Request $request) {
+        $id_mesa = \Session::get('id_mesa');
         $id_produto = $request->get('botao');
+        $quantidade_form = $request->get('quant');
         $itens = $this->carrinho->getItens();
 
-        try{
-            foreach($itens as $item){
-                $est = Produto::find($id_produto);
-                if($id_produto == null){
-                    return \Redirect::back()->with('mensagens-erro', 'Erro, Não há produto Selecionado');
-                }elseif($item->produto->id != $id_produto){
-
-                    $this->carrinho->add($id_produto);
-                    return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 1');    
-                }else{
-                    if($item->produto->id == $id_produto){
-                    $item->qtde++;
-                    return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 2'); 
-                    }
-                }
-
-            }   
-        }catch(Exception $e){
-            return redirect()->back()
-           ->with('mensagens-erro', 'Erro!!!')
-           ->withInput();
-        }
-
-        if($this->carrinho->add($id_produto)){   
-            return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho');
-        }else{
-            return redirect()->back()
-           ->with('mensagens-danger', 'Erro não é possivel adicionar Produto desejado')
-           ->withInput();    
-        }
-        
-    
-    //dd($itens[0]->CarrinhoItem->produto->id);
-            /*for ( $i=0; count($itens)<$i; $i++ ) {
-                echo $itens['CarrinhoItem']['Produto'][$i];
-            }*/
-            /*$flag=0; 
-            for($i=0;$i<count($itens[$i]->produto[]->id);$i++){
-                
-                if($itens[$i]->produto->id ==$id_produto){
-                $item->qtde++;
-                        return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 1');
-                $flag=1;
-                }
+        if($estoque = Produto::find($id_produto)->qtde_estoque - $quantidade_form = intval($quantidade_form)){
+            if($estoque < 0){
+                $estoque = Produto::find($id_produto)->qtde_estoque;
+                return redirect('getmesa/'.$id_mesa)->withErrors('Desculpe o Incoviniente, Mas a Quantidade do Produto Escolhida e Maior que o Estoque: '. $estoque);
             }
-            if($flag!=1){
-                    $this->carrinho->add($id_produto);
-                        return \Redirect::back()->with('mensagens-sucesso', 'Produto adicionado ao carrinho 1');    
-            }*/
+        }elseif($estoque == -1){
+            return back()->withErrors('Desculpe o Incoviniente, Não Temos mais Estoque para o Produto desejado :"(');
+        }
+        $est = Produto::find($id_produto)->qtde_estoque;
+        if ($id_produto == null) {
+            return redirect('getmesa/'.$id_mesa)->with('mensagens-erro', 'erro');
+        }
+        if($request->get('qtde') <= Produto::find($id_produto)->qtde_estoque){
+
+            if ($this->carrinho->add($id_produto, $quantidade_form)) {
+                return redirect('getmesa/'.$id_mesa)->with('mensagens-sucesso', 'Produto adicionado com sucesso');
+            }
+        }
+
+        return redirect('getmesa/'.$id_mesa)->with('mensagens-sucesso', 'Produto adicionado com sucesso 3'. $quantidade_form);
     }
-    /*public function Adicionar(Request $request){
-        $id_produto = $request->get('botao');
-        $itens = $this->carrinho->getItens();
-        foreach($itens as $item){
-        }*/
-    
     public function Remover($id){
         $this->carrinho->deleteItem($id);
         if(Route::getCurrentRoute()->getPath() == 'getmesa/{id}'){
@@ -160,7 +139,7 @@ class MesaController extends Controller{
         }else{
         $pedido = new Venda();
         DB::beginTransaction();
-        $pedido->user_id = \Session::get('id_mesa');//só por questoes de teste
+        $pedido->user_id = \Session::get('id_mesa');
         $pedido->data_venda = \Carbon\Carbon::now();
         $pedido->valor_venda = $this->carrinho->getTotal();
         //$pedido->pagseguro_transaction_id = $req->transaction_id;
@@ -194,5 +173,19 @@ class MesaController extends Controller{
         $pedido = Venda::find($id_pedido);
         return view('frente.mesa_pedido',['pedido'=>$pedido]);
     }
-          
+
+    public function MesaVolteSempre(){
+        $id = \Session::get('id_mesa');
+        $pegar_mesa = Mesa::find($id);
+        return view('frente.volte_sempre',compact('pegar_mesa'));
+    }
+
+    public function VolteSempreLiberar($id){
+        $id = \Session::get('id_mesa');
+        $mesa = Mesa::find($id);
+        $mesa->status = 1;
+        $mesa->save();
+        return redirect('volte_sempre');
+
+    }         
 }

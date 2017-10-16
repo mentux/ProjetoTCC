@@ -9,7 +9,7 @@
         <meta name="author" content="">
         <link rel="icon" href="../../favicon.ico">
 
-        <title>Lanchonete</title>
+        <title>L & C</title>
 
         <!-- Bootstrap core CSS -->
         <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
@@ -46,11 +46,11 @@
                                 Painel de controle
                             </a>
                         </li>
-                        <li class="list-group-item">
+                        <!--<li class="list-group-item">
                             <a href="{{url('mesas_ocupadas')}}">
                                 Mesas ocupadas
                             </a>
-                        </li>
+                        </li>-->
                         <li class="list-group-item">
                             <a href="{{route('admin.pedidos')}}">
                                 Todos os pedidos

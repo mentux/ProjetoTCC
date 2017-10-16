@@ -1,6 +1,20 @@
 @extends('layouts.admin')
 
 @section('conteudo')
+@if($tipoVisao == 'Todos' OR $tipoVisao == 'Todos os pedidos de hoje')
+<a class="btn btn-primary" href="{{url('todosHoje')}}">Hoje</a>
+<a class="btn btn-primary" href="{{route('admin.pedidos')}}">Todos</a>
+@elseif($tipoVisao == 'Pagos' OR $tipoVisao == 'Pagos hoje' )
+<a class="btn btn-primary" href="{{url('pagosHoje')}}">Hoje</a>
+<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=pagos')}}">Todos</a>
+@elseif($tipoVisao == 'Finalizados/Enviados' OR $tipoVisao == 'Finalizados/Enviados Hoje')
+<a class="btn btn-primary" href="{{url('enviadosHoje')}}">Hoje</a>
+<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=finalizados')}}">Todos</a>
+@elseif($tipoVisao == 'Não Pagos' OR $tipoVisao == 'Não Pagos hoje')
+<a class="btn btn-primary" href="{{url('pendentesHoje')}}">Hoje</a>
+<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=nao-pagos')}}">Todos</a>
+@endif
+
 <h2>Pedidos - {{$tipoVisao}} - {{$pedidos->count()}} </h2>
 <table class="table table-striped">
     <thead>
@@ -8,7 +22,6 @@
             <th>Data</th>
             <th class="text-right">Mesa</th>
             <th class="text-right">Valor</th>
-            <th class="text-right">Método de Pagamento</th>
             <!--<th class="text-right">Status no Pagseguro</th>-->
             <th class="text-right">Status Local</th>
             <th class="text-right">Enviado / Finalizado</th>
@@ -29,9 +42,6 @@
             </td>
             <td class="text-right">
                 {{number_format($pedido->valor_venda, 2, ',', '.')}}
-            </td>
-            <td class="text-right">
-                {{$pedido->metodo_pagamento}}
             </td>
             <!--<td class="text-right">
                 {{$pedido->status_pagamento}}

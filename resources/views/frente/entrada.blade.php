@@ -16,7 +16,7 @@
 <div class='container'>
     <h3>Mesas disponíveis</h3>
     @foreach($mesa as $m)
-        <a href="{{url('getmesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
+        <a href="{{url('reservar_mesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
     @endforeach
 </div>
 <!--<div class='col-sm-12'>
@@ -44,4 +44,12 @@
 @endforeach
 </div>
 @endforeach-->
+<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+  <script type="text/javascript">
+    setTimeout(
+          function(){
+              window.location = "http://localhost:8000"; 
+          },
+      3000);
+     </script>
 @stop

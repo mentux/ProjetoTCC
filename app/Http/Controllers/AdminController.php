@@ -20,12 +20,11 @@ class AdminController extends Controller {
     }
 
     public function getDashboard() {
-          
-                $models['qtdePedidos']['total'] = Venda::count();
-                $models['qtdePedidos']['pendentes-pagamento'] = Venda::naoPagas()->count();
-                $models['qtdePedidos']['pagos'] = Venda::pagas()->count();
-                $models['qtdePedidos']['finalizados'] = Venda::finalizadas()->count();
-                return view('admin.dashboard', $models);    
+            $models['qtdePedidos']['total'] = Venda::count();
+            $models['qtdePedidos']['pendentes-pagamento'] = Venda::naoPagas()->count();
+            $models['qtdePedidos']['pagos'] = Venda::pagas()->count();
+            $models['qtdePedidos']['finalizados'] = Venda::finalizadas()->count();
+            return view('admin.dashboard', $models);    
             
     }
     
@@ -42,7 +41,7 @@ class AdminController extends Controller {
             } else {
                 if ($req->status == 'nao-pagos') {
                     $models['tipoVisao'] = 'Não Pagos';
-                    $models['pedidos'] = Venda::where('pago',0)->orderBy('data_venda','DESC')->get();
+                    $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->get();
                 } else if ($req->status == 'pagos') {
                     $models['tipoVisao'] = 'Pagos';
                     $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->get();
@@ -84,21 +83,35 @@ class AdminController extends Controller {
         return redirect()->route('admin.pedidos', '?status=finalizados')->with('mensagens-sucesso', 'Pedido finalizado');
     }
 
-    public function listarMesasOcupadas(){
-        $mesas = DB::table('mesa')->select('mesa.id_mesa','mesa.numero','vendas.status','vendas.pago','vendas.enviado')->join('vendas','vendas.id_mesa','=','mesa.id_mesa')->where('vendas.status',3)->where('vendas.pago',1)->where('vendas.enviado',1)->where('mesa.status',2)->get();
-        return view('admin.mesas_ocupadas',['mesas'=>$mesas]);
+    public function getTodosHoje(){
+        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
+        $models['pedidos'] = Venda::orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['tipoVisao'] = 'Todos os pedidos de hoje';
+        return view('admin.pedidos-listar', $models);
     }
 
-    public function putLiberarMesa(Request $request, $id) {
-        $mesa = Mesa::find($id);
-        
-        if ($mesa == null) {
-            return back()->withErrors('Mesa não encontrada');
-        }
-        
-        $mesa->status = 1;
-        $mesa->save();
-        
-        return redirect('mesas_ocupadas')->with('mensagens-sucesso', 'Mesa liberada');
+        public function getPendentesHoje(){
+        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
+        $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['tipoVisao'] = 'Não Pagos hoje';
+        return view('admin.pedidos-listar', $models);
     }
+
+
+     public function getPagosHoje(){
+        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
+        $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['tipoVisao'] = 'Pagos hoje';
+        return view('admin.pedidos-listar', $models);
+    }
+
+    public function getFinalizadosHoje(){
+        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
+        $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['tipoVisao'] = 'Finalizados/Enviados Hoje';
+        return view('admin.pedidos-listar', $models);
+    }
+
+
+
 }
