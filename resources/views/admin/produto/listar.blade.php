@@ -40,7 +40,7 @@
 		    @foreach($produtos as $prod)
 		    <tr style="text-align: center">
 		        <td>{{$prod->id}}</td>
-		        <td><img src="{{route('imagem.file',$prod->imagem_nome)}}" width="100" height="100" alt="{{$prod->imagem_nome}}" ></td>
+		        <td><img src="{{asset('uploads/'.$prod->imagem_nome)}}" width="100" height="100" alt="{{$prod->imagem_nome}}" ></td>
 		        <td>{{$prod->nome}}</td>
 		        <td>{{$prod->qtde_estoque}}</td>
 		        <td>{{$prod->marca->nome}}</td>

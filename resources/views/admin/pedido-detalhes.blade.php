@@ -69,12 +69,10 @@
         @foreach($pedido->itens as $item)
         <tr>
             <td>
-                <img src="{{route('imagem.file',$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" style="width:150px;" >
+                <img src="{{asset('uploads/'.$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" style="width:150px;" >
             </td>
             <td>
-                <a href="{{route('produto.detalhes', $item->produto->id)}}">
-                    {{$item->produto->nome}}
-                </a>
+                {{$item->produto->nome}}
             </td>
             <td class="text-right">
                 {{$item->qtde}}

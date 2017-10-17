@@ -1,7 +1,6 @@
 @extends('layouts.frente-loja')
 
 @section('conteudo')
-
 	<br/>
     <h1>Produtos em Destaque:</h1>
     <div class='col-sm-12'>
@@ -10,49 +9,50 @@
         </div>
     </div>
     <div class="col-md-12">
-    @foreach($produto_destacado->chunk(3) as $chunked)
-    <div class="row">
-    @foreach($chunked as $produto_destacado)
-        <div class="col-sm-6 col-md-4">
-            <div class="panel panel-primary">
-                <div class="thumbnail">
-                    <img style='height:300px; width:300px;' src="{{route('imagem.file',$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}" data-lightbox="roadtrip">
-                    <div class="caption">
-                        <div><h3>{{$produto_destacado->nome}}</h3></div>
-                        <h4 class="text-muted">{{$produto_destacado->marca->nome}}</h4>
-                        <p>{{str_limit($produto_destacado->descricao,100)}}</p>
-                        <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto_destacado->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
-                        <h4>R$:{{$produto_destacado->preco_venda}}</h4>
+        @foreach($produto_destacado->chunk(3) as $chunked)
+        <div class="row">
+        @foreach($chunked as $produto_destacado)
+            <div class="col-sm-6 col-md-4">
+                <div class="panel panel-primary">
+                    <div class="thumbnail">
+                        <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}" data-lightbox="roadtrip">
+                        <div class="caption">
+                            <div><h3>{{$produto_destacado->nome}}</h3></div>
+                            <h4 class="text-muted">{{$produto_destacado->marca->nome}}</h4>
+                            <p>{{str_limit($produto_destacado->descricao,100)}}</p>
+                            <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto_destacado->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
+                            <h4>R$:{{$produto_destacado->preco_venda}}</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-      </div>
-    @endforeach
+          </div>
+        @endforeach
+        </div>
+        @endforeach
     </div>
-    @endforeach
 
-
+    <br/>
 	<h2>Cardápio</h2>
-
-	@foreach($produto as $produto)
-
-   	<div class="col-lg-4 col-md-6 mb-4">
-
-    	<div class="card h-100">
-    			<img style='height:300px; width:300px;' src="{{route('imagem.file',$produto->imagem_nome)}}" alt="">
-    			<div style='margin-bottom: 30px;' class="card-body">
+    <div class="col-md-12">
+	@foreach($produto->chunk(3) as $linha)
+        <div class='row'>
+        @foreach($linha as $produto)
+       	    <div class="col-sm-6 col-md-4">
+    			<img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+    			<div class="card-body">
     				<h4 class="card-title">
     					{{$produto->nome}}
     				</h4>
     				<p class="card-text">{{str_limit($produto->descricao,100)}}</p>
     				<h4 class="card-text">R${{$produto->preco_venda}}</h4>
     				<!-- Trigger the modal with a button -->
-					<button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
-    			</div>
-    			
-    	</div>
+    				<button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
+    			</div>	
+            </div>
+            @endforeach
+        </div>
+        @endforeach
     </div>
-	@endforeach
 		    <!-- Modal -->
 	<div id="myModal" class="modal fade" role="dialog">
 	  <div class="modal-dialog">
@@ -80,11 +80,10 @@
             </form>
 	    </div>
 	    </div>
-
 	  </div>
 	</div>
 
-            <!-- Modal carrinho -->
+    <!-- Modal carrinho -->
     <div id="carrinho_id" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <!-- Modal content-->
@@ -108,12 +107,10 @@
                     @foreach($itens as $item)
                     <tr class="teste">
                         <td>
-                            <img src="{{route('imagem.file',$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" data-lightbox="roadtrip" style="width:70px;" >
+                            <img src="{{asset('uploads/'.$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" data-lightbox="roadtrip" style="width:70px;" >
                         </td>
                         <td>
-                            <a href="{{route('produto.detalhes', $item->produto->id)}}">
                                 {{$item->produto->nome}}
-                            </a>
                         </td>
                         <td class="text-center">
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
@@ -166,7 +163,7 @@ $(function() {
                 $('.modal-title').html(id.nome);
                 $('.conteudo').html(id.descricao);
                 $('.valor').html('R$: '+id.preco_venda);
-                $(".imagem").attr("src",'http://localhost:8000/imagem/arquivo/'+id.imagem_nome);
+                $(".imagem").attr("src",'http://localhost:8000/uploads/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
   				//console.log($('.add_carrinho').val());
                 //console.log(id.id);

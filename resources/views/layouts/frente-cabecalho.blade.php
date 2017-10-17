@@ -24,6 +24,16 @@
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         </button>
         @endif
+        @if((Route::getCurrentRoute()->getPath()) == 'categoria/{id?}')
+        {!! Form::open(array('route' => 'produto.buscar', 'class'=>'navbar-form navbar-right')) !!} 
+        <div class="form-group">
+            {!! Form::text('termo-pesquisa', null,['placeholder'=>'Pesquisar',
+            'class'=>'form-control']) !!}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+        </button>
+        @endif
         {!! Form::close() !!}
         <div class="navbar-collapse collapse navbar-right">
         @if((Route::getCurrentRoute()->getPath()) == 'mesa_pedido/{id_pedido}')

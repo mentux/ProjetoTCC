@@ -61,8 +61,8 @@
                     <br/>
                         @include('layouts.messages')
                         @yield('conteudo')
-                    </div>
-                </div>
+                    
+                
 
 
         </div> <!-- /container -->

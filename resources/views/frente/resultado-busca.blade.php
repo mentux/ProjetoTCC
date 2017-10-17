@@ -26,7 +26,7 @@
 
         <tr>
             <td>
-                <img src="{{route('imagem.file',$produto->imagem_nome)}}" alt="{{$produto->imagem_nome}}" style="width:150px;" >
+                <img src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="{{$produto->imagem_nome}}" style="width:150px;" >
             </td>
             <td>
                 {{$produto->nome}}
@@ -64,7 +64,7 @@
                 <input type="numeric" value='1' name='quant' class="col-sm-2">
                 <br/>
                 <br/>
-               <button type="submit" name="botao" value="{{$produto->id}}" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
+               <button type="submit" name="botao" value="@if(isset($produto->id)){{$produto->id}} @endif" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
             <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
             </form>
           </div>
@@ -96,7 +96,7 @@ $(function() {
                 $('.modal-title').html(id.nome);
                 $('.conteudo').html(id.descricao);
                 $('.valor').html('R$: '+id.preco_venda);
-                $(".imagem").attr("src",'http://localhost:8000/imagem/arquivo/'+id.imagem_nome);
+                $(".imagem").attr("src",'http://localhost:8000/uploads/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id); 
                 },
             });

@@ -44,8 +44,8 @@
 	   <h3 class='text-success text-center' >O sistema ira retornar ao cardápio automaticamente.</h3>
 
 	   <div class="container">
-        <a class="btn btn-success btn-lg" href="{{url('getmesa',\Session::get('id_mesa'))}}">Voltar para o cardápio</a>
-        <a class="btn btn-danger btn-lg" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair</a>
+        <a class="btn btn-success btn-lg col-sm-3 col-md-offset-2" href="{{url('getmesa',\Session::get('id_mesa'))}}">Voltar para o cardápio</a>
+        <a class="btn btn-danger btn-lg col-sm-1 col-sm-offset-1" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair</a>
    </div>
    @endif
 
