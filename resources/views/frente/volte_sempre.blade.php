@@ -4,7 +4,7 @@
 
 
 <div class="container">
-	<h1 class="text-info">Obrigado pela preferência e volte sempre! :) </h1>
+	<h1 class="col-md-offset-2 text-info">Obrigado pela preferência e volte sempre! :) </h1>
 </div>
 	@if($pegar_mesa->status == 1)
 	<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>

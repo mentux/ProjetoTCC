@@ -1,8 +1,9 @@
 @extends('layouts.frente-loja')
 
 @section('conteudo')
-	<br/>
-    <h1>Produtos em Destaque:</h1>
+<br/>
+    <h1 class='hidden-xs'>Produtos em Destaque:</h1>
+    <h1 style='margin-top:50px;' class='hidden-lg hidden-md hidden-sm '>Produtos em Destaque:</h1>
     <div class='col-sm-12'>
         <div class="page-header text-muted">
             {{count($produto_destacado)}} produtos em destaque
@@ -30,7 +31,6 @@
         </div>
         @endforeach
     </div>
-
     <br/>
 	<h2>Cardápio</h2>
     <div class="col-md-12">
@@ -38,7 +38,7 @@
         <div class='row'>
         @foreach($linha as $produto)
        	    <div class="col-sm-6 col-md-4">
-    			<img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+    			<img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" data-lightbox="roadtrip" alt="">
     			<div class="card-body">
     				<h4 class="card-title">
     					{{$produto->nome}}
@@ -101,6 +101,7 @@
                         <th class="text-right">Preço Unitário</th>
                         <th>Quantidade</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -118,8 +119,9 @@
                         <td class="text-center"> 
                             {{$item->qtde}}
                         </td>
-                        <td> <a href="{{route('remover', $item->produto->id)}}" 
-                                class="btn btn-danger btn-xs pull-right">Excluir item </a>
+                        <td> 
+                        <a href="{{route('remover', $item->produto->id)}}" 
+                                class="btn btn-danger btn-xs pull-right">Excluir item</a>
                         </td>
                     </tr>
                     @endforeach

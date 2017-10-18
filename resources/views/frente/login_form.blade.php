@@ -1,4 +1,4 @@
-<div class="col-md-4 col-md-offset-2">
+<div class="col-md-4 col-md-offset-4">
     <div class="panel panel-success">
         <div class="panel-heading">Entre com sua identificação para finalizar compras e acessar seus pedidos</div>
         <div class="panel-body">

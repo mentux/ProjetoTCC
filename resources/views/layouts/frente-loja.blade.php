@@ -30,21 +30,42 @@
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
     </head>
-
     <body>
 
         <div class="container">
-
             @include('layouts.frente-cabecalho')
             <!-- Example row of columns -->
-            
+                @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}' OR (Route::getCurrentRoute()->getPath()) == 'categoria/{id?}' OR(Route::getCurrentRoute()->getPath()) == 'produto/buscar')
                 <div class="row">
-                    <div class="col-lg-2 ">
-                        <h3>Categoria</h3>
-                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Categoria
+                    <div class="col-lg-2">
+                        <h3>Categorias</h3>
+                            <a class='btn btn-primary hidden-xs' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Cardápio</a>
+                            <br/>
+                            <br/>
+                            <button class="btn btn-primary dropdown-toggle hidden-xs" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Categorias
                                 <span class="caret"></span>
                             </button>
+
+                            <div style='margin-top:35px;' class='botoes_responsivo'>
+                                <button class="btn btn-primary dropdown-toggle hidden-sm hidden-md hidden-lg" type="button" id="dropdownMenu2"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Categorias
+                                    <span class="caret"></span>
+                                </button>
+                                <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Cardápio</a>
+                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                    @foreach ($listcategorias as $cat)
+                                    @if (is_null($cat->categoria_id) && $cat->categoria_id < 1)
+                                    <li>
+                                        <a href="{{route('categoria.listar', $cat->id)}}">
+                                            {{$cat->nome}}
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @endforeach
+                                </ul>
+                            </div>
+
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             @foreach ($listcategorias as $cat)
                             @if (is_null($cat->categoria_id) && $cat->categoria_id < 1)
@@ -57,6 +78,7 @@
                             @endforeach
                         </ul>
                     </div>
+                    @endif
                     <div class="col-lg-10">
                     <br/>
                         @include('layouts.messages')

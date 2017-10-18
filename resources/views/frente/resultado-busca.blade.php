@@ -1,6 +1,8 @@
 @extends('layouts.frente-loja')
 
 @section('conteudo')
+<br/>
+<br/>
 <div class='col-sm-12'>
     <div class="page-header text-muted">
         {{$produtos->total()}} encontrado(s) com o termo de busca 

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Shoppvel\Http\Requests;
 use Shoppvel\Models\Produto;
 use Shoppvel\Models\Marca;
+use Shoppvel\Models\VendaItem;
 use Shoppvel\Controllers\ImagemController;
 use Shoppvel\Http\Requests\ProdutoFormRequest;
 use Shoppvel\Http\Requests\ProdutoUpdateRequest;
@@ -156,9 +157,18 @@ class ProdutoController extends Controller {
         }
     
     function delete($id) {
-        $models['produto'] = Produto::find($id)->delete();
-        \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
+        $itens = VendaItem::where('produto_id',$id)->count();
+        if($itens == 1){
+            return redirect()->back()->with('mensagens-danger','Não é possivel excluir este produto,pois esta relacionado a algum pedido');
+        }else{
+            $produto = Produto::find($id);
+            $path = 'uploads/'.$produto->imagem_nome;
+            unlink($path);
+            $produto->delete();
+            \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
             return redirect()->action('ProdutoController@listar');
+        }
+        
     }
 
 }

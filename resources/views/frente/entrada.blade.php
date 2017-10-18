@@ -14,10 +14,12 @@
 </style>
 <br/>
 <div class='container'>
-    <h3>Mesas disponíveis</h3>
-    @foreach($mesa as $m)
-        <a href="{{url('reservar_mesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
-    @endforeach
+      <div class='col-md-12'>
+        <h3>Mesas disponíveis</h3>
+        @foreach($mesa as $m)
+            <a href="{{url('reservar_mesa',$m->id_mesa)}}" class='btn btn-primary btn-lg' >{{$m->numero}}</a>
+        @endforeach
+      </div>
 </div>
 <!--<div class='col-sm-12'>
     <div class="page-header text-muted">
