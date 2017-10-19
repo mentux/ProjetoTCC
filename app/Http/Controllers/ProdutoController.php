@@ -26,16 +26,13 @@ class ProdutoController extends Controller {
 
         $termo = $request->get('termo-pesquisa');
 
-        $produtos = Produto::where('nome', 'LIKE', '%' . $termo . '%')
-                ->paginate(10);
-        //$produtos->setPath('buscar/'.$termo);
+        $produtos = Produto::where('nome','ILIKE',"%{$termo}%")->paginate(10);
         $models['produtos'] = $produtos;
         $models['termo'] = $termo;
         return view('frente.resultado-busca', $models);
     }
     function listar() {
         $models['produtos'] = Produto::orderBy('nome')->paginate(10);
-            //dd($models);
             return view('admin.produto.listar', $models);
         }
     
@@ -53,7 +50,6 @@ class ProdutoController extends Controller {
         'descricao'=>'required|min:5',
         'qtde_estoque'=>'required|integer|min:1',
         'preco_venda'=>'required|min:0,00',
-        'imagem_nome'=>'required|image',
         ],[
                 'categoria_id.required'=>'É Nescessário Selecionar uma Categoria',
                 'marca_id.required'=>'É Nescessário Selecionar uma Marca',
@@ -66,8 +62,6 @@ class ProdutoController extends Controller {
                 'qtde_estoque.integer'=>'O Valor do Estoque Deverá Ser Apenas Números Inteiros e Positivo"',
                 'qtde_estoque.min'=>'O Valor Mínimo para a Quantidade do Estoque é de 1',
                 'preco_venda.required'=>'O Preco do Produto é Nescessário ',
-                'imagem_nome.required'=>'É Nescessário Selecionar Uma Imagem',
-                'imagem_nome.image'=>'Não é Imagem Válida',
         ]);
 
         
@@ -79,20 +73,21 @@ class ProdutoController extends Controller {
         $produto->qtde_estoque = $request->input('qtde_estoque');
         $produto->preco_venda = str_replace(',', '.',$request->input('preco_venda'));
         $produto->destacado = $request->input('destacado');
-        $path = 'uploads';
-        $imagem_upload = $request->file('imagem_nome');
-        $formato = $imagem_upload->getClientOriginalExtension();
-        $arquivo = rand(902802,398432).'.'.$formato;
-        $request->file('imagem_nome')->move($path,$arquivo);
-        $produto->imagem_nome = $arquivo;
-        //str_replace(',', '.', $produto->preco_venda);
+        if($request->file('imagem_nome') == null){
+            $produto->imagem_nome= 'sem_imagem.jpg';
+        }else{
+            $path = 'uploads';
+            $imagem_upload = $request->file('imagem_nome');
+            $formato = $imagem_upload->getClientOriginalExtension();
+            $arquivo = rand(902802,398432).'.'.$formato;
+            $request->file('imagem_nome')->move($path,$arquivo);
+            $produto->imagem_nome = $arquivo;
+        }
         if($produto->preco_venda < 0){
             return redirect()->back()->with('mensagens-danger', 'Não é possível Deixar o Preço do Produto Negativo!!!');
         }
-        //dd($produto->preco_venda);
         $produto->save();
         return redirect()->action('ProdutoController@listar')->with('mensagens-sucesso', 'Cadastrado com Sucesso!!!');
-        //dd($produto);
     }
     
     function editar($id) {
@@ -108,8 +103,7 @@ class ProdutoController extends Controller {
         'nome'=>'required|min:3',
         'descricao'=>'required|min:5',
         'qtde_estoque'=>'required|integer|min:1',
-        'preco_venda'=>'required|min:0,00',
-        'imagem_nome'=>'required',
+        'preco_venda'=>'required|min:0,00', 
         ],[
                 'categoria_id.required'=>'É Nescessário Selecionar uma Categoria',
                 'marca_id.required'=>'É Nescessário Selecionar uma Marca',
@@ -121,28 +115,29 @@ class ProdutoController extends Controller {
                 'qtde_estoque.integer'=>'O Valor do Estoque Deverá Ser Apenas Números Inteiros e Positivo"',
                 'qtde_estoque.min'=>'O Valor Mínimo para a Quantidade do Estoque é de 1',
                 'preco_venda.required'=>'O Preco do Produto é Nescessário ',
-                'imagem_nome.required'=>'É Nescessário Selecionar Uma Imagem',
         ]);
-        $data = $request->all();
-        $data= Produto::find($id);
-        $data->categoria_id = $request->input('categoria_id');
-        $data->marca_id = $request->input('marca_id');
-        $data->nome = $request->input('nome');
-        $data->descricao = $request->input('descricao');
-        $data->qtde_estoque = $request->input('qtde_estoque');
-        $data->preco_venda = str_replace(',', '.',$request->input('preco_venda'));
-        $data->destacado = $request->input('destacado');
-        $path = 'public/uploads';
-        $imagem_upload = $request->file('imagem_nome');
-        $formato = $imagem_upload->getClientOriginalExtension();
-        $arquivo = rand(902802,398432).'.'.$formato;
-        $request->file('imagem_nome')->move($path,$arquivo);
-        $data->imagem_nome = $arquivo;
-        //str_replace(',', '.', $produto->preco_venda);
-        if($data->preco_venda < 0){
-            return redirect()->back()->with('mensagens-danger', 'Não é possível Deixar o Preço do Produto Negativo!!!');
+        $produto = Produto::find($id);
+        $produto->categoria_id = $request->input('categoria_id');
+        $produto->marca_id = $request->input('marca_id');
+        $produto->nome = $request->input('nome');
+        $produto->descricao = $request->input('descricao');
+        $produto->qtde_estoque = $request->input('qtde_estoque');
+        $produto->preco_venda = str_replace(',', '.',$request->input('preco_venda'));
+        $produto->destacado = $request->input('destacado');
+        if($request->file('imagem_nome') == null){
+            $produto->imagem_nome= 'sem_imagem.jpg';
+        }else{
+            $path = 'uploads';
+            $imagem_upload = $request->file('imagem_nome');
+            $formato = $imagem_upload->getClientOriginalExtension();
+            $arquivo = rand(902802,398432).'.'.$formato;
+            $request->file('imagem_nome')->move($path,$arquivo);
+            $produto->imagem_nome = $arquivo;
         }
-        if(Produto::find($id)->update($data)){
+        if($produto->preco_venda < 0){
+            return redirect()->action('ProdutoController@atualizar');
+        }
+        if($produto->save()){
            return redirect()->action('ProdutoController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso!');
         } else {
            return redirect()->back()
@@ -158,15 +153,33 @@ class ProdutoController extends Controller {
     
     function delete($id) {
         $itens = VendaItem::where('produto_id',$id)->count();
-        if($itens == 1){
+        $produto = Produto::find($id);
+        if($produto->imagem_nome == 'sem_imagem.jpg'){
+            $produto->delete();
+            \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
+            return redirect()->action('ProdutoController@listar');
+        }elseif($itens == 1){
             return redirect()->back()->with('mensagens-danger','Não é possivel excluir este produto,pois esta relacionado a algum pedido');
         }else{
-            $produto = Produto::find($id);
             $path = 'uploads/'.$produto->imagem_nome;
             unlink($path);
             $produto->delete();
             \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
             return redirect()->action('ProdutoController@listar');
+        }
+        
+    }
+
+    public function excluir_imagem($id){
+        $imagem = Produto::find($id);
+        if($imagem->imagem_nome != 'sem_imagem.jpg'){
+        $path = 'uploads/'.$imagem->imagem_nome;
+        $imagem->imagem_nome = 'sem_imagem.jpg';
+        unlink($path);
+        $imagem->save();
+        return redirect()->back()->with('mensagens-sucesso','Imagem Excluida com sucesso');
+        }else{
+            return redirect()->back()->with('mensagens-danger','Imagem ja foi excluida');
         }
         
     }

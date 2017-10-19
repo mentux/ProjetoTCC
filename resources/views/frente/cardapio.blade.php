@@ -2,6 +2,9 @@
 
 @section('conteudo')
 <br/>
+    <a class="btn btn-danger" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair da mesa</a>
+    <br/>
+    <br/>
     <h1 class='hidden-xs'>Produtos em Destaque:</h1>
     <h1 style='margin-top:50px;' class='hidden-lg hidden-md hidden-sm '>Produtos em Destaque:</h1>
     <div class='col-sm-12'>

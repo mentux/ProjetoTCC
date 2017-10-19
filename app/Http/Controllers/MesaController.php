@@ -185,7 +185,6 @@ class MesaController extends Controller{
         $pedido->user_id = \Session::get('id_mesa');
         $pedido->data_venda = \Carbon\Carbon::now();
         $pedido->valor_venda = $this->carrinho->getTotal();
-        //$pedido->pagseguro_transaction_id = $req->transaction_id;
         $pedido->id_mesa = \Session::get('id_mesa');
         $pedido->status = 1;
         $pedido->save();
@@ -232,22 +231,3 @@ class MesaController extends Controller{
 }
 
 
-
-
-/*
-
- $itemCarrinho = Produto::find($itemCarrinho->produto->id);
-            $itemCarrinho->qtde_estoque;
-            $item=$itemCarrinho;
-            $result=0;
-    
-            if($result = $item->qtde_estoque - $itemVenda->qtde){
-
-                if($result < 0){
-                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Quantidade Escolhida é maior que o estoque: '. $itemCarrinho->qtde_estoque . ' '.$itemCarrinho->nome);
-                }
-            }else{
-                $pedido->itens()->save($itemVenda);
-                $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
-            }
-*/

@@ -19,6 +19,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Numero do pedido</th>
             <th>Data</th>
             <th class="text-right">Mesa</th>
             <th class="text-right">Valor</th>
@@ -32,6 +33,10 @@
     <tbody>
         @forelse($pedidos as $pedido)
         <tr>
+             <td>
+                {{$pedido->id_venda}}
+                
+            </td>
             <td>
                 <a href="{{route('admin.pedidos', $pedido->id_venda)}}">
                     {{$pedido->data_venda->format('d/m/Y')}}

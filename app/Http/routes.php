@@ -214,6 +214,13 @@ Route::get('logout_admin','AdminController@logout_admin');
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
+
+
+    Route::get('excluir_imagem/{id}','ProdutoController@excluir_imagem');
+
+
+
+
      Route::put('mesa_liberada/{id}', [
                 'as' => 'liberar_mesa',
                 'uses' => 'AdminController@putLiberarMesa'
