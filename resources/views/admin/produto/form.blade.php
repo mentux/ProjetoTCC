@@ -19,7 +19,7 @@
 			@endif
 
 			        {!! Form::label('categoria_id', 'Categoria', ['class'=>'col-sm-2 form-label']) !!}
-			        {!! Form::select('id', $listcategorias->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Categoria']) !!}<br>
+			        {!! Form::select('categoria_id', $listcategorias->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Categoria']) !!}<br>
 
 			        {!! Form::label('marca_id', 'Marca', ['class'=>'col-sm-2 form-label']) !!}
 			        {!! Form::select('marca_id', $marcas->lists('nome','id'), null, ['class'=>'form-control', 'placeholder'=>'Marca']) !!}<br>

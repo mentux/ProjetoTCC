@@ -22,8 +22,15 @@ class MarcaController extends Controller
 
         }
     
-    function salvar(MarcaFormRequest $request) {
-    	$marca = new Marca();
+    function salvar(Request $request) {
+    	 $this->validate($request,[
+        'nome'=>'required|min:3|unique:marcas',
+        ],[
+            'nome.required'     =>'O campo Nome é nescessário ser preenchido',
+            'nome.min'          =>'O minímo é 3 caracteres no campo Nome',
+            'nome.unique:marcas'=>'O Nome para a Marca já está sendo utilizado',
+        ]);
+      $marca = new Marca();
     	$marca->create($request->all());
         //\Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
       return $this->listar();
@@ -49,25 +56,14 @@ class MarcaController extends Controller
     }
     function excluir($id) {
         $data['marca'] = Marca::find($id);
-       
         if(count(Produto::where('marca_id', $id)->get()) == 0){
-            //dd($data);
             return view('admin.marca.excluir', $data); 
         }
         else{
+          //dd($data['marca']->nome);
            return \Redirect::back()
-            ->withErrors('Não é possível excluir esta marca, pois ela está associada à um produto.'); 
+            ->withErrors('Não é possível excluir a Marca: '.$data['marca']->nome.', pois ela está associada à um(uns) produto(s).'); 
         }
-      /*$models['marca'] = Marca::find($id);
-      $produtos = Produto::where('marca_id', $id)->get();
-      if(Produto::where('marca_id', $id)->get() == ''){
-      //dd($produto);
-        return view('admin.marca.excluir', $models, $produtos);
-      }else{
-        return redirect()->back()
-           ->with('mensagens-erro', 'Erro!!!')
-           ->withInput();
-      }*/
     }  
     function delete($id) {
         $models['marca'] = Marca::find($id)->delete();

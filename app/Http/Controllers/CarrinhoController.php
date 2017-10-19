@@ -45,7 +45,7 @@ class CarrinhoController extends Controller {
 
     function getEsvaziar() {
         $this->carrinho->esvaziar();
-        return redirect('/')->with('mensagens-sucesso', 'Carrinho vazio');
+        return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-sucesso', 'Carrinho vazio');
     }
 
     /**

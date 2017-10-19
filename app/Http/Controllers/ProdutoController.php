@@ -34,7 +34,7 @@ class ProdutoController extends Controller {
         return view('frente.resultado-busca', $models);
     }
     function listar() {
-        $models['produtos'] = Produto::orderBy('nome')->paginate(20);
+        $models['produtos'] = Produto::orderBy('nome')->paginate(10);
             //dd($models);
             return view('admin.produto.listar', $models);
         }
@@ -47,7 +47,7 @@ class ProdutoController extends Controller {
     
     function salvar(Request $request) {
         $this->validate($request,[
-        'id'=>'required',
+        'categoria_id'=>'required',
         'marca_id'=>'required',
         'nome'=>'required|min:3|unique:produtos',
         'descricao'=>'required|min:5',
@@ -55,7 +55,7 @@ class ProdutoController extends Controller {
         'preco_venda'=>'required|min:0,00',
         'imagem_nome'=>'required|image',
         ],[
-                'id.required'=>'É Nescessário Selecionar uma Categoria',
+                'categoria_id.required'=>'É Nescessário Selecionar uma Categoria',
                 'marca_id.required'=>'É Nescessário Selecionar uma Marca',
                 'nome.required'=>'Nome do Produto é Nescessário',
                 'nome.min'=>'Minímo 3 Caracteres no Nome do Produto',
@@ -72,7 +72,7 @@ class ProdutoController extends Controller {
 
         
         $produto = new Produto();
-        $produto->categoria_id = $request->input('id');
+        $produto->categoria_id = $request->input('categoria_id');
         $produto->marca_id = $request->input('marca_id');
         $produto->nome = $request->input('nome');
         $produto->descricao = $request->input('descricao');
@@ -103,7 +103,7 @@ class ProdutoController extends Controller {
 
     public function atualizar(Request $request, $id) {
         $this->validate($request,[
-        'id'=>'required',
+        'categoria_id'=>'required',
         'marca_id'=>'required',
         'nome'=>'required|min:3',
         'descricao'=>'required|min:5',
@@ -111,7 +111,7 @@ class ProdutoController extends Controller {
         'preco_venda'=>'required|min:0,00',
         'imagem_nome'=>'required',
         ],[
-                'id.required'=>'É Nescessário Selecionar uma Categoria',
+                'categoria_id.required'=>'É Nescessário Selecionar uma Categoria',
                 'marca_id.required'=>'É Nescessário Selecionar uma Marca',
                 'nome.required'=>'Nome do Produto é Nescessário',
                 'nome.min'=>'Minímo 3 Caracteres no Nome do Produto',
@@ -125,7 +125,7 @@ class ProdutoController extends Controller {
         ]);
         $data = $request->all();
         $data= Produto::find($id);
-        $data->categoria_id = $request->input('id');
+        $data->categoria_id = $request->input('categoria_id');
         $data->marca_id = $request->input('marca_id');
         $data->nome = $request->input('nome');
         $data->descricao = $request->input('descricao');

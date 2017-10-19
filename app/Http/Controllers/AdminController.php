@@ -16,6 +16,9 @@ class AdminController extends Controller {
 
     public function logout_admin(){
         \Session::forget('admin');
+        \Session::forget('id');
+        \Session::forget('role');
+        \Session::forget('nome');
         return redirect('login');
     }
 
@@ -37,17 +40,17 @@ class AdminController extends Controller {
         if ($id == null) {
             if ($req->has('status') == false) {
                 $models['tipoVisao'] = 'Todos';
-                $models['pedidos'] = Venda::orderBy('data_venda','DESC')->get();
+                $models['pedidos'] = Venda::orderBy('data_venda','DESC')->paginate(10);
             } else {
                 if ($req->status == 'nao-pagos') {
                     $models['tipoVisao'] = 'Não Pagos';
-                    $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->get();
+                    $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->paginate(10);
                 } else if ($req->status == 'pagos') {
                     $models['tipoVisao'] = 'Pagos';
-                    $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->get();
+                    $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->paginate(10);
                 } else if ($req->status == 'finalizados') {
                     $models['tipoVisao'] = 'Finalizados/Enviados';
-                    $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->get();
+                    $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->paginate(10);
                 }
             }
             return view('admin.pedidos-listar', $models);
@@ -85,14 +88,14 @@ class AdminController extends Controller {
 
     public function getTodosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $models['pedidos'] = Venda::orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['pedidos'] = Venda::orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);
         $models['tipoVisao'] = 'Todos os pedidos de hoje';
         return view('admin.pedidos-listar', $models);
     }
 
         public function getPendentesHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);
         $models['tipoVisao'] = 'Não Pagos hoje';
         return view('admin.pedidos-listar', $models);
     }
@@ -100,14 +103,14 @@ class AdminController extends Controller {
 
      public function getPagosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);
         $models['tipoVisao'] = 'Pagos hoje';
         return view('admin.pedidos-listar', $models);
     }
 
     public function getFinalizadosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->get();
+        $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);//alterado os get(); para paginate(10);
         $models['tipoVisao'] = 'Finalizados/Enviados Hoje';
         return view('admin.pedidos-listar', $models);
     }

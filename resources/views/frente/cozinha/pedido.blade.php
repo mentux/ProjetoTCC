@@ -85,5 +85,5 @@
         @endforeach
     </tbody>
 </table>
-
+{{ $venda->render() }}
 @stop

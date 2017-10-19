@@ -56,6 +56,9 @@ class LoginController extends Controller{
 
     public function logout(){
         \Session::forget('cozinha');
+        \Session::forget('id');
+        \Session::forget('role');
+        \Session::forget('nome');
         return redirect('login');
     }
 		

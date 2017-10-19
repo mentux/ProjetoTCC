@@ -101,7 +101,7 @@
                         <th class="text-right">Preço Unitário</th>
                         <th>Quantidade</th>
                         <th></th>
-                        <th></th>
+                        <th><a href="{{route('carrinho.esvaziar')}}" class='btn btn-warning btn-sm'>Esvaziar carrinho</a></th>
                     </tr>
                 </thead>
                 <tbody>

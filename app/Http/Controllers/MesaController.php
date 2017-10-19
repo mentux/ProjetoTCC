@@ -33,6 +33,15 @@ class MesaController extends Controller{
     	return view('admin.mesas.mesa');
     }
     public function salvar(Request $request){
+         $this->validate($request,[
+        'numero'=>'required|numeric',
+        ],[
+                'numero.required'=>'É nescessário preencher o campo Número',
+                'numero.numeric'=>'O campo Número deve ser númerico',
+        ]);
+        if($request->numero < 0){
+            return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
+        }
         $consulta = Mesa::where('numero',$_REQUEST['numero'])->count();
         if($consulta == 1){
             return redirect()->back()
@@ -51,6 +60,16 @@ class MesaController extends Controller{
     }
     public function atualizar(Request $request, $id) {
         $data = $request->all();
+        $this->validate($request,[
+        'numero'=>'required|numeric',
+        ],[
+                'numero.required'=>'É nescessário preencher o campo Número',
+                'numero.numeric'=>'O campo Número deve ser númerico',
+        ]);
+        if($request->numero < 0){
+            return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
+        }
+
         if(Mesa::find($id)->update($data)){
            return redirect()->action('MesaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso!');
         } else {
@@ -65,10 +84,15 @@ class MesaController extends Controller{
             return redirect()->action('MesaController@listar');
     }
 
-    public function getMesaId(Request $request,$id){ 
+    public function getMesaId(Request $request,$id){
+        
         $mesa = Mesa::find($id);
-        if($mesa->status == 1){
-           return redirect('/')->withErrors('Essa mesa não foi reservada'); 
+        $consulta = Mesa::where('id_mesa',$id)->count();
+        if($consulta == 0){
+            return redirect('/');
+        
+        }elseif($mesa->status == 1){
+           return redirect('/')->with('mensagens-danger','Essa mesa não foi reservada'); 
        }else{
         $produto = Produto::all();
         $produto_destacado = Produto::where('destacado',1)->get();
@@ -147,6 +171,7 @@ class MesaController extends Controller{
         }else{
             return redirect()->back()->with('mensagens-sucesso', 'Produto Removido do Carrinho');
         }
+
     }
 
 
@@ -170,21 +195,8 @@ class MesaController extends Controller{
             $itemVenda->produto_id = $itemCarrinho->produto->id;
             $itemVenda->qtde = $itemCarrinho->qtde;
             $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-            
-            $itemCarrinho = Produto::find($itemCarrinho->produto->id);
-            $itemCarrinho->qtde_estoque;
-            $item=$itemCarrinho;
-            $result=0;
-    
-            if($result = $item->qtde_estoque - $itemVenda->qtde){
-
-                if($result < 0){
-                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Quantidade Escolhida é maior que o estoque: '. $itemCarrinho->qtde_estoque);
-                }
-            }else{
-                $pedido->itens()->save($itemVenda);
-                $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
-            }
+            $pedido->itens()->save($itemVenda);
+            $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
         }
         
        
@@ -216,5 +228,26 @@ class MesaController extends Controller{
         $mesa->save();
         return redirect('volte_sempre');
 
-    }         
+    }
 }
+
+
+
+
+/*
+
+ $itemCarrinho = Produto::find($itemCarrinho->produto->id);
+            $itemCarrinho->qtde_estoque;
+            $item=$itemCarrinho;
+            $result=0;
+    
+            if($result = $item->qtde_estoque - $itemVenda->qtde){
+
+                if($result < 0){
+                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Quantidade Escolhida é maior que o estoque: '. $itemCarrinho->qtde_estoque . ' '.$itemCarrinho->nome);
+                }
+            }else{
+                $pedido->itens()->save($itemVenda);
+                $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
+            }
+*/

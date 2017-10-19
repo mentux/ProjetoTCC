@@ -19,7 +19,7 @@
 			@endif
 
 					{!! Form::label('numero', 'Mesa', ['class'=>'input-group']) !!}
-					{!! Form::input('numeric', 'numero', null, ['class'=>'form-control', 'autofocus', 'placeholder'=>'Numero']) !!}
+					{!! Form::input('numeric', 'numero', null, ['class'=>'form-control', 'autofocus', 'placeholder'=>'Número']) !!}
 
 					{!! Form::submit('Salvar', ['class'=>'btn btn-primary', 'style'=>'margin-top:2px']) !!}
 

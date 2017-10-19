@@ -86,4 +86,5 @@
         @endforelse
     </tbody>
 </table>
+{{ $pedidos->render() }}
 @stop

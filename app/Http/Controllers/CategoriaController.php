@@ -86,7 +86,7 @@ class CategoriaController extends Controller {
         if($id != -1){
             return view('admin.categoria.excluir', $models);
         }
-            return redirect()->back()->with('mensagens-danger', 'Não é possível excluir, há um produto associado');
+            return redirect()->back()->with('mensagens-danger', 'Não é possível excluir, Há Produto(s) associado(s)');
             
         }
     

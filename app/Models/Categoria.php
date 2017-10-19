@@ -9,7 +9,8 @@ class Categoria extends Model {
 
 	protected $fillable = [
 		'nome',
-		'categoria_id'
+		'categoria_id',
+        'id',
 	];
     //public $timestamps = false;
 
