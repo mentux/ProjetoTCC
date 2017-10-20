@@ -38,9 +38,7 @@
                 
             </td>
             <td>
-                <a href="{{route('admin.pedidos', $pedido->id_venda)}}">
-                    {{$pedido->data_venda->format('d/m/Y')}}
-                </a>
+                {{$pedido->data_venda->format('d/m/Y')}}
             </td>
             <td class="text-center">
                 {{$pedido->mesa->numero}}
@@ -80,6 +78,9 @@
                         {{ Form::submit('Marcar Finalizado', ['class'=>'btn btn-warning btn-sm col-sm-12']) }}
                     {{ Form::close() }}
                 @endif
+            </td>
+            <td>
+                <a class='btn btn-primary' href="{{route('admin.pedidos', $pedido->id_venda)}}">Mais detalhes</a> 
             </td>
         </tr>
         @empty

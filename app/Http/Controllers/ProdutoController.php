@@ -124,15 +124,18 @@ class ProdutoController extends Controller {
         $produto->qtde_estoque = $request->input('qtde_estoque');
         $produto->preco_venda = str_replace(',', '.',$request->input('preco_venda'));
         $produto->destacado = $request->input('destacado');
-        if($request->file('imagem_nome') == null){
-            $produto->imagem_nome= 'sem_imagem.jpg';
-        }else{
-            $path = 'uploads';
+        if($produto->imagem_nome != 'sem_imagem.jpg'){
+            $produto->imagem_nome = $produto->imagem_nome;
+        }elseif($request->file('imagem_nome') == null){
+            $produto->imagem_nome = 'sem_imagem.jpg';
+        }
+        else{
+           $path = 'uploads';
             $imagem_upload = $request->file('imagem_nome');
             $formato = $imagem_upload->getClientOriginalExtension();
             $arquivo = rand(902802,398432).'.'.$formato;
             $request->file('imagem_nome')->move($path,$arquivo);
-            $produto->imagem_nome = $arquivo;
+            $produto->imagem_nome = $arquivo; 
         }
         if($produto->preco_venda < 0){
             return redirect()->action('ProdutoController@atualizar');

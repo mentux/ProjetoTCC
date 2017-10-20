@@ -6,14 +6,14 @@
     <thead>
         <tr>
             <th>Mesa</th>
-            <th>Valor</th>
+            <th>Total</th>
             <th>Status</th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
-                2
+                {{$venda->mesa->numero}}
             </td>
             <td>
                 {{$venda->valor_venda}}

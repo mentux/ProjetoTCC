@@ -1,31 +1,29 @@
 @extends('layouts.admin')
 
 @section('conteudo')
-<h2>Pedido - {{$pedido->data_venda->format('d/m/Y H:i')}} </h2>
+<h2>Pedido - {{$pedido->id_venda}} </h2>
 <table class="table table-striped">
     <thead>
         <tr>
             <th>Data</th>
-            <th class="text-right">Cliente</th>
+            <th class="text-right"></th>
             <th class="text-right">Valor</th>
-            <th class="text-right">Método de Pagamento</th>
-            <th class="text-right">Status no Pagseguro</th>
+            <th class="text-right"></th>
+            <th class="text-right"></th>
             <th class="text-right">Status Local</th>
             <th class="text-right">Enviado / Finalizado</th>
-            <th class="text-right">Id no Pagseguro</th>
+            <th class="text-right"></th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
-                <a href="{{route('cliente.pedidos', $pedido->id_venda)}}">
-                    {{$pedido->data_venda->format('d/m/Y H:i')}}
-                </a>
+                {{$pedido->data_venda->format('d/m/Y')}}
             </td>
             <td>
                 
             </td>
-            <td>
+            <td class='text-right'>
                 {{number_format($pedido->valor_venda, 2, ',', '.')}}
             </td>
             <td class="text-right">
@@ -62,7 +60,6 @@
             <th class="text-right">Quantidade</th>
             <th class="text-right">Valor Unitário</th>
             <th class="text-right">Total do item</th>
-            <th class="text-right">Avaliação</th>
         </tr>
     </thead>
     <tbody>
@@ -82,9 +79,6 @@
             </td>
             <td class="text-right">
                 {{number_format($item->produto->preco_venda * $item->qtde, 2, ',', '.')}}
-            </td>
-            <td class="col-sm-2 text-right">
-                {{ number_format($item->produto->avaliacao_total / $item->produto->avaliacao_qtde, 2) }}
             </td>
         </tr>
         @endforeach

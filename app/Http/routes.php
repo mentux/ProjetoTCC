@@ -374,6 +374,8 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.mesa.excluir',
                 'uses' => 'MesaController@excluir'
             ]);
+            Route::get('excluir_mesa_selecionar/{id}','MesaController@excluir_mesa_selecionar');
+
             Route::post('admin/mesa/listar', [
                 'as' => 'admin.mesa.salvar',
                 'uses' => 'MesaController@salvar'
@@ -386,7 +388,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.mesa.excluir',
                 'uses' => 'MesaController@excluir'
             ]);
-            Route::delete('admin/mesa/{id?}/delete', [
+            Route::get('admin/mesa/{id?}/delete', [
                 'as' => 'admin.mesa.delete',
                 'uses' => 'MesaController@delete'
             ]);

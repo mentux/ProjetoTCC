@@ -10,7 +10,6 @@
         <link rel="icon" href="../../favicon.ico">
 
         <title>L & C</title>
-
         <!-- Bootstrap core CSS -->
         <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
         {!! HTML::style('bootstrap/css/assets/css/style.css') !!}
@@ -38,24 +37,26 @@
                 @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}' OR (Route::getCurrentRoute()->getPath()) == 'categoria/{id?}' OR(Route::getCurrentRoute()->getPath()) == 'produto/buscar')
                 <div class="row">
                     <div class="col-lg-2">
+                        </br>
+                        </br>
                         <h3>Categorias</h3>
-                            <a class='btn btn-primary hidden-xs' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Cardápio</a>
+                            <a class='btn btn-primary hidden-xs' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
                             <br/>
                             <br/>
                             <button class="btn btn-primary dropdown-toggle hidden-xs" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 Categorias
                                 <span class="caret"></span>
                             </button>
+                            <div class='botoes_responsivo'>
 
-                            <div style='margin-top:35px;' class='botoes_responsivo'>
                                 <button class="btn btn-primary dropdown-toggle hidden-sm hidden-md hidden-lg" type="button" id="dropdownMenu2"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     Categorias
                                     <span class="caret"></span>
                                 </button>
-                                <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Cardápio</a>
+                                <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
                                  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     @foreach ($listcategorias as $cat)
-                                    @if (is_null($cat->categoria_id) && $cat->categoria_id < 1)
+                                    @if ($cat->id)
                                     <li>
                                         <a href="{{route('categoria.listar', $cat->id)}}">
                                             {{$cat->nome}}
@@ -65,10 +66,9 @@
                                     @endforeach
                                 </ul>
                             </div>
-
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             @foreach ($listcategorias as $cat)
-                            @if (is_null($cat->categoria_id) && $cat->categoria_id < 1)
+                            @if ($cat->id)
                             <li>
                                 <a href="{{route('categoria.listar', $cat->id)}}">
                                     {{$cat->nome}}
@@ -83,13 +83,7 @@
                     <br/>
                         @include('layouts.messages')
                         @yield('conteudo')
-                    
-                
-
-
         </div> <!-- /container -->
-
-
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/ie10-viewport-bug-workaround.js')}}"></script>

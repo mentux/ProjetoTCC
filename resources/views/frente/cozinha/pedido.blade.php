@@ -37,6 +37,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Numero</th>
             <th>Mesa</th>
             <th>Status</th>
             <th></th>
@@ -44,7 +45,10 @@
     </thead>
     <tbody>
         @foreach($venda as $pedido)
-        <tr>   
+        <tr> 
+            <td>
+                {{$pedido->id_venda}}
+            </td>  
             <td>
                 {{$pedido->mesa->numero}}
             </td>

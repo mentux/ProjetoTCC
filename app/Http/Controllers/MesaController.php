@@ -79,9 +79,20 @@ class MesaController extends Controller{
         }
     }
     function excluir($id) {
-        $mesas['mesa'] = Mesa::find($id)->delete();
-        \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
+        $mesa = Mesa::find($id);
+        if($mesa->status == 2){
+            return redirect('admin/mesa/listar')->with('mensagens-danger','A mesa esta reservada');
+        }else{
+            $mesa->delete();
+            \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
             return redirect()->action('MesaController@listar');
+        }
+        
+    }
+
+    public function excluir_mesa_selecionar($id){
+        $mesa = Mesa::find($id);
+        return view('admin.mesas.mesa-excluir',['mesa'=>$mesa]);
     }
 
     public function getMesaId(Request $request,$id){
@@ -174,7 +185,6 @@ class MesaController extends Controller{
 
     }
 
-
     public function FecharPedido(Request $request){
         $itens = $this->carrinho->getItens();
         if(count($itens) == 0){
@@ -194,10 +204,26 @@ class MesaController extends Controller{
             $itemVenda->produto_id = $itemCarrinho->produto->id;
             $itemVenda->qtde = $itemCarrinho->qtde;
             $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-            $pedido->itens()->save($itemVenda);
-            $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
-        }
+    
         
+            $prod = Produto::find($itemCarrinho->produto->id);
+            $prod->qtde_estoque;
+            $item=$prod;
+            $result=0;
+    
+            if($result = $item->qtde_estoque - $itemVenda->qtde){
+
+                if($result < 0){
+                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Quantidade Escolhida é maior que o estoque: '. $prod->qtde_estoque . ' '.$prod->nome);
+                }
+            }
+                $itemVenda = new VendaItem();
+                $itemVenda->produto_id = $itemCarrinho->produto->id;
+                $itemVenda->qtde = $itemCarrinho->qtde;
+                $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
+                $pedido->itens()->save($itemVenda);
+                $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
+        }
        
         DB::commit();
 

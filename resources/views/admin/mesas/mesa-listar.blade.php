@@ -33,7 +33,7 @@
 		            <a href="{{ url('admin/mesa/'.$mesa->id_mesa . '/editar') }}" class="btn btn-info btn-sm">
 		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
 		            </a>
-		            <a href="{{ url('admin/mesa/'.$mesa->id_mesa . '/excluir') }}" class="btn btn-danger btn-sm">
+		            <a href="{{ url('excluir_mesa_selecionar',$mesa->id_mesa)}}" class="btn btn-danger btn-sm">
 		                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
 		            </a>
 		        </td>
