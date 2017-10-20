@@ -214,7 +214,7 @@ class MesaController extends Controller{
             if($result = $item->qtde_estoque - $itemVenda->qtde){
 
                 if($result < 0){
-                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Quantidade Escolhida é maior que o estoque: '. $prod->qtde_estoque . ' '.$prod->nome);
+                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois ultrapassou a quantidade de estoque dos produtos adicionados no carrinho.');
                 }
             }
                 $itemVenda = new VendaItem();
