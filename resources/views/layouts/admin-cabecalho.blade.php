@@ -13,7 +13,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Lanchonete - Área Administrativa.</a>
+            <a class="navbar-brand" href="#">L & C - Área Administrativa.</a>
         </div>
         <div class="navbar-collapse collapse navbar-right">
           <ul class="nav navbar-nav">
@@ -22,7 +22,8 @@
                 <li><a href="{{route('admin.categoria.listar')}}">Categorias</a></li>
                 <li><a href="{{route('admin.marca.listar')}}">Marcas</a>
                 <li><a href="{{route('admin.produto.listar')}}">Produtos</a>
-                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a>       
+                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a> 
+                <li><a href="{{route('admin.cliente.listar')}}">Clientes</a>       
                 @if(session('admin') == '')
                 <li><a href="{{ url('/login') }}">Login</a></li>
                 @else

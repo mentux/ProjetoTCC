@@ -192,7 +192,7 @@ class MesaController extends Controller{
         $pedido = new Venda();
         DB::beginTransaction();
         if(\Session::get('id_cliente') == ''){
-            $pedido->user_id = \Session::get('id_mesa');
+            $pedido->user_id = '';
         }else{
             $pedido->user_id = \Session::get('id_cliente');
         }

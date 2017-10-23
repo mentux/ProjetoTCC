@@ -118,7 +118,7 @@ class ClienteController extends Controller {
             \Session::put('nome_cliente',$cliente->name);
             \Session::put('id_cliente',$cliente->id);
             \Session::put('role_cliente',$cliente->role);
-            return redirect('getmesa/'.\Session::get('id_mesa'));
+            return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-sucesso','Bem vindo');
         }
         return view('frente.cliente.cadastrar_form');
     }

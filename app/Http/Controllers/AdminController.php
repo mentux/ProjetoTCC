@@ -8,6 +8,7 @@ use Shoppvel\Models\Carrinho;
 use Shoppvel\Models\Produto;
 use Shoppvel\Models\Venda;
 use Shoppvel\Models\Mesa;
+use Shoppvel\User;
 use Shoppvel\Models\VendaItem ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -103,7 +104,6 @@ class AdminController extends Controller {
 
      public function getPagosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);
         $models['tipoVisao'] = 'Pagos hoje';
         return view('admin.pedidos-listar', $models);
     }
@@ -113,6 +113,41 @@ class AdminController extends Controller {
         $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);//alterado os get(); para paginate(10);
         $models['tipoVisao'] = 'Finalizados/Enviados Hoje';
         return view('admin.pedidos-listar', $models);
+    }
+
+    public function listarClientes(){
+        $cliente = User::orderBy('name')->where('role','cliente')->paginate(10);
+        return view('admin.cliente.listar',['cliente'=>$cliente]);
+    }
+
+    public function atualizarCliente(Request $request,$id){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $cliente = User::find($id);
+            $cliente->name     = $request->input('name');
+            $cliente->endereco = $request->input('endereco');
+            $cliente->update();
+            return redirect('admin/cliente/listar')->with('mensagens-sucesso','Atualizado com sucesso');
+        }
+        $cliente = User::find($id);
+        return view('admin.cliente.form',['cliente'=>$cliente]);
+
+    }
+
+    public function excluirCliente($id){
+        $cliente = User::find($id);
+        return view('admin.cliente.excluir',['cliente'=>$cliente]);
+    }
+
+    public function deletarCliente($id){
+        $vendas = Venda::where('user_id',$id)->count();
+        if($vendas > 1){
+           return redirect('admin/cliente/listar')->with('mensagens-danger','Não é possível excluir este cliente,pois ele gerou pedidos.'); 
+        }else{
+            $cliente = User::find($id);
+            $cliente->delete();
+            return redirect('admin/cliente/listar')->with('mensagens-sucesso','Excluido com sucesso.');
+        }
+        
     }
 
 

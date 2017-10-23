@@ -405,4 +405,25 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.mesa.delete',
                 'uses' => 'MesaController@delete'
             ]);
+
+            //cliente
+            Route::get('admin/cliente/listar', [
+                'as' => 'admin.cliente.listar',
+                'uses' => 'AdminController@listarClientes'
+            ]);
+
+            Route::any('admin/cliente/atualizar/{id}', [
+                'as' => 'admin.cliente.atualizar',
+                'uses' => 'AdminController@atualizarCliente'
+            ]);
+
+            Route::get('admin/cliente/excluir/{id}', [
+                'as' => 'admin.cliente.excluir',
+                'uses' => 'AdminController@excluirCliente'
+            ]);
+
+            Route::delete('admin/cliente/{id}/deletar', [
+                'as' => 'admin.cliente.deletar',
+                'uses' => 'AdminController@deletarCliente'
+            ]);
 });

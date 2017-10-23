@@ -8,7 +8,7 @@ use Shoppvel\Http\Requests;
 class FrenteLojaController extends Controller {
 
     function getIndex() {
-                   /**
+            /**
          * Verifique o arquivo Controller.php onde usamos uma variavel
          * compartilhada (global) para todas as views, que devem ser motrar
          * as categorias do lado esquerdo em nosso sistema, assim não precisamos
@@ -18,9 +18,10 @@ class FrenteLojaController extends Controller {
         $models['mesa'] = \Shoppvel\Models\Mesa::where('status',1)->get();
         
         return view('frente.entrada', $models); 
+        }
+    
         
-
-    }
+    
 
     function getSobre() {
         return view('sobre');
