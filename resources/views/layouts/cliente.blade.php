@@ -65,9 +65,14 @@
                                 Pedidos finalizados
                             </a>
                         </li>
+                         <li class="list-group-item">
+                            <a href="{{url('getmesa',\Session::get('id_mesa'))}}">
+                                Voltar ao cardápio
+                            </a>
+                        </li>
                         <li class="list-group-item">
-                            <a href="{{route('cliente.perfil')}}">
-                                Perfil
+                            <a href="{{url('logout_cliente')}}">
+                                Logout
                             </a>
                         </li>
                     </ul>

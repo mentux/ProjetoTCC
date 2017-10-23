@@ -96,7 +96,6 @@ class MesaController extends Controller{
     }
 
     public function getMesaId(Request $request,$id){
-        
         $mesa = Mesa::find($id);
         $consulta = Mesa::where('id_mesa',$id)->count();
         if($consulta == 0){
@@ -192,7 +191,11 @@ class MesaController extends Controller{
         }else{
         $pedido = new Venda();
         DB::beginTransaction();
-        $pedido->user_id = \Session::get('id_mesa');
+        if(\Session::get('id_cliente') == ''){
+            $pedido->user_id = \Session::get('id_mesa');
+        }else{
+            $pedido->user_id = \Session::get('id_cliente');
+        }
         $pedido->data_venda = \Carbon\Carbon::now();
         $pedido->valor_venda = $this->carrinho->getTotal();
         $pedido->id_mesa = \Session::get('id_mesa');
@@ -234,7 +237,38 @@ class MesaController extends Controller{
         
         
     }
+    public function IncrementDelete($id){
+        //$value = $request->get('increment');
+        //$quant = $request->get('valor');
+        //$qtde = Produto::find($value);
+        $itens = $this->carrinho->getItens();
+        $total = $this->carrinho->getTotal();
+        foreach($itens as $i => $item){
+            if($id == $itens[$i]->produto->id){
+                $itens[$i]->qtde += 1;
+                return Response::json(number_format($total,2,',','.'));
+            }else{
+                while($id != $itens[$i]->produto->id){
+                    $i+=1;
+                    if(isset($itens[$i])){
+                        if($id == $itens[$i]->produto->id){
+                            $itens[$i]->qtde += 1;
+                            return Response::json(number_format($total,2,',','.'));
+                        }
+                    } 
+                }
+            }
+        }
+        
+    }
 
+    public function DecrementDelete(Request $request, $qtde){
+        $value = $request->get('increment');
+        $quant = $request->get('valor');
+        $qtde = Produto::find($value);
+        return Response::json($qtde);
+        
+    }
     public function MesaPedido($id_pedido){
         $pedido = Venda::find($id_pedido);
         return view('frente.mesa_pedido',['pedido'=>$pedido]);

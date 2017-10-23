@@ -2,7 +2,12 @@
 
 @section('conteudo')
 <br/>
-    <a class="btn btn-danger" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair da mesa</a>
+    @if(\Session::get('cliente')=='')
+        <div class="alert alert-info alert-dismissable text-center">
+            <strong>Ola!</strong>Gostaria de se cadastrar no nosso sistema?<br/><a class='btn btn-primary btn-sm'  href="{{url('cadastrar_cliente')}}">Cadastrar</a> <br/> Ou acessar sua conta?<br/><a href="{{url('login_cliente')}}" class='btn btn-info btn-sm'>Acessar</a> 
+        </div>
+    @endif
+    <a class="btn btn-info" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair da mesa</a>
     <br/>
     <br/>
     <h1 class='hidden-xs'>Produtos em Destaque:</h1>
@@ -70,12 +75,18 @@
 	           <p class='conteudo'></p>
 	           <p class='valor'></p>
 	           <img style='height:200px; width:200px;' class="imagem" />
-                <br/>
+               <div class='col-md-12'>
+               <p>Média de avaliações<p>
+               <h5 class="alert alert-success text-center avaliado col-md-3"><strong></strong>
+               </h5>
+               </div>
             <form class="action_carrinho"  action="{{route('adicionar')}}">
 	    </div>
 	    <div class="modal-footer">
-                <p class='text-left' >Quantidade</p>
-                <input type="numeric" value="1" name="quant" class="col-sm-2">
+                <p class='text-left'>Quantidade</p>
+                <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant">
+                <input class="btn btn-primary btn-sm col-md-1 col-sm-2 col-xs-2 increment" type="button" value="+" onclick="$('#alvo').val(parseInt($('#alvo').val())+1)">
+                <input class="btn btn-primary btn-sm col-md-1 col-sm-2 col-xs-2 decrement" type="button" value="-" onclick="$('#alvo').val(parseInt($('#alvo').val())-1)">
                 <br/>
                 <br/>
 	            <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
@@ -114,17 +125,21 @@
                             <img src="{{asset('uploads/'.$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" data-lightbox="roadtrip" style="width:70px;" >
                         </td>
                         <td>
-                                {{$item->produto->nome}}
+                            {{$item->produto->nome}}
                         </td>
                         <td class="text-center">
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
                         </td>
-                        <td class="text-center"> 
-                            {{$item->qtde}}
+                        <td class="text-center quant_item"> 
+                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" class="col-sm-2 col-xs-2 form-control btn-xs text-center qun">
+                                
+                                <button style="margin-right: 1px; margin-left: 2px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
+                                
+                                <button style="margin-left: 3px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
                         </td>
                         <td> 
-                        <a href="{{route('remover', $item->produto->id)}}" 
-                                class="btn btn-danger btn-xs pull-right">Excluir item</a>
+                        <a href="{{route('remover', $item->produto->id, $item->qtde)}}" 
+                                style="margin-bottom: 3px; margin-right: 15px;" class="btn btn-danger btn-xs pull-right">Excluir item</a>
                         </td>
                     </tr>
                     @endforeach
@@ -135,7 +150,7 @@
                             Total
                         </td>
                         <td>
-                            <h4 class="text-center text-danger">
+                            <h4 class="text-center text-danger total">
                                 R${{number_format($total,2,',','.')}}
                             </h4>
                         </td>
@@ -164,12 +179,18 @@ $(function() {
                 type: "GET",
                 url: 'http://localhost:8000/mesa/produto/'+id,
                 data: {id: id},
-                success: function(id) {
+                success: function(id){
+                avaliado = id.avaliacao_total/id.avaliacao_qtde;
                 $('.modal-title').html(id.nome);
                 $('.conteudo').html(id.descricao);
                 $('.valor').html('R$: '+id.preco_venda);
                 $(".imagem").attr("src",'http://localhost:8000/uploads/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
+                if(Number.isNaN(avaliado)){
+                  $('.avaliado').html('Não avaliado');  
+                }else{
+                  $('.avaliado').html(avaliado.toFixed(2));
+                }
   				//console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },
@@ -178,6 +199,39 @@ $(function() {
         });
 });
 </script>
+
+<!-- Increment -->
+
+<script type="text/javascript">
+$(function() {
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-Token':$('input[name="_token"]').val()
+        }
+    });
+        $('.increment').on("click",function(){
+            var id = $(this).attr('value');
+            //var qtde = $('.quant').attr('value');
+            //alert(qtde);
+            console.log(id);
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:8000/increment_teste/'+id,
+                data: {id : id},
+                success: function(total) {
+                $('.total').html('R$'+total);
+                //$('.increment').html(id.id);
+                //console.log(total);
+                //console.log(id.id);
+                //console.log($('.add_carrinho').val());
+                //console.log(id.id);
+                },
+            });
+            
+        });
+});
+</script>
+<!-- Decrement -->
 <script type="text/javascript">
 $(function() {
     
@@ -187,4 +241,25 @@ $(function() {
         });
 });
 </script>
+<script>
+    $(".increment").on('click',function(){
+        var value = $('.quant').val();
+        $('.quant').val(parseInt($('.quant').val())+1); return false;
+    });
+    $(".decrement").click(function(){
+       if($(".quant").val()!=0){$('.quant').val(parseInt($('.quant').val())-1);} return false;
+    });
+</script>
+
+
+<script type="text/javascript">
+$(function() {
+    
+        $('.cadastrar').click(function(){
+            window.location.href =  "http://localhost:8000/cadastrar_cliente/";    
+            
+        });
+});
+</script>
+
 @stop

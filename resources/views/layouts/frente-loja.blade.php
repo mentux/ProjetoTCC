@@ -12,6 +12,7 @@
         <title>L & C</title>
         <!-- Bootstrap core CSS -->
         <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{asset('bootstrap/css/assets/css/font-awesome.min.css') }}" rel="stylesheet">
         {!! HTML::style('bootstrap/css/assets/css/style.css') !!}
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         
@@ -48,7 +49,6 @@
                                 <span class="caret"></span>
                             </button>
                             <div class='botoes_responsivo'>
-
                                 <button class="btn btn-primary dropdown-toggle hidden-sm hidden-md hidden-lg" type="button" id="dropdownMenu2"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     Categorias
                                     <span class="caret"></span>
@@ -81,7 +81,10 @@
                     @endif
                     <div class="col-lg-10">
                     <br/>
+                        @if((Route::getCurrentRoute()->getPath()) == 'cadastrar_cliente' OR ((Route::getCurrentRoute()->getPath()) == 'login_cliente'))  
+                        @else
                         @include('layouts.messages')
+                        @endif
                         @yield('conteudo')
         </div> <!-- /container -->
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->

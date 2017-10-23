@@ -1,7 +1,7 @@
 @extends('layouts.cliente')
 
 @section('conteudo')
-<h2>Painel de controle - {{Auth::user()->name}}</h3>
+<h2>Painel de controle - {{\Session::get('nome_cliente')}}</h3>
 
 <div class="container">
     <div class="row">

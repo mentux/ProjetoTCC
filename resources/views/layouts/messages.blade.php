@@ -1,9 +1,9 @@
 @if (isset($errors) && (count($errors) > 0))
 <!-- mostra este bloco se existe uma chave na sessão chamada mensagem-erro -->
     <div class='alert alert-danger'>
-        <ul>
+        <ul style='list-style:none;'>
             @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
+            <li style='margin-bottom:5px;' class='text-center' >{{ $error }}</li>
             @endforeach
         </ul>
     </div>
@@ -37,3 +37,4 @@
         @endif
     </div>
 @endif
+

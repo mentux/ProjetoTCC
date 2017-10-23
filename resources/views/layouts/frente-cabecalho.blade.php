@@ -40,7 +40,7 @@
         @else
           <ul class="nav navbar-nav">
                 @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}')
-                <li><a data-toggle="modal" data-target="#carrinho_id">Carrinho</a></li>
+                <li><a data-toggle="modal" data-target="#carrinho_id" class="carrinho">Carrinho</a></li>
                 @else
                 @endif
 
@@ -58,6 +58,11 @@
                     <a href="{{ url('logout_cozinha') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                 </li>
                 @endif
+                @endif
+                @if(session('cliente') != '')
+                    <li class='small'>
+                        <a href="{{route('cliente.dashboard')}}">{{\Session::get('nome_cliente')}}</a>
+                    </li>
                 @endif
               </ul>
             </li>

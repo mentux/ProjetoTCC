@@ -122,23 +122,6 @@ Route::group(['middleware' => ['auth']], function () {
         'uses' => 'CarrinhoController@getFinalizarCompra'
     ]);
 
-    Route::get('cliente/dashboard', [
-        'as' => 'cliente.dashboard',
-        'uses' => 'ClienteController@getDashboard'
-    ]);
-
-    Route::get('cliente/pedidos/{id?}', [
-        'as' => 'cliente.pedidos',
-        'uses' => 'ClienteController@getPedidos'
-    ]);
-    Route::get('cliente/perfil', [
-        'as' => 'cliente.perfil',
-        'uses' => 'ClienteController@getPerfil'
-    ]);
-    Route::any('cliente/avaliar/{id}', [
-        'as' => 'cliente.avaliar',
-        'uses' => 'ClienteController@postAvaliar'
-    ]);
 });
 
 Route::any('login_teste','LoginController@login_form');
@@ -172,9 +155,39 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
 Route::get('mesa_pedido/{id_pedido}','MesaController@MesaPedido');
 Route::get('getmesa/{id}','MesaController@getMesaId');
 
+///////////Increment/////////
+Route::get('increment_teste/{id}','MesaController@IncrementDelete');
+Route::get('decrement_teste/{id}','MesaController@DecrementDelete');
+////////////////////////////
+///cadastro cliente modal
+Route::any('cadastrar_cliente','ClienteController@NovoCliente');
+
+Route::any('login_cliente','ClienteController@login_cliente');
+
+Route::get('logout_cliente','ClienteController@logout_cliente');
+
 ///////////Rotas usuário
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
-    Route::get('cliente_dashboard','ClienteController@dashboard');
+    //Route::get('cliente_dashboard','ClienteController@dashboard');
+    Route::get('cliente/dashboard', [
+        'as' => 'cliente.dashboard',
+        'uses' => 'ClienteController@getDashboard'
+    ]);
+
+    Route::get('cliente/pedidos/{id?}', [
+        'as' => 'cliente.pedidos',
+        'uses' => 'ClienteController@getPedidos'
+    ]);
+    Route::get('cliente/perfil', [
+        'as' => 'cliente.perfil',
+        'uses' => 'ClienteController@getPerfil'
+    ]);
+    Route::any('cliente/avaliar/{id}', [
+        'as' => 'cliente.avaliar',
+        'uses' => 'ClienteController@postAvaliar'
+    ]);
+
+
 });
 
 

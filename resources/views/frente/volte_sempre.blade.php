@@ -13,7 +13,7 @@
 	        function(){
 	            window.location = "http://localhost:8000/volte_sempre"; 
 	        },
-	    3000);
+	    5000);
 	   </script>
 	@else
 	<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
