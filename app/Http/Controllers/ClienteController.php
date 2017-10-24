@@ -19,7 +19,7 @@ use Crypt;
 
 class ClienteController extends Controller {
 
-    public function getDashboard() {
+    public function getDashboard(){
         $id = \Session::get('id_cliente');
         $models['qtdePedidos']['total'] = Venda::where('user_id',$id)->count();
         $models['qtdePedidos']['pendentes-pagamento'] = Venda::where('user_id',$id)->where('pago', false)->count();

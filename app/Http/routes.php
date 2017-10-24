@@ -46,7 +46,17 @@ Route::get('home', array('as' => 'home', 'uses' => function(){
   return view('home');
 }));
 
+Route::group(['middleware'=>'Shoppvel\Http\Middleware\recepcao'], function(){
 Route::get('/', 'FrenteLojaController@getIndex');
+Route::get('logout_recepcao', 'RecepcaoController@logout_recepcao');
+});
+
+
+
+
+
+
+
 
 Route::get('admin', function () {
     return view('admin_template');
@@ -124,7 +134,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 });
 
-Route::any('login_teste','LoginController@login_form');
+Route::any('/login','LoginController@login_form');
 Route::get('logout_cozinha','LoginController@logout');
 ////////Rotas do usuario de cozinha
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){

@@ -192,7 +192,7 @@ class MesaController extends Controller{
         $pedido = new Venda();
         DB::beginTransaction();
         if(\Session::get('id_cliente') == ''){
-            $pedido->user_id = '';
+            $pedido->user_id = null;
         }else{
             $pedido->user_id = \Session::get('id_cliente');
         }
@@ -277,6 +277,10 @@ class MesaController extends Controller{
     public function MesaVolteSempre(){
         $id = \Session::get('id_mesa');
         $pegar_mesa = Mesa::find($id);
+        \Session::forget('cliente');
+        \Session::forget('id_cliente');
+        \Session::forget('role_cliente');
+        \Session::forget('nome_cliente');
         return view('frente.volte_sempre',compact('pegar_mesa'));
     }
 

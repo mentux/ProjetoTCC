@@ -1,8 +1,21 @@
-<div class="col-md-4 col-md-offset-4">
+@extends('layouts.frente-loja')
+
+@section('conteudo')
+
+@if(\Session::has('erro'))
+<div class='container'>
+    <div class='alert alert-danger text-center'>
+        {{\Session::get('erro')}}
+    </div>
+</div>
+@endif
+
+
+<div class="col-md-6 col-md-offset-4">
     <div class="panel panel-success">
         <div class="panel-heading">Entre com sua identificação para finalizar compras e acessar seus pedidos</div>
         <div class="panel-body">
-            <form class="form-horizontal" role="form" method="POST" action="{{url('login_teste')}}">
+            <form class="form-horizontal" role="form" method="POST" action="{{url('/login')}}">
                 {!! csrf_field() !!}
 
                 <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -33,7 +46,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!--<div class="form-group">
                     <div class="col-md-6 col-md-offset-4">
                         <div class="checkbox">
                             <label>
@@ -41,7 +54,7 @@
                             </label>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="form-group">
                     <div class="col-md-6 col-md-offset-4">
@@ -49,10 +62,11 @@
                             <i class="fa fa-btn fa-sign-in"></i>Entrar
                         </button>
 
-                        <a class="btn btn-link" href="{{ url('/password/reset') }}">Esqueceu sua senha?</a>
+                        <!--<a class="btn btn-link" href="{{ url('/password/reset') }}">Esqueceu sua senha?</a>-->
                     </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
+@endsection

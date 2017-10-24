@@ -44,21 +44,32 @@
                 @else
                 @endif
 
-                @if((Route::getCurrentRoute()->getPath()) == '/')
 
-                @if (session('cozinha') == '')
-                    <li><a href="{{ url('/login') }}">Login</a></li>
-                @else
+                @if (session('cozinha') != '')
                     <li class="small">
                         <a href="{{url('cozinha_dashboard')}}">
                             {{ \Session::get('nome') }}
                         </a>
                     </li>
-                <li>
-                    <a href="{{ url('logout_cozinha') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                </li>
                 @endif
+
+
+
+                @if (session('recepcao') != '' AND (Route::getCurrentRoute()->getPath()) == '/' )
+                    <li class="small">
+                        <a href="#">
+                            {{ \Session::get('nome_recepcao') }}
+                        </a>
+                    </li>
+                    <li class="small">
+                        <a href="{{url('logout_recepcao')}}">
+                            Sair
+                        </a>
+                    </li>
                 @endif
+
+
+
                 @if(session('cliente') != '')
                     <li class='small'>
                         <a href="{{route('cliente.dashboard')}}">{{\Session::get('nome_cliente')}}</a>
