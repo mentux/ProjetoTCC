@@ -129,6 +129,12 @@ class MesaController extends Controller{
 
     }
     public function Adicionar(Request $request) {
+        $this->validate($request,[
+                'quant'=>'integer|required'
+            ],[
+                'quant.integer'=>'Apenas números',
+                'quant.required'=>'É obrigatório o Preenchimento do Campo Quantidade'
+            ]);
         $id_mesa = \Session::get('id_mesa');
         $id_produto = $request->get('botao');
         $quantidade_form = $request->input('quant');
@@ -212,25 +218,21 @@ class MesaController extends Controller{
             $itemVenda->produto_id = $itemCarrinho->produto->id;
             $itemVenda->qtde = $itemCarrinho->qtde;
             $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-        
-                
-                        $idx-=1; 
-                        $prod = Produto::find($itemCarrinho->produto->id);
-                        $prod->qtde_estoque;
-                        $item=$prod;
-                        $result=0;
-                        if($result = $item->qtde_estoque - $itemVenda->qtde){
-                            if($result < 0){
-                                return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois ultrapassou a quantidade de estoque dos produtos adicionados no carrinho.');
-                            }
-                        }
-                    $itemVenda = new VendaItem();
-                    $itemVenda->produto_id = $itemCarrinho->produto->id;
-                    $itemVenda->qtde = $itemCarrinho->qtde;
-                    $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-                    dd(count($itemVenda));
-                    $pedido->itens()->save($itemVenda);
-                    $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
+             
+            $prod = Produto::find($itemCarrinho->produto->id);
+            $prod->qtde_estoque;
+            $item=$prod;
+            if($result = $item->qtde_estoque - $itemVenda->qtde){
+                if($this->carrinho->getItens()[$idx]->qtde == 0){
+                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois tem produto(os) com quantidade zero no carrinho');
+
+                }
+                if($result < 1){
+                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois ultrapassou a quantidade de estoque dos produtos adicionados no carrinho.');
+                }   
+            }
+            $pedido->itens()->save($itemVenda);
+            $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
                      
                 
                

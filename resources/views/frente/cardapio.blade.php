@@ -85,8 +85,6 @@
 	    <div class="modal-footer">
                 <p class='text-left'>Quantidade</p>
                 <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant">
-                <input class="btn btn-primary btn-sm col-md-1 col-sm-2 col-xs-2 increment" type="button" value="+" onclick="$('#alvo').val(parseInt($('#alvo').val())+1)">
-                <input class="btn btn-primary btn-sm col-md-1 col-sm-2 col-xs-2 decrement" type="button" value="-" onclick="$('#alvo').val(parseInt($('#alvo').val())-1)">
                 <br/>
                 <br/>
 	            <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
@@ -131,7 +129,7 @@
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
                         </td>
                         <td class="text-center quant_item"> 
-                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" class="col-sm-2 col-xs-2 form-control btn-xs text-center quant">
+                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" disabled class="col-sm-2 col-xs-2 form-control btn-xs text-center quant">
                                 
                                 <button style="margin-right: 1px; margin-left: 2px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
                                 
