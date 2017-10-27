@@ -63,6 +63,25 @@ class Carrinho {
         return $total;
     }
 
+    public function getTotalCarrinho() {
+        $total = 0;
+        foreach ($this->itens as $item) {
+            $total += $item->qtde * $item->produto->preco_venda;
+            $teste = $item->produto->preco_venda;
+            $total+$teste;
+        }
+        return $total;
+    }
+
+    public function getTotalMenos() {
+        $total = 0;
+        foreach ($this->itens as $item) {
+            $total += $item->qtde * $item->produto->preco_venda;
+            $teste = $item->produto->preco_venda;
+            $total-$teste;
+        }
+        return $total;
+    }
 
     public function deleteItem($id){
         $itens_carrinho = $this->getItens();

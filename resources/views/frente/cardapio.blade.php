@@ -131,11 +131,11 @@
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
                         </td>
                         <td class="text-center quant_item"> 
-                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" class="col-sm-2 col-xs-2 form-control btn-xs text-center qun">
+                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" class="col-sm-2 col-xs-2 form-control btn-xs text-center quant">
                                 
                                 <button style="margin-right: 1px; margin-left: 2px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
                                 
-                                <button style="margin-left: 3px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
+                                <button style="margin-left: 3px;" name="teste" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
                         </td>
                         <td> 
                         <a href="{{route('remover', $item->produto->id, $item->qtde)}}" 
@@ -150,7 +150,7 @@
                             Total
                         </td>
                         <td>
-                            <h4 class="text-center text-danger total">
+                            <h4  id="total" class="text-center text-danger total">
                                 R${{number_format($total,2,',','.')}}
                             </h4>
                         </td>
@@ -191,6 +191,7 @@ $(function() {
                 }else{
                   $('.avaliado').html(avaliado.toFixed(2));
                 }
+                //console.log(id);
   				//console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },
@@ -211,15 +212,20 @@ $(function() {
     });
         $('.increment').on("click",function(){
             var id = $(this).attr('value');
+            
+            //console.log($(".total").text());
             //var qtde = $('.quant').attr('value');
             //alert(qtde);
-            console.log(id);
+            //console.log(id);
             $.ajax({
                 type: "GET",
                 url: 'http://localhost:8000/increment_teste/'+id,
                 data: {id : id},
                 success: function(total) {
-                $('.total').html('R$'+total);
+                //console.log(total);
+                $('.total').html('R$'+total);   
+                $('.decrement').prop('disabled', false);
+                //$('.total').load().val(); carrega valor 
                 //$('.increment').html(id.id);
                 //console.log(total);
                 //console.log(id.id);
@@ -234,6 +240,39 @@ $(function() {
 <!-- Decrement -->
 <script type="text/javascript">
 $(function() {
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-Token':$('input[name="_token"]').val()
+        }
+    });
+        $('.decrement').on("click",function(){
+            var id = $(this).attr('value');
+            //console.log($(this).parent().parent().parent().next().children().children().next().children().html()); acessa valor por Jquery metodo navegação por tag
+            //var qtde = $('.quant').attr('value');
+            //alert(qtde);
+            //console.log(id);
+            $.ajax({
+                type: "GET",
+                url: 'http://localhost:8000/decrement_teste/'+id,
+                data: {id : id},
+                success: function(total) {
+                $('.total').html('R$'+total);
+                //$('.total').load().text();
+                //$('.increment').html(id.id);
+                //console.log(total);
+                //console.log(id.id);
+                //console.log($('.add_carrinho').val());
+                //console.log(id.id);
+                },
+            });
+            
+        });
+});
+</script>
+
+
+<script type="text/javascript">
+$(function() {
     
         $('.add_carrinho').click(function(){
             window.location.href =  "http://localhost:8000/finalizar_cardapio/";    
@@ -242,12 +281,23 @@ $(function() {
 });
 </script>
 <script>
+    
+//////////////incrementaçao btn
     $(".increment").on('click',function(){
         var value = $('.quant').val();
-        $('.quant').val(parseInt($('.quant').val())+1); return false;
+        $(this).prev().val(parseInt($(this).prev().val())+1); return false;
     });
-    $(".decrement").click(function(){
-       if($(".quant").val()!=0){$('.quant').val(parseInt($('.quant').val())-1);} return false;
+//////////////decrementação btn
+    $(".decrement").on('click',function(){
+        if($(this).prev().prev().val()!=0){
+            $(this).prev().prev().val(parseInt($(this).prev().prev().val())-1);
+        }
+    });
+//////////////disable on click btn decrement
+    $(".decrement").on('click',function(){
+        if($(this).prev().prev().val()<2){
+            $(this).prop('disabled', true);
+        }
     });
 </script>
 

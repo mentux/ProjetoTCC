@@ -167,7 +167,7 @@ Route::get('getmesa/{id}','MesaController@getMesaId');
 
 ///////////Increment/////////
 Route::get('increment_teste/{id}','MesaController@IncrementDelete');
-Route::get('decrement_teste/{id}','MesaController@DecrementDelete');
+Route::get('decrement_teste/{id}','MesaController@Decrement');
 ////////////////////////////
 ///cadastro cliente modal
 Route::any('cadastrar_cliente','ClienteController@NovoCliente');

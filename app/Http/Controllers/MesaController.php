@@ -134,6 +134,10 @@ class MesaController extends Controller{
         $quantidade_form = $request->input('quant');
         $itens = $this->carrinho->getItens();
 
+        if($quantidade_form <= 0){
+            return redirect('getmesa/'.$id_mesa)->with('mensagens-danger', 'Não é possível adicionar um produto com quantidade 0 no carrinho.');  
+        }
+
         if($estoque = Produto::find($id_produto)->qtde_estoque - $quantidade_form = intval($quantidade_form)){
             if($estoque < 0){
                 $estoque = Produto::find($id_produto)->qtde_estoque;
@@ -185,7 +189,9 @@ class MesaController extends Controller{
     }
 
     public function FecharPedido(Request $request){
+        
         $itens = $this->carrinho->getItens();
+
         if(count($itens) == 0){
             return redirect()->back()->with('mensagens-danger', 'Nenhum produto adicionado no carrinho.');
         }else{
@@ -201,31 +207,33 @@ class MesaController extends Controller{
         $pedido->id_mesa = \Session::get('id_mesa');
         $pedido->status = 1;
         $pedido->save();
-        
         foreach ($this->carrinho->getItens() as $idx => $itemCarrinho) {
             $itemVenda = new VendaItem();
             $itemVenda->produto_id = $itemCarrinho->produto->id;
             $itemVenda->qtde = $itemCarrinho->qtde;
             $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-    
         
-            $prod = Produto::find($itemCarrinho->produto->id);
-            $prod->qtde_estoque;
-            $item=$prod;
-            $result=0;
-    
-            if($result = $item->qtde_estoque - $itemVenda->qtde){
-
-                if($result < 0){
-                    return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois ultrapassou a quantidade de estoque dos produtos adicionados no carrinho.');
-                }
-            }
-                $itemVenda = new VendaItem();
-                $itemVenda->produto_id = $itemCarrinho->produto->id;
-                $itemVenda->qtde = $itemCarrinho->qtde;
-                $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
-                $pedido->itens()->save($itemVenda);
-                $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
+                
+                        $idx-=1; 
+                        $prod = Produto::find($itemCarrinho->produto->id);
+                        $prod->qtde_estoque;
+                        $item=$prod;
+                        $result=0;
+                        if($result = $item->qtde_estoque - $itemVenda->qtde){
+                            if($result < 0){
+                                return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois ultrapassou a quantidade de estoque dos produtos adicionados no carrinho.');
+                            }
+                        }
+                    $itemVenda = new VendaItem();
+                    $itemVenda->produto_id = $itemCarrinho->produto->id;
+                    $itemVenda->qtde = $itemCarrinho->qtde;
+                    $itemVenda->preco_venda = $itemCarrinho->produto->preco_venda;
+                    dd(count($itemVenda));
+                    $pedido->itens()->save($itemVenda);
+                    $itemCarrinho->produto->decrement('qtde_estoque', $itemCarrinho->qtde);
+                     
+                
+               
         }
        
         DB::commit();
@@ -233,19 +241,18 @@ class MesaController extends Controller{
         $this->carrinho->esvaziar();
 
         return redirect('mesa_pedido/'.$pedido->id_venda)->with('mensagens-sucesso', 'Pedido realizado com sucesso.');
-        }
-        
-        
+        }   
     }
     public function IncrementDelete($id){
-        //$value = $request->get('increment');
-        //$quant = $request->get('valor');
-        //$qtde = Produto::find($value);
         $itens = $this->carrinho->getItens();
-        $total = $this->carrinho->getTotal();
+        $total = $this->carrinho->getTotalCarrinho();
+        
         foreach($itens as $i => $item){
+            //implementei a logica do calculo total quando e diferente ou igual o id que esta vindo, apenas alterei a logica do metodo que faz o calculo do total do carrinho onde tirei o "=" do $total+=$teste;
             if($id == $itens[$i]->produto->id){
                 $itens[$i]->qtde += 1;
+                $teste=$itens[$i]->produto->preco_venda;
+                $total+=$teste;
                 return Response::json(number_format($total,2,',','.'));
             }else{
                 while($id != $itens[$i]->produto->id){
@@ -253,22 +260,46 @@ class MesaController extends Controller{
                     if(isset($itens[$i])){
                         if($id == $itens[$i]->produto->id){
                             $itens[$i]->qtde += 1;
+                            $teste=$itens[$i]->produto->preco_venda;
+                            $total+=$teste;
+                            return Response::json(number_format($total,2,',','.'));
+                        }
+                    }
+                }
+            }
+        }    
+    }
+
+    public function Decrement($id){
+        $itens = $this->carrinho->getItens();
+        $total = $this->carrinho->getTotalMenos();
+        foreach($itens as $i => $item){
+            if($id == $itens[$i]->produto->id){
+                $itens[$i]->qtde -= 1;
+                $teste=$itens[$i]->produto->preco_venda;
+                $total-=$teste;
+                return Response::json(number_format($total,2,',','.'));
+            }else{
+                while($id != $itens[$i]->produto->id){
+                    $i+=1;
+                    if(isset($itens[$i])){
+                        if($id == $itens[$i]->produto->id){
+                            $itens[$i]->qtde -= 1;
+                            $teste=$itens[$i]->produto->preco_venda;
+                            $total-=$teste;
                             return Response::json(number_format($total,2,',','.'));
                         }
                     } 
                 }
             }
-        }
-        
+        }    
     }
 
-    public function DecrementDelete(Request $request, $qtde){
-        $value = $request->get('increment');
-        $quant = $request->get('valor');
-        $qtde = Produto::find($value);
-        return Response::json($qtde);
-        
-    }
+
+
+
+
+
     public function MesaPedido($id_pedido){
         $pedido = Venda::find($id_pedido);
         return view('frente.mesa_pedido',['pedido'=>$pedido]);
