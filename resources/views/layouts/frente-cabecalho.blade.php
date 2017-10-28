@@ -44,8 +44,7 @@
                 @else
                 @endif
 
-
-                @if (session('cozinha') != '')
+                @if (session('cozinha') != '' AND (Route::getCurrentRoute()->getPath()) != 'getmesa/{id}' AND (Route::getCurrentRoute()->getPath()) != 'produto/buscar' AND (Route::getCurrentRoute()->getPath()) != 'categoria/{id?}' AND (Route::getCurrentRoute()->getPath()) != 'cliente/pedidos/{id?}' AND (Route::getCurrentRoute()->getPath()) != 'cliente/dashboard' AND (Route::getCurrentRoute()->getPath()) != 'volte_sempre'  )
                     <li class="small">
                         <a href="{{url('cozinha_dashboard')}}">
                             {{ \Session::get('nome') }}
@@ -70,7 +69,7 @@
 
 
 
-                @if(session('cliente') != '')
+                @if(session('cliente') != '' AND (Route::getCurrentRoute()->getPath()) == 'getmesa/{id}')
                     <li class='small'>
                         <a href="{{route('cliente.dashboard')}}">{{\Session::get('nome_cliente')}}</a>
                     </li>

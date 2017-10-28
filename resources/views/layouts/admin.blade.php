@@ -72,11 +72,16 @@
                             </a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{route('admin.cliente.listar')}}">
+                                Clientes
+                            </a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{url('logout_admin')}}">Sair</a>
                         </li>
                     </ul>
                 </div>
-                <div class="col-lg-10">
+                <div class="col-lg-10 col-md-10"><!-- coloquei 8 antes etava 10 somente lg-->
                     @include('layouts.messages')
 
                     @yield('conteudo')
@@ -84,9 +89,7 @@
             </div>
 
             <!-- Site footer -->
-            <footer class="footer">
-                <p>&copy; 2016 Ademir Mazer Junior. @nunomazer - ademir.mazer.jr@gmail.com</p>
-            </footer>
+           
 
         </div> <!-- /container -->
 

@@ -31,10 +31,14 @@
            <h4 class="modal-title">Modal Header</h4>
     </div>
     <div class="modal-body">
-           <p class='conteudo'></p>
-           <p class='valor'></p>
-           <img style='height:200px; width:200px;' class="imagem" />
-            <br/>
+          <p class='conteudo'></p>
+               <p class='valor'></p>
+               <img style='height:200px; width:200px;' class="imagem" />
+               <div class='col-md-12'>
+               <p>Média de avaliações<p>
+               <h5 class="alert alert-success text-center avaliado col-md-3"><strong></strong>
+               </h5>
+               </div>
         <form class="action_carrinho"  action="{{route('adicionar')}}">
     </div>
     <div class="modal-footer">
@@ -49,6 +53,7 @@
     </div>
   </div>
 </div>
+
 <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
 <script type="text/javascript">
 $(function() {
@@ -63,12 +68,19 @@ $(function() {
                 type: "GET",
                 url: 'http://localhost:8000/mesa/produto/'+id,
                 data: {id: id},
-                success: function(id) {
+                success: function(id){
+                avaliado = id.avaliacao_total/id.avaliacao_qtde;
                 $('.modal-title').html(id.nome);
                 $('.conteudo').html(id.descricao);
                 $('.valor').html('R$: '+id.preco_venda);
                 $(".imagem").attr("src",'http://localhost:8000/uploads/'+id.imagem_nome);
                 $('.add_carrinho').val(id.id);
+                if(Number.isNaN(avaliado)){
+                  $('.avaliado').html('Não avaliado');  
+                }else{
+                  $('.avaliado').html(avaliado.toFixed(2));
+                }
+                //console.log(id);
                 //console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },

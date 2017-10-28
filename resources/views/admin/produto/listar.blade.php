@@ -18,7 +18,7 @@
   	@if(Session::has('mensagem_sucesso'))
 		{!! 'OK' !!}
   	@endif
-	  	<table class="table table-hover table-striped">
+	  	<table class="table table-hover table-striped table-responsive" style="display: block !important;">
 		    <caption> 
 		        <a href="{{ route('admin.produto.criar') }}" class="btn btn-primary btn-sm">
 		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Novo Produto 
@@ -49,12 +49,12 @@
 		        <div class="row">
 			        <td class="col-md-1">
 			            <a href="{{ url('admin/produto/'.$prod->id . '/editar') }}" class="btn btn-info btn-sm">
-			                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> editar 
+			                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
 			            </a>
 			        </td>
 			        <td class="col-md-1">
 			            <a href="{{ url('admin/produto/'.$prod->id . '/excluir') }}" class="btn btn-danger btn-sm">
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> excluir 
+			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
 			            </a>
 			        </td>
 			    </div>

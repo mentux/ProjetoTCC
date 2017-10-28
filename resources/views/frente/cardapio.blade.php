@@ -40,60 +40,60 @@
         @endforeach
     </div>
     <br/>
-	<h2>Cardápio</h2>
+    <h2>Cardápio</h2>
     <div class="col-md-12">
-	@foreach($produto->chunk(3) as $linha)
+    @foreach($produto->chunk(3) as $linha)
         <div class='row'>
         @foreach($linha as $produto)
-       	    <div class="col-sm-6 col-md-4">
-    			<img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" data-lightbox="roadtrip" alt="">
-    			<div class="card-body">
-    				<h4 class="card-title">
-    					{{$produto->nome}}
-    				</h4>
-    				<p class="card-text">{{str_limit($produto->descricao,100)}}</p>
-    				<h4 class="card-text">R${{$produto->preco_venda}}</h4>
-    				<!-- Trigger the modal with a button -->
-    				<button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
-    			</div>	
+            <div class="col-sm-6 col-md-4">
+                <img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" data-lightbox="roadtrip" alt="">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        {{$produto->nome}}
+                    </h4>
+                    <p class="card-text">{{str_limit($produto->descricao,100)}}</p>
+                    <h4 class="card-text">R${{$produto->preco_venda}}</h4>
+                    <!-- Trigger the modal with a button -->
+                    <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
+                </div>  
             </div>
             @endforeach
         </div>
         @endforeach
     </div>
-		    <!-- Modal -->
-	<div id="myModal" class="modal fade" role="dialog">
-	  <div class="modal-dialog">
+            <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
 
-	    <!-- Modal content-->
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal">&times;</button>
-	           <h4 class="modal-title">Modal Header</h4>
-	    </div>
-	    <div class="modal-body">
-	           <p class='conteudo'></p>
-	           <p class='valor'></p>
-	           <img style='height:200px; width:200px;' class="imagem" />
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+               <p class='conteudo'></p>
+               <p class='valor'></p>
+               <img style='height:200px; width:200px;' class="imagem" />
                <div class='col-md-12'>
                <p>Média de avaliações<p>
                <h5 class="alert alert-success text-center avaliado col-md-3"><strong></strong>
                </h5>
                </div>
             <form class="action_carrinho"  action="{{route('adicionar')}}">
-	    </div>
-	    <div class="modal-footer">
+        </div>
+        <div class="modal-footer">
                 <p class='text-left'>Quantidade</p>
                 <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant">
                 <br/>
                 <br/>
-	            <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
+                <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
             <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
             </form>
-	    </div>
-	    </div>
-	  </div>
-	</div>
+        </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Modal carrinho -->
     <div id="carrinho_id" class="modal fade" role="dialog">
@@ -128,12 +128,12 @@
                         <td class="text-center">
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
                         </td>
-                        <td class="text-center quant_item"> 
-                             <input style="width: 40px; height: 25px; margin-right: 3px;" type="numeric" value="{{$item->qtde}}" name="quant" disabled class="col-sm-2 col-xs-2 form-control btn-xs text-center quant">
+                        <td class="text-center quant_item col-md-4 col-sm-5 col-xs-5"> 
+                             <input style="width: 27px; height: 25px; margin-right: 1px;" type="numeric" value="{{$item->qtde}}" name="quant" disabled class="col-sm-1 col-xs-1 form-control btn-xs text-center quant">
                                 
-                                <button style="margin-right: 1px; margin-left: 2px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
-                                
-                                <button style="margin-left: 3px;" name="teste" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
+                                <button style="margin-right: 2px; margin-left: 1px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
+                              
+                                <button name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
                         </td>
                         <td> 
                         <a href="{{route('remover', $item->produto->id, $item->qtde)}}" 
@@ -190,7 +190,7 @@ $(function() {
                   $('.avaliado').html(avaliado.toFixed(2));
                 }
                 //console.log(id);
-  				//console.log($('.add_carrinho').val());
+                //console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },
             });
@@ -222,7 +222,8 @@ $(function() {
                 success: function(total) {
                 //console.log(total);
                 $('.total').html('R$'+total);   
-                $('.decrement').prop('disabled', false);
+                $(this).next().prop('disabled', false);
+                var load = $(this).next().load('disabled', false);
                 //$('.total').load().val(); carrega valor 
                 //$('.increment').html(id.id);
                 //console.log(total);
@@ -249,6 +250,9 @@ $(function() {
             //var qtde = $('.quant').attr('value');
             //alert(qtde);
             //console.log(id);
+            if($(this).prev().prev().val()<2){
+            $(this).prop('disabled', true);
+            }
             $.ajax({
                 type: "GET",
                 url: 'http://localhost:8000/decrement_teste/'+id,
@@ -279,11 +283,22 @@ $(function() {
 });
 </script>
 <script>
-    
 //////////////incrementaçao btn
     $(".increment").on('click',function(){
         var value = $('.quant').val();
         $(this).prev().val(parseInt($(this).prev().val())+1); return false;
+    });
+    $(".increment").on('click',function(){
+      if($(this).prev().val()<2){
+            $(this).next().prop('disabled', true);
+        }
+        
+    });
+    $(".increment").on('click',function(){
+      if($(this).prev().val()>1){
+            $(this).next().prop('disabled', false);
+        }
+        
     });
 //////////////decrementação btn
     $(".decrement").on('click',function(){
@@ -295,7 +310,7 @@ $(function() {
     $(".decrement").on('click',function(){
         if($(this).prev().prev().val()<2){
             $(this).prop('disabled', true);
-        }
+        }return true;
     });
 </script>
 

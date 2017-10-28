@@ -18,12 +18,11 @@
         <div class="navbar-collapse collapse navbar-right">
           <ul class="nav navbar-nav">
                 <li class="active"><a href="{{route('admin.dashboard')}}">Home</a></li>
-                <li><a href="{{route('admin.pedidos')}}">Pedidos</a></li>
+                <!--<li><a href="{{route('admin.pedidos')}}">Pedidos</a></li> deixei comentado pq nos menus laterais ja tem os links de cada status dos pedidos-->
                 <li><a href="{{route('admin.categoria.listar')}}">Categorias</a></li>
                 <li><a href="{{route('admin.marca.listar')}}">Marcas</a>
                 <li><a href="{{route('admin.produto.listar')}}">Produtos</a>
-                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a> 
-                <li><a href="{{route('admin.cliente.listar')}}">Clientes</a>       
+                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a>      
                 @if(session('admin') == '')
                 <li><a href="{{ url('/login') }}">Login</a></li>
                 @else

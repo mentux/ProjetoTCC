@@ -2,7 +2,7 @@
 
 @section('conteudo')	
 <link href="{{asset('bootstrap/css/mycss/menu.css')}}" rel="stylesheet">
-	<div id="excluir"> 
+	<div class="alert alert-danger"> 
 		@if(Request::is('*/excluir'))
 			<h3 >Deseja relamente excluir a Marca {!! $marca->nome !!}</h3>
 		@endif

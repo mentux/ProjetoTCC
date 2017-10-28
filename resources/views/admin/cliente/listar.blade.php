@@ -11,7 +11,7 @@
   	@if(Session::has('mensagem_sucesso'))
 		{!! 'OK' !!}
   	@endif
-	  	<table class="table table-hover table-striped">
+	  	<table class="table table-hover table-striped table table-responsive" style="display: block !important;">
 		    		<th>id</th>
 		            <th>Nome</th>
 		            <th>E-mail</th>

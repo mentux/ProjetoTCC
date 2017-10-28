@@ -23,53 +23,17 @@
   |
  */
 
-Route::post('/pagseguro/notification', [
-    'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
-    'as' => 'pagseguro.notification',
-]);
-
-Route::auth();
 
 
-//github
-Route::get('/auth/github', 'SocialAuthController@EntrarGitHub');
 
-Route::get('/retorno/github', 'SocialAuthController@RetornoGitHub');
-
-
-//facebook
-Route::get('/auth/facebook', 'SocialAuthController@EntrarFacebook');
-
-Route::get('/retorno/facebook', 'SocialAuthController@RetornoFacebook');
-
-Route::get('home', array('as' => 'home', 'uses' => function(){
-  return view('home');
-}));
-
+//middleware da recepção,seria só o index,onde fica a lista das mesas para serem reservadas
+//logout e a reserva da mesa.
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\recepcao'], function(){
-Route::get('/', 'FrenteLojaController@getIndex');
+Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
+Route::get('/','FrenteLojaController@getIndex');
 Route::get('logout_recepcao', 'RecepcaoController@logout_recepcao');
 });
-
-
-
-
-
-
-
-
-Route::get('admin', function () {
-    return view('admin_template');
-});
-
-Route::get('sobre', [
-    'as' => 'sobre',
-    'uses' => 'FrenteLojaController@getSobre'
-]);
-Route::get('pagseguro/checkout', [
-    'as' => 'pagseguro.checkout',
-    'uses' => 'PedidoController@postCheckout'
-]);
+//lista os produtos relacionados a categoria selecionada
 Route::get('categoria/{id?}', [
     'as' => 'categoria.listar',
     'uses' => 'CategoriaController@getCategoria'
@@ -78,13 +42,10 @@ Route::get('categoria/{id?}', [
  * ATENÇÃO para esta rota, ela deve estar antes de produto/{id}
  * para funcionar
  */
+//busca de produto na mesa
 Route::any('produto/buscar', [
     'as' => 'produto.buscar',
     'uses' => 'ProdutoController@getBuscar'
-]);
-Route::get('produto/{id}', [
-    'as' => 'produto.detalhes',
-    'uses' => 'ProdutoController@getProdutoDetalhes'
 ]);
 Route::get('imagem/arquivo/{nome}', [
     'as' => 'imagem.file',
@@ -133,11 +94,11 @@ Route::group(['middleware' => ['auth']], function () {
     ]);
 
 });
-
+//form de login geral
 Route::any('/login','LoginController@login_form');
-Route::get('logout_cozinha','LoginController@logout');
 ////////Rotas do usuario de cozinha
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
+    Route::get('logout_cozinha','LoginController@logout');
 
     Route::get('cozinha_pedido_detalhes/{id}', [
     'as' => 'cozinha.detalhes',
@@ -161,24 +122,26 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     ]);
 });
 
-
+//Rota onde mostra o status de andamento do pedido após a emissão do pedido
 Route::get('mesa_pedido/{id_pedido}','MesaController@MesaPedido');
+//Rota para abrir o cardapio da mesa reservada
 Route::get('getmesa/{id}','MesaController@getMesaId');
 
 ///////////Increment/////////
 Route::get('increment_teste/{id}','MesaController@IncrementDelete');
 Route::get('decrement_teste/{id}','MesaController@Decrement');
 ////////////////////////////
-///cadastro cliente modal
-Route::any('cadastrar_cliente','ClienteController@NovoCliente');
 
+///cadastro cliente form 
+Route::any('cadastrar_cliente','ClienteController@NovoCliente');
+//login cliente form
 Route::any('login_cliente','ClienteController@login_cliente');
 
-Route::get('logout_cliente','ClienteController@logout_cliente');
-
-///////////Rotas usuário
+///////////Rotas usuário do tipo cliente
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
-    //Route::get('cliente_dashboard','ClienteController@dashboard');
+
+    Route::get('logout_cliente','ClienteController@logout_cliente');
+
     Route::get('cliente/dashboard', [
         'as' => 'cliente.dashboard',
         'uses' => 'ClienteController@getDashboard'
@@ -188,10 +151,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
         'as' => 'cliente.pedidos',
         'uses' => 'ClienteController@getPedidos'
     ]);
-    Route::get('cliente/perfil', [
-        'as' => 'cliente.perfil',
-        'uses' => 'ClienteController@getPerfil'
-    ]);
     Route::any('cliente/avaliar/{id}', [
         'as' => 'cliente.avaliar',
         'uses' => 'ClienteController@postAvaliar'
@@ -200,54 +159,40 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
 
 });
 
-
+//Quando o cara clica em sair da mesa,é acessado essa rota,onde a mesa fica esperando ser reservada novamente para voltar para o cardapio
 Route::get('volte_sempre','MesaController@MesaVolteSempre');
+//Rota que chama funcao de liberar a mesa quando é clicado no botão sair da mesa
 Route::get('volte_sempre_liberar/{id}','MesaController@VolteSempreLiberar');
-Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
 
-
-Route::any('mesa', [
-                'as' => 'admin.mesa',
-                'uses' => 'MesaController@mesa_form'
-]);
+//Ao clicar no botao mais detalhes na lista de produtos no cardapio,categorias e busca,abre o modal com mais infos do produto
 Route::GET('mesa/produto/{id}', [
     'as' => 'mesa.produto',
     'uses' => 'MesaController@getProdutoModal'
 
 ]);
-
+//Adiciona produto no carrinho ao clicar no botao adicionar ao carrinho no produto modal
 Route::any('adicionar', [
     'as' => 'adicionar',
     'uses' => 'MesaController@Adicionar'
 ]);
+//Remove o produto individualmente no modal carrinho ao clicar no botao excluir item
 Route::any('remover/{id}', [
     'as' => 'remover',
     'uses' => 'MesaController@Remover'
 ]);
 
-Route::post('cadastrar_mesa','MesaController@criar_mesa');
 
-
+//Fecha o pedido quando é clicado no botao confirmar pedido no modal carrinho
 Route::any('finalizar_cardapio','MesaController@FecharPedido');
 
 
 
-
-Route::get('logout_admin','AdminController@logout_admin');
-
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
+    Route::get('logout_admin','AdminController@logout_admin');
 
 
     Route::get('excluir_imagem/{id}','ProdutoController@excluir_imagem');
-
-
-
-
-     Route::put('mesa_liberada/{id}', [
-                'as' => 'liberar_mesa',
-                'uses' => 'AdminController@putLiberarMesa'
-    ]);
 
 
     Route::get('admin', [
@@ -272,18 +217,14 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'uses' => 'AdminController@getPedidos'
             ]);
 
+            //lista todos os pedidos pendentes,pagos,enviados(finalizados),todos(literalmente) de hoje
             Route::get('todosHoje','AdminController@getTodosHoje');
             Route::get('pendentesHoje','AdminController@getPendentesHoje');
             Route::get('pagosHoje','AdminController@getPagosHoje');
             Route::get('enviadosHoje','AdminController@getPagosHoje');
 
 
-
-
-            Route::get('admin/perfil', [
-                'as' => 'admin.perfil',
-                'uses' => 'AdminController@getPerfil'
-            ]);
+            //Categorias
             Route::get('admin/categoria/listar', [
                 'as' => 'admin.categoria.listar',
                 'uses' => 'CategoriaController@listar'
@@ -316,6 +257,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.categoria.delete',
                 'uses' => 'CategoriaController@delete'
             ]);
+            //Marcas
             Route::get('admin/marca/listar', [
                 'as' => 'admin.marca.listar',
                 'uses' => 'MarcaController@listar'
@@ -348,6 +290,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.marca.delete',
                 'uses' => 'MarcaController@delete'
             ]);
+            //Produtos
             Route::get('admin/produto/listar', [
                 'as' => 'admin.produto.listar',
                 'uses' => 'ProdutoController@listar'
@@ -380,7 +323,12 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.produto.delete',
                 'uses' => 'ProdutoController@delete'
             ]);
-            /////Mesas//
+            /////Mesas
+            Route::any('mesa', [
+                'as' => 'admin.mesa',
+                'uses' => 'MesaController@mesa_form'
+            ]);
+
              Route::get('admin/mesa/listar', [
                 'as' => 'admin.mesa.listar',
                 'uses' => 'MesaController@listar'

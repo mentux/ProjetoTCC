@@ -10,7 +10,7 @@
   	@if(Session::has('mensagem_sucesso'))
 		{!! 'OK' !!}
   	@endif
-	  	<table class="table table-hover table-striped">
+	  	<table class="table table-hover table-striped table-responsive">
 		    <caption> 
 		        <a href="{{ route('admin.marca.criar') }}" class="btn btn-primary btn-sm">
 		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nova Marca 

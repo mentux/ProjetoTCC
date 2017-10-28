@@ -3,7 +3,7 @@
 
 @section('conteudo')
 
-<div class="panel panel-default ">
+<div class="panel panel-default" style="display: block !important;">
   	<div class="panel-heading">
     	<h3 class="panel-title">Lista de Categoria</h3>
   	</div>
@@ -11,7 +11,7 @@
   	@if(Session::has('mensagem_sucesso'))
 		{!! 'OK' !!}
   	@endif
-	  	<table class="table table-hover table-striped">
+	  	<table class="table table-hover table-striped table-responsive" style="display: block !important;">
 		    <caption> 
 		        <a href="{{ route('admin.categoria.criar') }}" class="btn btn-primary btn-sm">
 		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nova Categoria 
@@ -20,7 +20,8 @@
 		    		<th>id</th>
 		            <th>Nome</th>
 		            <th>Categoria Principal</th>
-		            <th>Ações</th>
+		            <th>Editar</th>
+		            <th>Excluir</th>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -38,16 +39,17 @@
 		        
 		        <td>
 		            <a href="{{ url('admin/categoria/'.$cat->id . '/editar') }}" class="btn btn-info btn-sm">
-		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> editar 
+		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
 		            </a>
-			        
+		        </td>
+			    <td>
 			        @if(count($cat->produtos) > 0)
 						<a href="{{ url('admin/categoria/'.$cat->id = -1 . '/excluir') }}" class="btn btn-danger btn-sm">
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> excluir 
+			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
 			            </a>
 			        @else
 			            <a href="{{ url('admin/categoria/'.$cat->id . '/excluir') }}" class="btn btn-danger btn-sm">
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> excluir 
+			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
 			            </a>
 			        @endif
 		        </td>

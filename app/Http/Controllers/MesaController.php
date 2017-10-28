@@ -106,7 +106,7 @@ class MesaController extends Controller{
        }else{
         $produto = Produto::all();
         $produto_destacado = Produto::where('destacado',1)->get();
-        $itens = $this->carrinho->getItens();// o esquema funciona como se fosse esse carrinho
+        $itens = $this->carrinho->getItens();
         $total = $this->carrinho->getTotal();
         \Session::put('id_mesa',$id);
         return view('frente.cardapio',['mesa'=>$mesa,'produto'=>$produto,'itens'=>$itens,'total'=>$total,'produto_destacado'=>$produto_destacado]);
@@ -141,13 +141,13 @@ class MesaController extends Controller{
         $itens = $this->carrinho->getItens();
 
         if($quantidade_form <= 0){
-            return redirect('getmesa/'.$id_mesa)->with('mensagens-danger', 'Não é possível adicionar um produto com quantidade 0 no carrinho.');  
+            return redirect('getmesa/'.$id_mesa)->with('mensagens-danger', 'Não é possível adicionar um produto com quantidade inferior a 0 no carrinho.');  
         }
 
         if($estoque = Produto::find($id_produto)->qtde_estoque - $quantidade_form = intval($quantidade_form)){
             if($estoque < 0){
                 $estoque = Produto::find($id_produto)->qtde_estoque;
-                return redirect('getmesa/'.$id_mesa)->withErrors('Desculpe o Incoviniente, Mas a Quantidade do Produto Escolhida e Maior que o Estoque: '. $estoque);
+                return redirect('getmesa/'.$id_mesa)->withErrors('Desculpe o Incoviniente, Mas a Quantidade do Produto(s) Escolhida e Maior que o Estoque: '. $estoque);
             }
         }elseif($estoque == -1){
             return back()->withErrors('Desculpe o Incoviniente, Não Temos mais Estoque para o Produto desejado :"(');
@@ -250,7 +250,6 @@ class MesaController extends Controller{
         $total = $this->carrinho->getTotalCarrinho();
         
         foreach($itens as $i => $item){
-            //implementei a logica do calculo total quando e diferente ou igual o id que esta vindo, apenas alterei a logica do metodo que faz o calculo do total do carrinho onde tirei o "=" do $total+=$teste;
             if($id == $itens[$i]->produto->id){
                 $itens[$i]->qtde += 1;
                 $teste=$itens[$i]->produto->preco_venda;
@@ -297,11 +296,6 @@ class MesaController extends Controller{
         }    
     }
 
-
-
-
-
-
     public function MesaPedido($id_pedido){
         $pedido = Venda::find($id_pedido);
         return view('frente.mesa_pedido',['pedido'=>$pedido]);
@@ -326,5 +320,3 @@ class MesaController extends Controller{
 
     }
 }
-
-
