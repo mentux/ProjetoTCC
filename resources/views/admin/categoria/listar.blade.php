@@ -39,17 +39,17 @@
 		        
 		        <td>
 		            <a href="{{ url('admin/categoria/'.$cat->id . '/editar') }}" class="btn btn-info btn-sm">
-		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
+		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <strong>Editar</strong> 
 		            </a>
 		        </td>
 			    <td>
 			        @if(count($cat->produtos) > 0)
 						<a href="{{ url('admin/categoria/'.$cat->id = -1 . '/excluir') }}" class="btn btn-danger btn-sm">
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
+			                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir</strong> 
 			            </a>
 			        @else
 			            <a href="{{ url('admin/categoria/'.$cat->id . '/excluir') }}" class="btn btn-danger btn-sm">
-			                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
+			                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir</strong> 
 			            </a>
 			        @endif
 		        </td>

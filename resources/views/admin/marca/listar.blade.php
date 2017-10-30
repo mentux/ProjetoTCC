@@ -13,7 +13,7 @@
 	  	<table class="table table-hover table-striped table-responsive">
 		    <caption> 
 		        <a href="{{ route('admin.marca.criar') }}" class="btn btn-primary btn-sm">
-		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Nova Marca 
+		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Nova Marca</strong> 
 		        </a>
 		    </caption>
 		    <thead>
@@ -28,13 +28,12 @@
 		    <tr>
 		        <td>{{$marca->id}}</td>
 		        <td>{{$marca->nome}}</td>
-		        
 		        <td>
 		            <a href="{{ url('admin/marca/'.$marca->id . '/editar') }}" class="btn btn-info btn-sm">
-		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
+		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <strong>Editar</strong> 
 		            </a>
 		            <a href="{{ url('admin/marca/'.$marca->id . '/excluir') }}" class="btn btn-danger btn-sm">
-		                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
+		                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir</strong> 
 		            </a>
 		        </td>
 		    </tr>

@@ -84,11 +84,6 @@
                 </div>
             </div>
 
-            <!-- Site footer -->
-            <footer class="footer">
-                <p>&copy; 2016 Ademir Mazer Junior. @nunomazer - ademir.mazer.jr@gmail.com</p>
-            </footer>
-
         </div> <!-- /container -->
 
 

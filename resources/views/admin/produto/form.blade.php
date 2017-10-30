@@ -57,7 +57,7 @@
 					<div class="col-md-12">
 					{!! Form::submit('Salvar', ['class'=>'btn btn-primary']) !!}
 
-						<a href="{{Route('admin.produto.listar')}}"><div class="btn btn-success btn-sm  glyphicon glyphicon-share-alt col-md-offset-1"> Cancelar</div></a>
+						<a href="{{Route('admin.produto.listar')}}"><div class="btn btn-success btn-sm  glyphicon glyphicon-share-alt col-md-offset-1"> <strong>Cancelar</strong></div></a>
 					</div>
 
 				{!! Form::close() !!}

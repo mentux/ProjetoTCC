@@ -29,11 +29,11 @@
 		        <td>{{$c->endereco}}</td>
 		        <td>
 		            <a href="{{ url('admin/cliente/atualizar',$c->id) }}" class="btn btn-info btn-sm">
-		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> editar 
+		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <strong>Editar</strong> 
 		            </a>
 		        </td>
 		        <td><a href="{{ url('admin/cliente/excluir',$c->id) }}" class="btn btn-danger btn-sm">
-			    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> excluir 
+			    <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir</strong> 
 			    </a></td>
 		    </tr>
 		    @endforeach

@@ -14,18 +14,21 @@
     <h1 style='margin-top:50px;' class='hidden-lg hidden-md hidden-sm '>Produtos em Destaque:</h1>
     <div class='col-sm-12'>
         <div class="page-header text-muted">
-            {{count($produto_destacado)}} produtos em destaque
+            {{count($produto_destacado)}} Produtos em Destaque
         </div>
     </div>
     <div class="col-md-12">
         @foreach($produto_destacado->chunk(3) as $chunked)
         <div class="row">
         @foreach($chunked as $produto_destacado)
-            <div class="col-sm-6 col-md-4">
-                <div class="panel panel-primary">
-                    <div class="thumbnail">
-                        <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}" data-lightbox="roadtrip">
+            <div class="teste">
+                <div class="col-sm-6 col-md-4">
+                    <div class="front">
+                        <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}">
+                    </div>
+                    <div class="back">
                         <div class="caption">
+                            <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}">
                             <div><h3>{{$produto_destacado->nome}}</h3></div>
                             <h4 class="text-muted">{{$produto_destacado->marca->nome}}</h4>
                             <p>{{str_limit($produto_destacado->descricao,100)}}</p>
@@ -34,28 +37,33 @@
                         </div>
                     </div>
                 </div>
-          </div>
+            </div>
         @endforeach
         </div>
         @endforeach
     </div>
     <br/>
-    <h2>Cardápio</h2>
+    <h2 style="padding-bottom: 50px;">Cardápio</h2>
     <div class="col-md-12">
     @foreach($produto->chunk(3) as $linha)
         <div class='row'>
         @foreach($linha as $produto)
-            <div class="col-sm-6 col-md-4">
-                <img style='height:200px; width:200px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" data-lightbox="roadtrip" alt="">
-                <div class="card-body">
-                    <h4 class="card-title">
-                        {{$produto->nome}}
-                    </h4>
-                    <p class="card-text">{{str_limit($produto->descricao,100)}}</p>
-                    <h4 class="card-text">R${{$produto->preco_venda}}</h4>
+            <div class="col-sm-6 col-md-4 flip" style="margin-bottom: 30px;">
+                <div class="front">
+                    <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+                </div>
+                <div class="back">
+                    <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            {{$produto->nome}}
+                        </h4>
+                        <p class="card-text">{{str_limit($produto->descricao,100)}}</p>
+                        <h4 class="card-text">R${{$produto->preco_venda}}</h4>
                     <!-- Trigger the modal with a button -->
-                    <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
-                </div>  
+                        <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
+                    </div>
+                </div>
             </div>
             @endforeach
         </div>
@@ -118,7 +126,7 @@
                 </thead>
                 <tbody>
                     @foreach($itens as $item)
-                    <tr class="teste">
+                    <tr>
                         <td>
                             <img src="{{asset('uploads/'.$item->produto->imagem_nome)}}" alt="{{$item->produto->imagem_nome}}" data-lightbox="roadtrip" style="width:70px;" >
                         </td>
@@ -128,11 +136,11 @@
                         <td class="text-center">
                             {{number_format($item->produto->preco_venda, 2, ',', '.')}}
                         </td>
-                        <td class="text-center quant_item col-md-4 col-sm-5 col-xs-5"> 
+                        <td class="text-center quant_item col-md-6 col-sm-6 col-xs-5"> 
                              <input style="width: 27px; height: 25px; margin-right: 1px;" type="numeric" value="{{$item->qtde}}" name="quant" disabled class="col-sm-1 col-xs-1 form-control btn-xs text-center quant">
                                 
-                                <button style="margin-right: 2px; margin-left: 1px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
-                              
+                                <button style="margin-right: 2px; margin-left: 1px; width: 10px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
+
                                 <button name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
                         </td>
                         <td> 
@@ -163,7 +171,20 @@
         </div>
       </div>
     </div>
-<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+<!-- Code of Jquery Plugin Flip Image-->
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+    $(".flip").flip({
+        trigger: 'hover'
+    });
+    $(".teste").flip({
+        axis: 'x',
+        trigger: 'click'
+    });
+});
+</script>
+<!-- End Code -->
 <script type="text/javascript">
 $(function() {
     $.ajaxSetup({
@@ -310,7 +331,7 @@ $(function() {
     $(".decrement").on('click',function(){
         if($(this).prev().prev().val()<2){
             $(this).prop('disabled', true);
-        }return true;
+        }
     });
 </script>
 

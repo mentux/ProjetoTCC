@@ -23,7 +23,7 @@
 					<br/>
 					{!! Form::submit('Salvar', ['class'=>'btn btn-primary', 'style'=>'margin-top:2px']) !!}
 
-					<a href="{{Route('admin.cliente.listar')}}"><div class="btn btn-success  glyphicon glyphicon-share-alt">Cancelar </div></a>
+					<a href="{{Route('admin.cliente.listar')}}"><div class="btn btn-success  glyphicon glyphicon-share-alt"><strong>Cancelar</strong> </div></a>
 
 				{!! Form::close() !!}
 		</div>	

@@ -6,6 +6,14 @@
   	<div class="panel-heading">
     	<h3 class="panel-title">Lista de Mesas</h3>
   	</div>
+  	<style>
+  		td{
+  			text-align:center;
+  		}
+  		th{
+  			text-align: center;
+  		}
+  	</style>
   	<div class="panel-body">
   	@if(Session::has('mensagem_sucesso'))
 		{!! 'OK' !!}
@@ -19,8 +27,9 @@
 		    <thead>
 		        <tr>
 		            <th>id</th>
-		            <th>Numero</th>
-		            <th>Ações</th>
+		            <th>Número</th>
+		            <th style="margin-right: 10px;">Editar</th>
+		            <th class="pull-left">Excluir</th>
 		        </tr>
 		    </thead>
 		    <tbody>
@@ -30,11 +39,13 @@
 		        <td>{{$mesa->numero}}</td>
 		        
 		        <td>
-		            <a href="{{ url('admin/mesa/'.$mesa->id_mesa . '/editar') }}" class="btn btn-info btn-sm">
-		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Editar 
-		            </a>
-		            <a href="{{ url('excluir_mesa_selecionar',$mesa->id_mesa)}}" class="btn btn-danger btn-sm">
-		                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir 
+		            <a  href="{{ url('admin/mesa/'.$mesa->id_mesa . '/editar') }}" class="btn btn-info btn-sm">
+		                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> <strong>Editar</strong> 
+		            </a>		            
+		        </td>
+		        <td class="pull-left">
+		        	<a href="{{ url('excluir_mesa_selecionar',$mesa->id_mesa)}}" class="btn btn-danger btn-sm">
+		                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir</strong> 
 		            </a>
 		        </td>
 		    </tr>

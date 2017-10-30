@@ -23,7 +23,7 @@
 
 					{!! Form::submit('Salvar', ['class'=>'btn btn-primary', 'style'=>'margin-top:2px']) !!}
 
-					<a href="{{Route('admin.marca.listar')}}"><div class="btn btn-success btn-sm glyphicon glyphicon-share-alt"> Cancelar </div></a>
+					<a href="{{Route('admin.marca.listar')}}"><div class="btn btn-success btn-sm glyphicon glyphicon-share-alt"> <strong>Cancelar</strong> </div></a>
 
 				{!! Form::close() !!}
 		</div>	

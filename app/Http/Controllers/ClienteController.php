@@ -155,9 +155,9 @@ class ClienteController extends Controller {
                     \Session::put('nome_cliente',$dados->name);
                     \Session::put('role_cliente',$dados->role);
                     return redirect('getmesa/'.\Session::get('id_mesa'))->with("mensagens-sucesso",'Seja Bem vindo ');  
-                    }else{
-                        return redirect('login_cliente')->with("login_error",'Login ou senha incorretos,tente novamente.');
                     }
+                }else{
+                  return redirect('login_cliente')->with("login_error",'Login ou senha incorretos,tente novamente.');
                 }
             
             }else{

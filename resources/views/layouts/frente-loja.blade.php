@@ -46,17 +46,17 @@
                             <br/>
                             <button class="btn btn-primary dropdown-toggle hidden-xs" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                 Categorias
-                                <span class="caret"></span>
+                                <span class="glyphicon glyphicon-chevron-down"></span>
                             </button>
                             <div class='botoes_responsivo'>
                                 <button class="btn btn-primary dropdown-toggle hidden-sm hidden-md hidden-lg" type="button" id="dropdownMenu2"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                     Categorias
-                                    <span class="caret"></span>
+                                    <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
                                 </button>
                                 <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
-                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
                                     @foreach ($listcategorias as $cat)
-                                    @if ($cat->id)
+                                    @if ($cat->categoria_id=='')
                                     <li>
                                         <a href="{{route('categoria.listar', $cat->id)}}">
                                             {{$cat->nome}}
@@ -64,11 +64,23 @@
                                     </li>
                                     @endif
                                     @endforeach
+                                    <li class="dropdown-submenu pull-left">
+                                        <a tabindex="-1" href="#">Sub Categorias</a>
+                                            @foreach ($listcategorias as $cat2)
+                                            @if ($cat2->categoria_id!='')
+                                            <li class="dropdown dropdown-submenu">
+                                                <a href="{{route('categoria.listar', $cat2->id)}}">
+                                                    {{$cat2->nome}}
+                                                </a>
+                                            </li>
+                                            @endif
+                                            @endforeach
+                                    </li>
                                 </ul>
                             </div>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                             @foreach ($listcategorias as $cat)
-                            @if ($cat->id)
+                            @if ($cat->categoria_id=='')
                             <li>
                                 <a href="{{route('categoria.listar', $cat->id)}}">
                                     {{$cat->nome}}
@@ -76,6 +88,18 @@
                             </li>
                             @endif
                             @endforeach
+                            <li class="dropdown-submenu pull-left">
+                                <a tabindex="-1" href="#">Sub Categorias</a>
+                                    @foreach ($listcategorias as $cat2)
+                                    @if ($cat2->categoria_id!='')
+                                    <li class="dropdown dropdown-submenu">
+                                        <a href="{{route('categoria.listar', $cat2->id)}}">
+                                            {{$cat2->nome}}
+                                        </a>
+                                    </li>
+                                    @endif
+                                    @endforeach
+                            </li>
                         </ul>
                     </div>
                     @endif
@@ -93,5 +117,6 @@
         <script src="{{asset('bootstrap/js/lightbox.js')}}"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/script.js')}}"></script>
+        <script src="{{asset('bootstrap/js/flip.min.js')}}"></script>
     </body>
 </html>

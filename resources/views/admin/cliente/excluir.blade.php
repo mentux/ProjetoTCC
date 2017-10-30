@@ -9,9 +9,9 @@
 	
 	{!! Form::open(['method'=>'DELETE', 'url'=>'admin/cliente/'.$cliente->id.'/deletar', 'style'=>'display: inline;']) !!}
 	 	
-	 	<button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Excluir Cliente</button>
+	 	<button type="submit" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-erase" aria-hidden="true"></span> <strong>Excluir Cliente</strong></button>
 
-	 	<a href="{{Route('admin.cliente.listar')}}"><div class="btn btn-success btn-sm glyphicon glyphicon-share-alt"> Cancelar </div></a>
+	 	<a href="{{Route('admin.cliente.listar')}}"><div class="btn btn-success btn-sm glyphicon glyphicon-share-alt"> <strong>Cancelar</strong> </div></a>
 
 	{!! Form::close() !!}
 
