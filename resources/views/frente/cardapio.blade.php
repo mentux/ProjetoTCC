@@ -31,7 +31,7 @@
                             <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}">
                             <div><h3>{{$produto_destacado->nome}}</h3></div>
                             <h4 class="text-muted">{{$produto_destacado->marca->nome}}</h4>
-                            <p>{{str_limit($produto_destacado->descricao,100)}}</p>
+                            <p style="width: 200px;" class="col-xs-4">{{str_limit($produto_destacado->descricao,100)}}</p>
                             <button type="button" class="btn btn-primary btn-lg getid" value='{{$produto_destacado->id}}' data-toggle="modal" data-target="#myModal">Mais Detalhes</button>
                             <h4>R$:{{$produto_destacado->preco_venda}}</h4>
                         </div>
@@ -69,7 +69,7 @@
         </div>
         @endforeach
     </div>
-            <!-- Modal -->
+    <!-- Modal -->
     <div id="myModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
@@ -210,7 +210,7 @@ $(function() {
                 }else{
                   $('.avaliado').html(avaliado.toFixed(2));
                 }
-                //console.log(id);
+                console.log(id);
                 //console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },

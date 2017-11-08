@@ -38,7 +38,7 @@
                 
             </td>
             <td>
-                {{$pedido->data_venda->format('d/m/Y')}}
+                {{$pedido->data_venda->format('d/m/Y : H:i')}}
             </td>
             <td class="text-center">
                 {{$pedido->mesa->numero}}
@@ -66,8 +66,8 @@
                     : '<b class="text-warning">Aguardando atualização de status de pagamento</b>'
                 !!}
             </td>
-            
-            <td class="text-right small">
+            <!-- to deixando por enquanto esses botoes pra quem sabe a gente reutilizar em outro lugar,pq o caixa ja marca como pago e finalizado,entao nao teria mais necessidade de ter esses botoes,domingo ou hoje mais a noite a gente decide o que fazer com eles :) -->
+            <!--<td class="text-right small">
                 @if ($pedido->pago == false)
                     {{ Form::open (['route' => ['admin.pedido.pago', $pedido->id_venda], 'method' => 'PUT']) }}
                         {{ Form::submit('Baixa de Pagamento', ['class'=>'btn btn-success btn-sm col-sm-12']) }}
@@ -78,7 +78,8 @@
                         {{ Form::submit('Marcar Finalizado', ['class'=>'btn btn-warning btn-sm col-sm-12']) }}
                     {{ Form::close() }}
                 @endif
-            </td>
+            </td>-->
+
             <td>
                 <a class='btn btn-primary' href="{{route('admin.pedidos', $pedido->id_venda)}}">Mais detalhes</a> 
             </td>

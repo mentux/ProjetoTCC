@@ -16,7 +16,7 @@ class FrenteLojaController extends Controller {
          */
         $models['produtos'] = \Shoppvel\Models\Produto::destacado()->get();
         $models['produto'] = \Shoppvel\Models\Produto::destacado(0)->get();
-        $models['mesa'] = \Shoppvel\Models\Mesa::where('status',1)->get();
+        $models['mesa'] = \Shoppvel\Models\Mesa::orderBy('numero')->get();
         
         return view('frente.entrada', $models); 
         }

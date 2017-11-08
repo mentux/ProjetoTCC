@@ -37,6 +37,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Data/Hora</th>
             <th>Numero</th>
             <th>Mesa</th>
             <th>Status</th>
@@ -46,6 +47,7 @@
     <tbody>
         @foreach($venda as $pedido)
         <tr> 
+            <td>{{$pedido->data_venda->format('d/m/Y : H:i')}}</td>
             <td>
                 {{$pedido->id_venda}}
             </td>  

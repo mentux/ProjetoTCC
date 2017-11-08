@@ -16,6 +16,7 @@
         <link href="{{asset('bootstrap/css/bootstrap.css')}}" rel="stylesheet">
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <link href="{{asset('bootstrap/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
+        <link href="{{asset('bootstrap/css/lightbox.css')}}" rel="stylesheet">
         {!! HTML::style('bootstrap/css/assets/css/style.css') !!}
         <!-- Custom styles for this template -->
         <link href="{{asset('bootstrap/css/nav-justified.css')}}" rel="stylesheet">
@@ -30,37 +31,40 @@
 
     <body>
 
-        <div class="container">
+         <div class="container">
 
             @include('layouts.frente-cabecalho')
             
             <!-- Example row of columns -->
             <br><br>
+            
             <div class="row">
-                <div class="col-lg-2">
-                    <h3>Cozinha</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">
+                <div class="col-lg-12">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Cozinha
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <li>
                             <a href="{{url('cozinha_dashboard')}}">
                                 Dashboard
                             </a>
                         </li>
-                        <li class="list-group-item">
+                        <li>
                             <a href="{{url('pedidos_pendentes')}}">
                                 Pedidos Pendentes
                             </a>
                         </li>
-                        <li class="list-group-item">
+                        <li>
                             <a href="{{url('pedidos_andamento')}}">
                                 Pedidos em andamento
                             </a>
                         </li>
-                        <li class="list-group-item">
+                        <li>
                             <a href="{{url('pedidos_pronto')}}">
                                 Pedidos Prontos
                             </a>
                         </li>
-                        <li class="list-group-item">
+                        <li>
                             <a href="{{url('logout_cozinha')}}">
                                 Logout
                             </a>
@@ -73,18 +77,18 @@
                     @yield('cozinha')
                 </div>
             </div>
-
+        
             <!-- Site footer -->
-            <footer class="footer">
-                <p>&copy; 2016 Ademir Mazer Junior. @nunomazer - ademir.mazer.jr@gmail.com</p>
-            </footer>
 
-        </div> <!-- /container -->
+        </div>
+
+       
 
 
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/ie10-viewport-bug-workaround.js')}}"></script>
+        <script src="{{asset('bootstrap/js/lightbox.js')}}"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
     </body>
 </html>

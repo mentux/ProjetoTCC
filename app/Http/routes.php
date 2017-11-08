@@ -112,14 +112,26 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     Route::get('pedidos_andamento_hoje','CozinhaController@getAndamentosHoje');
     Route::get('pedidos_pronto','CozinhaController@getProntos');
     Route::get('pedidos_pronto_hoje','CozinhaController@getProntosHoje');
-    Route::put('pedido_pendente_status/{id}', [
+    Route::any('pedido_pendente_status/{id?}', [
                 'as' => 'status_pendente',
                 'uses' => 'CozinhaController@putAndamento'
     ]);
+
+    Route::any('muda_pendente/{id?}', [
+                'as' => 'status_muda_pendente',
+                'uses' => 'CozinhaController@putMudaPendente'
+    ]);
+
+
     Route::put('pedido_pronto_status/{id}', [
                 'as' => 'status_pronto',
                 'uses' => 'CozinhaController@putPronto'
     ]);
+    Route::any('pendentes/{id?}', [
+                'as' => 'pedido.pendentes',
+                'uses' => 'CozinhaController@getItensPedidoPendentes'
+    ]);
+
 });
 
 //Rota onde mostra o status de andamento do pedido após a emissão do pedido
@@ -180,14 +192,16 @@ Route::any('remover/{id}', [
     'as' => 'remover',
     'uses' => 'MesaController@Remover'
 ]);
-
-
 //Fecha o pedido quando é clicado no botao confirmar pedido no modal carrinho
 Route::any('finalizar_cardapio','MesaController@FecharPedido');
 
-
-
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
+
+
+    Route::any('troco/{id_pedido?}/{troco?}/{entrada?}', [
+                'as' => 'troco.salvar',
+                'uses' => 'AdminController@salvar_Troco'
+    ]);
 
     Route::get('logout_admin','AdminController@logout_admin');
 
@@ -218,13 +232,14 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
             ]);
 
             //lista todos os pedidos pendentes,pagos,enviados(finalizados),todos(literalmente) de hoje
+            /*  MODIFICAR AS ROTAS PARA O PADRÃO JÁ FEITO EM MAIOR PARTES DAS OUTRAS ROTAS  */
             Route::get('todosHoje','AdminController@getTodosHoje');
             Route::get('pendentesHoje','AdminController@getPendentesHoje');
             Route::get('pagosHoje','AdminController@getPagosHoje');
             Route::get('enviadosHoje','AdminController@getPagosHoje');
 
 
-            //Categorias
+            /////-----Categorias-----/////
             Route::get('admin/categoria/listar', [
                 'as' => 'admin.categoria.listar',
                 'uses' => 'CategoriaController@listar'
@@ -257,7 +272,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.categoria.delete',
                 'uses' => 'CategoriaController@delete'
             ]);
-            //Marcas
+            //////-----Marcas-----//////
             Route::get('admin/marca/listar', [
                 'as' => 'admin.marca.listar',
                 'uses' => 'MarcaController@listar'
@@ -290,7 +305,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.marca.delete',
                 'uses' => 'MarcaController@delete'
             ]);
-            //Produtos
+            /////-----Produtos-----//////
             Route::get('admin/produto/listar', [
                 'as' => 'admin.produto.listar',
                 'uses' => 'ProdutoController@listar'
@@ -323,13 +338,12 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.produto.delete',
                 'uses' => 'ProdutoController@delete'
             ]);
-            /////Mesas
+            //////-----Mesas-----//////
             Route::any('mesa', [
                 'as' => 'admin.mesa',
                 'uses' => 'MesaController@mesa_form'
             ]);
-
-             Route::get('admin/mesa/listar', [
+            Route::get('admin/mesa/listar', [
                 'as' => 'admin.mesa.listar',
                 'uses' => 'MesaController@listar'
             ]);
@@ -363,23 +377,19 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.mesa.delete',
                 'uses' => 'MesaController@delete'
             ]);
-
-            //cliente
+            ///////----Cliente----////////
             Route::get('admin/cliente/listar', [
                 'as' => 'admin.cliente.listar',
                 'uses' => 'AdminController@listarClientes'
             ]);
-
             Route::any('admin/cliente/atualizar/{id}', [
                 'as' => 'admin.cliente.atualizar',
                 'uses' => 'AdminController@atualizarCliente'
             ]);
-
             Route::get('admin/cliente/excluir/{id}', [
                 'as' => 'admin.cliente.excluir',
                 'uses' => 'AdminController@excluirCliente'
             ]);
-
             Route::delete('admin/cliente/{id}/deletar', [
                 'as' => 'admin.cliente.deletar',
                 'uses' => 'AdminController@deletarCliente'

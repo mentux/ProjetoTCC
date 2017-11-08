@@ -195,7 +195,7 @@ class MesaController extends Controller{
     }
 
     public function FecharPedido(Request $request){
-        
+        //cara,vc mexeu nesse metodo? pq ele nao ta dando mais aquele pt,ta gerando certinho,vou fazer mais uns testes aqui antes de dormir,nao mexi muito,fiquei vendo uns videos de airsoft pq hoje vo atirar de novo com a m4 predator la no palladium,to empolgado XD
         $itens = $this->carrinho->getItens();
 
         if(count($itens) == 0){
@@ -223,7 +223,7 @@ class MesaController extends Controller{
             $prod->qtde_estoque;
             $item=$prod;
             if($result = $item->qtde_estoque - $itemVenda->qtde){
-                if($this->carrinho->getItens()[$idx]->qtde == 0){
+                if($itemCarrinho->qtde == 0){
                     return redirect('getmesa/'.\Session::get('id_mesa'))->with('mensagens-danger', 'Não foi possível fechar o pedido,pois tem produto(os) com quantidade zero no carrinho');
 
                 }

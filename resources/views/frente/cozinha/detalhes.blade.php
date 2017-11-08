@@ -5,6 +5,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>Data/Hora</th>
             <th>Mesa</th>
             <th>Total</th>
             <th>Status</th>
@@ -12,6 +13,9 @@
     </thead>
     <tbody>
         <tr>
+            <td>
+                {{$venda->data_venda->format('d/m/Y : H:i')}}
+            </td>
             <td>
                 {{$venda->mesa->numero}}
             </td>

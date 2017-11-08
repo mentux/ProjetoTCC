@@ -1,49 +1,246 @@
 @extends('layouts.cozinha_cabecalho')
 
 @section('cozinha')
-<h2>Cozinha</h3>
 
-<div class="container">
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-1">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <a href="{{url('pedidos_pendentes_hoje')}}"><h3 class="text-center">Pendentes(hoje)</h3></a>
-                </div>
-                <div class="panel-body text-center">
-                    <h1 class="text-info">
-                        {{$pendente}}
-                    </h1>
-                </div>
-            </div>
-        </div>
+<div style="padding-top: 30px;" class='container'>
+    <div class='row'>
+        <!-- Listagem pedido Pendentes -->
         <div class="col-sm-4">
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <a href="{{url('pedidos_andamento')}}"><h3 class="text-center">Em Andamento(hoje)</h3></a>
+                    <h3 class="text-center">Pendente</h3>
                 </div>
-                <div class="panel-body text-center">
-                    <h1 class="text-info">
-                        {{$andamento}}
-                    </h1>
+                <div class="panel-body">
+                    @if(count($pendente) == 0)
+                    <p class='text-danger text-center'><strong>Nenhum pedido pendente no momento</strong></p>
+                    @else
+                    <table style="display: block !important;" class="table table-responsive">
+                        <thead>
+                            <th>Pedido</th>
+                            <th>Mesa</th>
+                            <th></th>
+                            <th></th>
+                        </thead>
+                        @foreach($pendente as $p)
+                        <tbody class="pend">
+                            <tr class="{{$p->id_venda}}">
+                                <td>{{$p->id_venda}}</td>
+                                <td>{{$p->mesa->numero}}</td>
+                                <td><button class='btn btn-primary btn-xs detalhes' value="{{$p->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
+                                <td><a class='btn btn-danger btn-xs' >Status</a></td>
+                            </tr>
+                        </tbody>
+                        @endforeach
+                    </table>
+                    @endif
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4 col-sm-offset-3 ">
+        <!-- Listagem pedidos em Andamento -->
+        <div class="col-sm-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h3 class="text-center">Em Andamento</h3>
+                </div>  
+                <div class="panel-body andamen">
+                    @if(count($andamento) == 0)
+                    <p class='text-info text-center txt_andamen'><strong>Nenhum pedido em andamento  no momento</strong></p>
+                    @else
+                    <table style="display: block !important;" class="table table-responsive">
+                        <thead>
+                            <th>Pedido</th>
+                            <th>Mesa</th>
+                            <th></th>
+                            <th></th>
+                        </thead>
+                        @foreach($andamento as $a)
+                        <tbody class="and">
+                            <tr class="{{$a->id_venda}}">
+                                <td>{{$a->id_venda}}</td>
+                                <td>{{$a->mesa->numero}}</td>
+                                <td><button class='btn btn-primary btn-xs detalhes' value="{{$a->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
+                                <td><a class='btn btn-danger btn-xs' href="#">Status</a></td>
+                            </tr>
+                        </tbody>
+                        @endforeach
+                    </table>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <!-- Listagem de pedido Prontos -->
+        <div class="col-sm-4">
             <div class="panel panel-success">
                 <div class="panel-heading">
-                    <a href="{{url('pedidos_pronto')}}"><h3 class="text-center">Prontos(hoje)</h3></a>
+                    <h3 class="text-center">Pronto</h3>
                 </div>
                 <div class="panel-body text-center">
-                    <h1 class="text-info">
-                        {{$prontos}}
-                    </h1>
+                    @if(count($prontos) == 0)
+                    <p class='text-success text-center'><strong>Nenhum pronto no momento</strong></p>
+                    @else
+                    <table style="display: block !important;" class="table table-responsive">
+                        <thead>
+                            <th>Pedido</th>
+                            <th><strong>Mesa</strong></th>
+                            <th></th>
+                        </thead>
+                        @foreach($prontos as $pron)
+                        <tbody>
+                            <td>{{$pron->id_venda}}</td>
+                            <td>{{$pron->mesa->numero}}</td>
+                            <td><button class='btn btn-primary btn-xs detalhes' value="{{$pron->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
+                        </tbody>
+                        @endforeach
+                    </table>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Modal do mais detalhes do pedido -->
+<div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+               <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Mesa</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody class='cabecalho'>
+                   
+                </tbody>
+            </table>
+        </div>
+        <div class='modal-itens'>
+            <table class="table table-striped teste">
+                <thead>
+                    <tr>
+                        <th>Imagem</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                    </tr>
+                </thead>
+                <tbody class='itens'>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-default  pull-right" data-dismiss="modal">Fechar</button>
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+<!--Ajax Modal -->
+<!-- Verificação do tr no <tbody>, se não houver filhos(<tr>,<td>) então para a requesição ajax-->
+<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+<script src="{{asset('bootstrap/js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+$(function() {
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-Token':$('input[name="_token"]').val()
+        }
+    });
+        $('.detalhes').click(function(){
+
+            var id = $(this).attr('value');
+
+            
+
+            if($('.itens').empty('tr:tabela_item')){
+                $.ajax().abort();
+            }
+            if($('.cabecalho_mesa').empty('tr:tabela_item')){
+                $.ajax().abort();
+            }
+            $.ajax({
+                type: "GET",
+                url: '{{route("pedido.pendentes")}}'+'/'+id,
+                data: {},
+                success: function(itens){
+                //var param = itens;
+                //console.log(itens);
+                var tabela = $('.tabela_item').find();
+                var status_cabecalho = itens[0].cabecalho[0].venda_status;
+                var botao_classe = '';
+
+                if(status_cabecalho == 1){
+                    status_cabecalho = 'Pendente';
+                    botao_classe = 'btn btn-danger pendente';
+                }
+                if(status_cabecalho == 2){
+                    status_cabecalho = 'Em Andamento';
+                    botao_classe = 'btn btn-info andamento';
+                }
+                if(status_cabecalho == 3){
+                    status_cabecalho = 'Pronto';
+                    botao_classe = 'btn btn-success pronto';
+                }
+                $('.cabecalho').append("<tr class='cabecalho_mesa'>" + "<td class='data'>"+ itens[0].data +"</td>" +"<td>"+ itens[0].cabecalho[0].numero+"</td>"+"<td>R$"+ itens[0].cabecalho[0].valor_venda+"</td>" + "<td>" + "<button value='"+ itens[0].cabecalho[0].id_venda +"' class='"+botao_classe+"'>" + status_cabecalho + "</button>" + "</td>" + "</tr>");
+                ////fim
+                $.each(itens[0]['itens'],function(key, value){
+                //console.log(value);
+                $('.itens').append("<tr class='tabela_item'>" + "<td>" + "<img style='width: 50px;' src='/uploads/"+ value.imagem_nome +"' data-lightbox='roadtrip'/>" + "</td>" +"<td>" + value.nome +  "</td>" + "<td>" + value.qtde + "</td>" + "</tr>");
+                });
+                $(function() {
+                        $.ajaxSetup({
+                            headers:{
+                                'X-CSRF-Token':$('input[name="_token"]').val()
+                            }
+                        });
+                            $('.pendente').on("click",function(){
+                                var id = $(this).attr('value');
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{route("status_muda_pendente")}}'+'/'+id,
+                                    data: {},
+                                    success: function(status) {
+                                        var status_cabecalho = itens[0].cabecalho[0].venda_status;
+                                        var botao_classe = '';
+
+                                        if(status == 2){
+                                            var tr = $('.pend').find('.'+id);
+                                            $('.pendente').attr("class",'btn btn-info andamento');
+                                            $('.andamento').text("Em andamento");
+                                            
+                                            if($(".and").size('')==0){
+                                                $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<tr>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "<th>" + "</th>" + "</tr>" + "</thead>" + "</table>").append(tr);
+                                                $(".txt_andamen").remove();
+                                                $(".pend").find('.'+id).remove();
+
+                                            }else{
+                                                $(".and").last().append(tr);
+                                            }
+                                            
+                                        }
+
+                                        
+                                    },
+                                });
+                                
+                            });
+                    });
+
+
+
+                },
+            });
+            
+        });
+});
+</script>
 
 @stop
