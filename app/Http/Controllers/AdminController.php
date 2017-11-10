@@ -153,11 +153,13 @@ class AdminController extends Controller {
     public function salvar_Troco($id_pedido = null,$troco = null ,$entrada = null){
 
         $consulta = Venda::where('id_venda',$id_pedido)->count();
+        
+        $entrada = str_replace(',', '.',$entrada);
         if($id_pedido == ''){
             return redirect()->back()->with('mensagens-danger','Erro');
         }
         if($entrada == null){
-            return redirect()->back()->with('mensagens-danger','O campo (entrada) é obrigatório');
+            return redirect()->back()->with('mensagens-danger','O campo (Entrada) é obrigatório');
         }
         if(!is_numeric($entrada)){
             return redirect()->back()->with('mensagens-danger','É necessário digitar apenas numeros no campo(entrada)');
@@ -165,9 +167,6 @@ class AdminController extends Controller {
         if($troco == null){
             return redirect()->back()->with('mensagens-danger','É obrigatório salvar o troco.');
         }
-        if(!is_numeric($troco)){
-            return redirect()->back()->with('mensagens-danger','O troco deve conter somente numeros');
-        }//Um detalhe que eu percebi,quando aparece a mensagem('valor de entrada É inferior ao valor total'),cai nesse if pq o troco ta recebendo essa string,teria que pensar um jeito de cair la no ultimo if que eu fiz,onde ele valida pra entrada nao ser menor do que o total.
         if($consulta != 1 ){
             return redirect()->back()->with('mensagens-danger','Pedido não encontrado');
         }
@@ -181,6 +180,9 @@ class AdminController extends Controller {
 
         if($entrada < $troco){
             return redirect()->back()->with('mensagens-danger','A entrada não pode ser menor do que o total.'); 
+        }
+        if(!is_numeric($troco)){
+            return redirect()->back()->with('mensagens-danger','O troco deve conter somente numeros');
         }
         $pedido = Venda::find($id_pedido);
         $pedido->troco = $troco;

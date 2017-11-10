@@ -16,15 +16,12 @@ class Carrinho {
 
     private $itens = null;
     private $session = null;
-    
     public function __construct() {
         $this->itens = session(self::NOME_CARRINHO, new Collection());   
     }
-
     public function getItens() {
         return $this->itens;
     }
-    
     private function addItem($item) {
         $this->itens->push($item);
         session([self::NOME_CARRINHO => $this->itens]);
@@ -35,7 +32,6 @@ class Carrinho {
         $avaliado = new VendaItem();
         $avaliado = $idProduto;
         $avaliado->save();
-
     }
     public function add($id, $qtde = 1) {
         $p = Produto::find($id);
@@ -54,7 +50,6 @@ class Carrinho {
 
         return true;
     }
-
     public function getTotal() {
         $total = 0;
         foreach ($this->itens as $item) {
@@ -62,7 +57,6 @@ class Carrinho {
         }
         return $total;
     }
-
     public function getTotalCarrinho() {
         $total = 0;
         foreach ($this->itens as $item) {
@@ -72,7 +66,6 @@ class Carrinho {
         }
         return $total;
     }
-
     public function getTotalMenos() {
         $total = 0;
         foreach ($this->itens as $item) {
@@ -82,7 +75,6 @@ class Carrinho {
         }
         return $total;
     }
-
     public function deleteItem($id){
         $itens_carrinho = $this->getItens();
         foreach ($itens_carrinho as $i => $item) {
@@ -93,10 +85,8 @@ class Carrinho {
 
         $this->esvaziar();
         session([self::NOME_CARRINHO => $itens_carrinho]);
-        session()->save();
-        
-    }
-    
+        session()->save();      
+    } 
     public function esvaziar() {
         session()->forget(self::NOME_CARRINHO);    
     }

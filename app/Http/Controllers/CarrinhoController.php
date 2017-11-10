@@ -100,12 +100,10 @@ class CarrinhoController extends Controller {
         }
         return $models;
     }
-
     function remover_item($id){
         $this->carrinho->deleteItem($id);
         return redirect()->route('carrinho.listar');
     }
-
     /**
      * Método interno do controlador carrinho para montar as classes modelo
      * as serem passadas para as diversas visões que as necessitam
@@ -118,7 +116,6 @@ class CarrinhoController extends Controller {
         }
         return $models;
     }
-
     public function getFinalizarCompra() {
         if ($this->carrinho->getItens()->count() == 0) {
             return back()->withErrors('Nenhum item no carrinho para finalizar compra!');
@@ -128,7 +125,6 @@ class CarrinhoController extends Controller {
 
         return view('frente.finalizar-compra', $models);
     }
-
     public function Avaliar(Request $request){
 
         $idProduto = $request->get('id_produto');
@@ -141,7 +137,6 @@ class CarrinhoController extends Controller {
         $produto->save();
         //$this->carrinho->setProductAvaliate($idProduto);
     }
-
     function calcFrete(Request $request){
 
             $cep = $request->get('cep');

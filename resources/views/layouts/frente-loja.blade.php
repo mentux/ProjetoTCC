@@ -31,7 +31,6 @@
         <![endif]-->
     </head>
     <body>
-
         <div class="container">
             @include('layouts.frente-cabecalho')
             <!-- Example row of columns -->

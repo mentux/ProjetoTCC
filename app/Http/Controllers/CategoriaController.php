@@ -23,19 +23,15 @@ class CategoriaController extends Controller {
         //dd($models['categoria']);
         return view('frente.produtos-categoria', $models);
     } 
-
     public function listar() {
         $models['listcategorias'] = Categoria::Orderby('nome');
         $models['listcategorias'] = Categoria::paginate(10);
         //dd($models);
             return view('admin.categoria.listar', $models);
         }
-    
     public function criar() {
-            return view('admin.categoria.form');
-
-        }
-    
+        return view('admin.categoria.form');
+    }
     public function salvar(CategoriaFormRequest $request) {
     	$categoria = new Categoria();
         if($_REQUEST['categoria_id']!= ''){

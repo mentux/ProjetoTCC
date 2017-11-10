@@ -5,14 +5,14 @@
 <div style="padding-top: 30px;" class='container'>
     <div class='row'>
         <!-- Listagem pedido Pendentes -->
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-12">
             <div class="panel panel-danger">
                 <div class="panel-heading">
                     <h3 class="text-center">Pendente</h3>
                 </div>
                 <div class="panel-body">
                     @if(count($pendente) == 0)
-                    <p class='text-danger text-center'><strong>Nenhum pedido pendente no momento</strong></p>
+                    <p class='text-danger text-center txt_pendente'><strong>Nenhum pedido pendente no momento</strong></p>
                     @else
                     <table style="display: block !important;" class="table table-responsive">
                         <thead>
@@ -27,7 +27,6 @@
                                 <td>{{$p->id_venda}}</td>
                                 <td>{{$p->mesa->numero}}</td>
                                 <td><button class='btn btn-primary btn-xs detalhes' value="{{$p->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
-                                <td><a class='btn btn-danger btn-xs' >Status</a></td>
                             </tr>
                         </tbody>
                         @endforeach
@@ -37,7 +36,7 @@
             </div>
         </div>
         <!-- Listagem pedidos em Andamento -->
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-12">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <h3 class="text-center">Em Andamento</h3>
@@ -59,7 +58,6 @@
                                 <td>{{$a->id_venda}}</td>
                                 <td>{{$a->mesa->numero}}</td>
                                 <td><button class='btn btn-primary btn-xs detalhes' value="{{$a->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
-                                <td><a class='btn btn-danger btn-xs' href="#">Status</a></td>
                             </tr>
                         </tbody>
                         @endforeach
@@ -69,14 +67,14 @@
             </div>
         </div>
         <!-- Listagem de pedido Prontos -->
-        <div class="col-sm-4">
+        <div class="col-sm-4 col-xs-12">
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="text-center">Pronto</h3>
                 </div>
-                <div class="panel-body text-center">
+                <div class="panel-body text-center pronto_tab">
                     @if(count($prontos) == 0)
-                    <p class='text-success text-center'><strong>Nenhum pronto no momento</strong></p>
+                    <p class='text-success text-center pronto_texto'><strong>Nenhum pronto no momento</strong></p>
                     @else
                     <table style="display: block !important;" class="table table-responsive">
                         <thead>
@@ -85,7 +83,7 @@
                             <th></th>
                         </thead>
                         @foreach($prontos as $pron)
-                        <tbody>
+                        <tbody class='pron'>
                             <td>{{$pron->id_venda}}</td>
                             <td>{{$pron->mesa->numero}}</td>
                             <td><button class='btn btn-primary btn-xs detalhes' value="{{$pron->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
@@ -190,12 +188,12 @@ $(function() {
                     botao_classe = 'btn btn-success pronto';
                 }
                 $('.cabecalho').append("<tr class='cabecalho_mesa'>" + "<td class='data'>"+ itens[0].data +"</td>" +"<td>"+ itens[0].cabecalho[0].numero+"</td>"+"<td>R$"+ itens[0].cabecalho[0].valor_venda+"</td>" + "<td>" + "<button value='"+ itens[0].cabecalho[0].id_venda +"' class='"+botao_classe+"'>" + status_cabecalho + "</button>" + "</td>" + "</tr>");
-                ////fim
+                // fim 
                 $.each(itens[0]['itens'],function(key, value){
                 //console.log(value);
                 $('.itens').append("<tr class='tabela_item'>" + "<td>" + "<img style='width: 50px;' src='/uploads/"+ value.imagem_nome +"' data-lightbox='roadtrip'/>" + "</td>" +"<td>" + value.nome +  "</td>" + "<td>" + value.qtde + "</td>" + "</tr>");
                 });
-                $(function() {
+                $(function(){
                         $.ajaxSetup({
                             headers:{
                                 'X-CSRF-Token':$('input[name="_token"]').val()
@@ -214,28 +212,59 @@ $(function() {
                                         if(status == 2){
                                             var tr = $('.pend').find('.'+id);
                                             $('.pendente').attr("class",'btn btn-info andamento');
-                                            $('.andamento').text("Em andamento");
-                                            
+                                            $('.andamento').text("Em Andamento");
                                             if($(".and").size('')==0){
-                                                $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<tr>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "<th>" + "</th>" + "</tr>" + "</thead>" + "</table>").append(tr);
+                                                $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" +''+ "</th>" + "</thead>" + "<tbody class='and'>" + "</tbody" + "</table>");
+                                                $(".and").append(tr);
                                                 $(".txt_andamen").remove();
                                                 $(".pend").find('.'+id).remove();
-
+                                            // Caso já contenha um Pedido, somente adiciona-o na tabela
                                             }else{
                                                 $(".and").last().append(tr);
                                             }
-                                            
-                                        }
-
-                                        
+                                        } 
                                     },
                                 });
                                 
                             });
                     });
+                    /// End Ajax Button Pending to Progress
+                    $(function(){
+                        $.ajaxSetup({
+                            headers:{
+                                'X-CSRF-Token':$('input[name="_token"]').val()
+                            }
+                        });
+                            $('.andamento').on("click",function(){
+                                var id = $(this).attr('value');
+                                $.ajax({
+                                    type: "GET",
+                                    url: '{{route("status_muda_pronto")}}'+'/'+id,
+                                    data: {},
+                                    success: function(status_pronto) {
+                                        var status_cabecalho = itens[0].cabecalho[0].venda_status;
+                                        var botao_classe = '';
 
-
-
+                                        if(status_pronto == 3){
+                                            var tr = $(".and").find('.'+id);
+                                            $('.andamento').attr("class",'btn btn-success pronto');
+                                            $('.pronto').text("Pronto");
+                                            if($(".pron").size('')==0){
+                                                $(".pronto_tab").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>" + "<tbody class='pront_din'>" + "</tbody>" + "</table>");
+                                                $(".pront_din").append(tr);
+                                                $(".txt_andamen").remove();
+                                                $(".pronto_texto").remove();
+                                                $(".primei").find('.'+id).remove();
+                                            }else{
+                                                $(".pron").last().append(tr);
+                                            }   
+                                        }
+                                    },
+                                });
+                                
+                            });
+                    });
+                    /// End Ajax
                 },
             });
             

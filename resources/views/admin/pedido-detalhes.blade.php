@@ -124,13 +124,15 @@ $(document).ready(function () {
             function(){
                 if((troco_retorno.toFixed(2))>0){
                     $('.troco').text(troco_retorno.toFixed(2));
+                    $('.confirmar').prop('disabled', false);
                 }
                 if ((troco_retorno.toFixed(2))==0) {
-                    console.log($('.troco').text(0));
+                    //console.log($('.troco').text(0));
+                    $('.confirmar').prop('disabled', false);
                 }
                 if ((troco_retorno.toFixed(2))<0) {
-                    $('.troco').show(5000).text('Valor de Entrada é Inválido');
-                    $('.troco').hide(1000).text(0);
+                    $('.troco').show().text('Valor Inferior ao Total');
+                    $('.confirmar').prop('disabled', true);
                 }
             },
         2000);
@@ -150,4 +152,3 @@ $(document).ready(function () {
     });
 });
 </script>
-<!-- Fiz um funcao de click no botao de confirmar onde ele chama a rota pra salvar o troco e a entrada no banco,chamo a rota,passo por parametro o id do pedido pro controller achar no banco o pedido,pego o troco e a entrada,dou um save la e salvo tudo no banco e ainda fiz uma validacao no formulario do caixa pra ele nao mandar denovo,caso ja tenha sido setado o troco e a entrada,só mostro e escondo o formulario,não é a melhor forma de fazer até pq ta faltando as validações na parte do controller mas ta funfando,teria que pensar em uma forma melhor ou deixar assim e validar tudo no controller,vemos isso mais tarde,flwz aí meu to indo capotar aqui /diegoo/ -->

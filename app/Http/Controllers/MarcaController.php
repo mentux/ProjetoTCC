@@ -30,7 +30,7 @@ class MarcaController extends Controller
             'nome.min'          =>'O minímo é 3 caracteres no campo Nome',
             'nome.unique:marcas'=>'O Nome para a Marca já está sendo utilizado',
         ]);
-      $marca = new Marca();
+        $marca = new Marca();
     	$marca->create($request->all());
         //\Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
       return $this->listar();

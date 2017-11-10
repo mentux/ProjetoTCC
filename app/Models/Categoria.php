@@ -17,15 +17,10 @@ class Categoria extends Model {
     public function produtos() {
         return $this->hasMany(Produto::class,"categoria_id","id");
     }
-
-
     public function filhos(){
     	return $this->hasMany(Categoria::class,"categoria_id","id");
     }
-
     public function pai(){
     	return $this->belongsTo(Categoria::class,"categoria_id","id");
     }
-    
-
 }

@@ -141,7 +141,7 @@
                                 
                                 <button style="margin-right: 2px; margin-left: 1px; width: 10px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
 
-                                <button name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> -</button>
+                                <button name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> - </button>
                         </td>
                         <td> 
                         <a href="{{route('remover', $item->produto->id, $item->qtde)}}" 

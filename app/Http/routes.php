@@ -123,6 +123,14 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     ]);
 
 
+    Route::any('muda_pronto/{id?}', [
+                'as' => 'status_muda_pronto',
+                'uses' => 'CozinhaController@putMudaPronto'
+    ]);
+
+
+
+
     Route::put('pedido_pronto_status/{id}', [
                 'as' => 'status_pronto',
                 'uses' => 'CozinhaController@putPronto'

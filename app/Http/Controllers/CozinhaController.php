@@ -98,6 +98,19 @@ class CozinhaController extends Controller{
         return Response::json($status);
     }
 
+    public function putMudaPronto($id){
+        $pedido = Venda::find($id);
+        
+        if ($pedido == null) {
+            return back()->withErrors('Pedido não encontrado!');
+        }
+        
+        $pedido->status = 3;
+        $pedido->save();
+        $status_pronto = $pedido->status;
+        return Response::json($status_pronto);
+    }
+
 
     ////////////////////////////////////
 
