@@ -16,7 +16,7 @@
 <div class='col-md-12'>
   <h3 style='text-indent:10px;' >Mesas Disponíveis</h3>
   @foreach($mesa as $m)
-      <a @if($m->status == '2') class='btn btn-danger btn-lg reservada' disabled @else class='btn btn-primary btn-lg' @endif  href="{{url('reservar_mesa',$m->id_mesa)}}"  >{{$m->numero}}</a>
+      <a @if($m->status == '2') class='btn btn-danger btn-lg reservada' @else class='btn btn-primary btn-lg' @endif  href="{{url('reservar_mesa',$m->id_mesa)}}"  >{{$m->numero}}</a>
   @endforeach
 </div>
 <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>

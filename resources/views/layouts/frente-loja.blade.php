@@ -12,6 +12,8 @@
         <title>L & C</title>
         <!-- Bootstrap core CSS -->
         <link href="{{asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+        <link href="{{asset('bootstrap/css/animate.css')}}" rel="stylesheet">
+        <link href="{{asset('bootstrap/css/bootstrap-dropdownhover.min.css')}}">
         <link href="{{asset('bootstrap/css/assets/css/font-awesome.min.css') }}" rel="stylesheet">
         {!! HTML::style('bootstrap/css/assets/css/style.css') !!}
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -35,87 +37,69 @@
             @include('layouts.frente-cabecalho')
             <!-- Example row of columns -->
                 @if((Route::getCurrentRoute()->getPath()) == 'getmesa/{id}' OR (Route::getCurrentRoute()->getPath()) == 'categoria/{id?}' OR(Route::getCurrentRoute()->getPath()) == 'produto/buscar')
-                <div class="row">
-                    <div class="col-lg-2">
-                        </br>
-                        </br>
-                        <h3>Categorias</h3>
-                            <a class='btn btn-primary hidden-xs' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
-                            <br/>
-                            <br/>
-                            <button class="btn btn-primary dropdown-toggle hidden-xs" type="button" id="dropdownMenu1"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Categorias
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </button>
-                            <div class='botoes_responsivo'>
-                                <button class="btn btn-primary dropdown-toggle hidden-sm hidden-md hidden-lg" type="button" id="dropdownMenu2"    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                    Categorias
-                                    <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                                </button>
-                                <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    @foreach ($listcategorias as $cat)
-                                    @if ($cat->categoria_id=='')
-                                    <li>
-                                        <a href="{{route('categoria.listar', $cat->id)}}">
-                                            {{$cat->nome}}
-                                        </a>
-                                    </li>
-                                    @endif
-                                    @endforeach
-                                    <li class="dropdown-submenu pull-left">
-                                        <a tabindex="-1" href="#">Sub Categorias</a>
-                                            @foreach ($listcategorias as $cat2)
-                                            @if ($cat2->categoria_id!='')
-                                            <li class="dropdown dropdown-submenu">
-                                                <a href="{{route('categoria.listar', $cat2->id)}}">
-                                                    {{$cat2->nome}}
+                <div class="col-lg-2">
+                    <div class="row">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                            </br>
+                            </br>
+                            <h3>Categorias</h3>
+                                <a class='btn btn-primary hidden-xs' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
+                                <br/>
+                                <br/>
+                                <div class="col-lg-2">
+                                    <div class="dropdown"><!-- remover causo precise e fechamento depois da ul-->
+                                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" data-hover="dropdown">
+                                            Categorias
+                                            <span class="caret"></span>
+                                        </button>
+                                        <a class='btn btn-primary hidden-sm hidden-md hidden-lg' href="{{url('getmesa/'.\Session::get('id_mesa'))}}">Voltar ao Cardápio</a>
+                                        <ul class="dropdown-menu" data-hover="dropdown" aria-labelledby="dropdownMenu1">
+                                            @foreach ($listcategorias as $cat)
+                                            @if ($cat->categoria_id=='')
+                                            <li>
+                                                <a href="{{route('categoria.listar', $cat->id)}}">
+                                                    {{$cat->nome}}
                                                 </a>
                                             </li>
                                             @endif
                                             @endforeach
-                                    </li>
-                                </ul>
-                            </div>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            @foreach ($listcategorias as $cat)
-                            @if ($cat->categoria_id=='')
-                            <li>
-                                <a href="{{route('categoria.listar', $cat->id)}}">
-                                    {{$cat->nome}}
-                                </a>
-                            </li>
-                            @endif
-                            @endforeach
-                            <li class="dropdown-submenu pull-left">
-                                <a tabindex="-1" href="#">Sub Categorias</a>
-                                    @foreach ($listcategorias as $cat2)
-                                    @if ($cat2->categoria_id!='')
-                                    <li class="dropdown dropdown-submenu">
-                                        <a href="{{route('categoria.listar', $cat2->id)}}">
-                                            {{$cat2->nome}}
-                                        </a>
-                                    </li>
-                                    @endif
-                                    @endforeach
-                            </li>
-                        </ul>
+                                            <li class="dropdown">
+                                                <a href="#">Sub Categorias</a>
+                                                    <ul class="dropdown-menu dropdownhover-right">
+                                                        @foreach ($listcategorias as $cat2)
+                                                        @if ($cat2->categoria_id!='')
+                                                        <li>
+                                                            <a href="{{route('categoria.listar', $cat2->id)}}">
+                                                                {{$cat2->nome}}
+                                                            </a>
+                                                        </li>
+                                                        @endif
+                                                        @endforeach
+                                                    </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                        </div>
                     </div>
+                </div>
+                @endif
+                <div class="col-lg-10">
+                <br/>
+                    @if((Route::getCurrentRoute()->getPath()) == 'cadastrar_cliente' OR ((Route::getCurrentRoute()->getPath()) == 'login_cliente'))  
+                    @else
+                    @include('layouts.messages')
                     @endif
-                    <div class="col-lg-10">
-                    <br/>
-                        @if((Route::getCurrentRoute()->getPath()) == 'cadastrar_cliente' OR ((Route::getCurrentRoute()->getPath()) == 'login_cliente'))  
-                        @else
-                        @include('layouts.messages')
-                        @endif
-                        @yield('conteudo')
-        </div> <!-- /container -->
+                    @yield('conteudo')
+                </div> <!-- /container -->
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/ie10-viewport-bug-workaround.js')}}"></script>
         <script src="{{asset('bootstrap/js/lightbox.js')}}"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('bootstrap/js/bootstrap-dropdownhover.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/script.js')}}"></script>
         <script src="{{asset('bootstrap/js/flip.min.js')}}"></script>
+        <script src="{{asset('bootstrap/js/menu.js')}}"></script>
     </body>
 </html>

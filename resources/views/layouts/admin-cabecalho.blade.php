@@ -22,7 +22,7 @@
                 <li><a href="{{route('admin.categoria.listar')}}">Categorias</a></li>
                 <li><a href="{{route('admin.marca.listar')}}">Marcas</a>
                 <li><a href="{{route('admin.produto.listar')}}">Produtos</a>
-                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar mesas</a>      
+                <li><a href="{{route('admin.mesa.listar')}}">Cadastrar Mesas</a>      
                 @if(session('admin') == '')
                 <li><a href="{{ url('/login') }}">Login</a></li>
                 @else

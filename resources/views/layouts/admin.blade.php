@@ -43,7 +43,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <a href="{{route('admin.dashboard')}}">
-                                Painel de controle
+                                Painel de Controle
                             </a>
                         </li>
                         <!--<li class="list-group-item">
@@ -53,22 +53,22 @@
                         </li>-->
                         <li class="list-group-item">
                             <a href="{{route('admin.pedidos')}}">
-                                Todos os pedidos
+                                Todos os Pedidos
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('admin.pedidos', '?status=nao-pagos')}}">
-                                Pedidos pendentes de pagamento
+                                Pedidos Pendentes de Pagamento
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('admin.pedidos', '?status=pagos')}}">
-                                Pedidos pagos
+                                Pedidos Pagos
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('admin.pedidos', '?status=finalizados')}}">
-                                Pedidos finalizados
+                                Pedidos Finalizados
                             </a>
                         </li>
                         <li class="list-group-item">

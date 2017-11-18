@@ -121,15 +121,16 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
                 'as' => 'status_muda_pendente',
                 'uses' => 'CozinhaController@putMudaPendente'
     ]);
-
-
     Route::any('muda_pronto/{id?}', [
                 'as' => 'status_muda_pronto',
                 'uses' => 'CozinhaController@putMudaPronto'
     ]);
-
-
-
+    //////Route in Test (Atualizar Pedidos Pendente(Novos), na listagem da cozinha do dia atual)
+    Route::get('novos_pedidos', [
+                'as' => 'novos_pedidos_pendente',
+                'uses' => 'CozinhaController@getNovosPedidosPendente'
+    ]);
+    //////*****************************////////////
 
     Route::put('pedido_pronto_status/{id}', [
                 'as' => 'status_pronto',

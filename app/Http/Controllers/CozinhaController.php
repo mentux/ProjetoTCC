@@ -3,15 +3,10 @@
 namespace Shoppvel\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use Shoppvel\Http\Requests;
-
 use Shoppvel\Models\Venda;
-
 use Shoppvel\Models\VendaItem;
-
 use Illuminate\Support\Facades\Response;
-
 use DB;
 use DateTime;
 
@@ -22,8 +17,6 @@ class CozinhaController extends Controller{
         $venda = Venda::find($id);
         return view('frente.cozinha.detalhes',['venda'=>$venda]);
     }
-
-
 	public function dashboard(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
         $pendente = Venda::where('status',1)->where('data_venda',$data_hoje)->get();
@@ -32,42 +25,33 @@ class CozinhaController extends Controller{
         $array = ['pendente'=>$pendente,'andamento'=>$andamento,'prontos'=>$prontos];
         return view('frente.cozinha.cozinha_dashboard',$array);
     }
-
 	public function getPendentes(){
 		$venda = Venda::orderBy('id_venda','DESC')->where('status',1)->paginate(5);
 		return view('frente.cozinha.pedido',['venda'=>$venda]);
-
 	}
-
     public function getPendentesHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
         $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',1)->paginate(5);
         return view('frente.cozinha.pedido',['venda'=>$venda]);
-
     }
-
 	public function getAndamentos(){
 		$venda = Venda::orderBy('id_venda','DESC')->where('status',2)->paginate(5);
 		return view('frente.cozinha.pedido',['venda'=>$venda]);
 	}
-
     public function getAndamentosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
         $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',2)->paginate(5);
         return view('frente.cozinha.pedido',['venda'=>$venda]);
     }
-
 	public function getProntos(){
 		$venda = Venda::orderBy('id_venda','DESC')->where('status',3)->paginate(5);
 		return view('frente.cozinha.pedido',['venda'=>$venda]);
 	}
-
     public function getProntosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y : H:i');
         $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',3)->paginate(5);
         return view('frente.cozinha.pedido',['venda'=>$venda]);
     }
-
 	public function putAndamento(Request $request, $id) {
 
         
@@ -82,9 +66,6 @@ class CozinhaController extends Controller{
         
         return redirect('pedidos_andamento')->with('mensagens-sucesso', 'Status alterado com sucesso');
     }
-
-    ////////////////////////////////////
-
     public function putMudaPendente($id){
         $pedido = Venda::find($id);
         
@@ -97,7 +78,6 @@ class CozinhaController extends Controller{
         $status = $pedido->status;
         return Response::json($status);
     }
-
     public function putMudaPronto($id){
         $pedido = Venda::find($id);
         
@@ -110,11 +90,6 @@ class CozinhaController extends Controller{
         $status_pronto = $pedido->status;
         return Response::json($status_pronto);
     }
-
-
-    ////////////////////////////////////
-
-
     public function putPronto(Request $request, $id) {
         $pedido = Venda::find($id);
         
@@ -134,7 +109,7 @@ class CozinhaController extends Controller{
         $data = Venda::where('id_venda',$id)->select('vendas.created_at AS data')->join('mesa','mesa.id_mesa','=','vendas.id_mesa')->get();
         ////
         //Formatação Data do Pedido
-        $data_nova = \Carbon\Carbon::parse($data[0]->data)->format('m/d/Y : H:i:s');
+        $data_nova = \Carbon\Carbon::parse($data[0]->data)->format('d/m/Y : H:i:s');
         ////
         //// Cabeçalho do Pedido
         $cabecalho = Venda::where('id_venda',$id)->select('vendas.created_at AS data','vendas.id_venda','vendas.status AS venda_status','vendas.valor_venda','mesa.numero')->join('mesa','mesa.id_mesa','=','vendas.id_mesa')->get();
@@ -142,4 +117,14 @@ class CozinhaController extends Controller{
         //// Retorno para o Modal
         return Response::json(array(["itens" => $itens, "cabecalho" => $cabecalho, "data" => $data_nova]));
     }  
+    public function getNovosPedidosPendente(){
+        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
+
+        $data = Venda::where('data_venda',$data_hoje)->select('vendas.id_venda','vendas.status','vendas.created_at AS data')->join('mesa','mesa.id_mesa','=','vendas.id_mesa')->where('vendas.status',1)->get();
+        $data = \Carbon\Carbon::parse($data[0]->data)->format('d/m/Y : H:i:s');
+
+        $venda = DB::table('vendas')->select('vendas.valor_venda','vendas.status','vendas.id_venda','vendas.data_venda','mesa.numero')->join('mesa','mesa.id_mesa','=','vendas.id_mesa')->where('vendas.data_venda',$data)->where('vendas.status',1)->get();
+
+        return Response::json(array(["venda"=>$venda,"data"=>$data]));
+    }
 }

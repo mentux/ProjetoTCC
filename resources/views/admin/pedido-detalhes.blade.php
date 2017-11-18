@@ -91,7 +91,7 @@
         <tr>
             @if($pedido->entrada == '' AND $pedido->troco == '')
                 <td>
-                    <input style="width:180px;" type='text' name='entrada' value="" class='form-control entrada_valor'>
+                    <input style="width:180px;" type='text' autocomplete="off" name='entrada' value="" class='form-control entrada_valor'>
                 </td>
             @else
                 <td>{{$pedido->entrada}}</td>
@@ -139,9 +139,6 @@ $(document).ready(function () {
     });
 });
 </script>
-
-
-<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
 <script type="text/javascript">
 $(document).ready(function () {
     $(".confirmar").click(function() {

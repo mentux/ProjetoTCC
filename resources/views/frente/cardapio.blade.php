@@ -173,6 +173,7 @@
     </div>
 <!-- Code of Jquery Plugin Flip Image-->
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!--<script src="{{asset('bootstrap/js/jquery-2.1.4.min.js')}}"></script>-->
 <script type="text/javascript">
     $(function(){
     $(".flip").flip({

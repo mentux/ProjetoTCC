@@ -56,7 +56,7 @@
                         </li>
                         <li>
                             <a href="{{url('pedidos_andamento')}}">
-                                Pedidos em andamento
+                                Pedidos em Andamento
                             </a>
                         </li>
                         <li>

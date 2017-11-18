@@ -42,32 +42,32 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <a href="{{route('cliente.dashboard')}}">
-                                Painel de controle
+                                Painel de Controle
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('cliente.pedidos')}}">
-                                Todos os pedidos
+                                Todos os Pedidos
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('cliente.pedidos', '?status=nao-pagos')}}">
-                                Pedidos pendentes de pagamento
+                                Pedidos Pendentes de Pagamento
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('cliente.pedidos', '?status=pagos')}}">
-                                Pedidos pagos
+                                Pedidos Pagos
                             </a>
                         </li>
                         <li class="list-group-item">
                             <a href="{{route('cliente.pedidos', '?status=finalizados')}}">
-                                Pedidos finalizados
+                                Pedidos Finalizados
                             </a>
                         </li>
                          <li class="list-group-item">
                             <a href="{{url('getmesa',\Session::get('id_mesa'))}}">
-                                Voltar ao cardápio
+                                Voltar ao Cardápio
                             </a>
                         </li>
                         <li class="list-group-item">

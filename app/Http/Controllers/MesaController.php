@@ -195,7 +195,6 @@ class MesaController extends Controller{
     }
 
     public function FecharPedido(Request $request){
-        //cara,vc mexeu nesse metodo? pq ele nao ta dando mais aquele pt,ta gerando certinho,vou fazer mais uns testes aqui antes de dormir,nao mexi muito,fiquei vendo uns videos de airsoft pq hoje vo atirar de novo com a m4 predator la no palladium,to empolgado XD
         $itens = $this->carrinho->getItens();
 
         if(count($itens) == 0){
