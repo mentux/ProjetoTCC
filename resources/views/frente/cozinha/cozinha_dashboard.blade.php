@@ -135,7 +135,7 @@
             </table>
         </div>
         <div class="modal-footer">
-        <button type="button" class="btn btn-default  pull-right" data-dismiss="modal" onclick="voltar_timer()" >Fechar</button>
+        <button type="button" class="btn btn-default  pull-right fechar" onclick="fechar()" data-dismiss="modal">Fechar</button>
         </div>
         </div>
       </div>
@@ -267,7 +267,7 @@ $(function() {
 });
 </script>
 <script type="text/javascript">
-    var time = 10000;
+    var time = 5000;
     var tid = setInterval(mycode, time);
     function mycode() {
         $(function(){
@@ -285,6 +285,7 @@ $(function() {
                 if($('.novos_pendente').empty()) {
                     $.ajax().abort();
                 }
+                $(".novos_pendente").append("<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>" + "<tbody class='pront_din'>" + "</tbody>");
                 $.ajax({
                     type: "GET",
                     url: '{{route("novos_pedidos_pendente")}}',
@@ -305,10 +306,11 @@ $(function() {
                                 }
                             }
                         });
-
-
-                        $('.detalhes').click(function(){
+                        $('.detalhes').on('click',function(){
                             clearInterval(tid);
+                            if($('.pron').size('')==0){
+                                $(".pron").remove();
+                            }
                             var id = $(this).attr('value');
                             if($('.itens').empty('tr:tabela_item')){
                                 $.ajax().abort();
@@ -346,6 +348,7 @@ $(function() {
                                     });
 
                                 },
+
                             });
                         });
                     },
@@ -353,14 +356,9 @@ $(function() {
                 
             });
         };
-    function abortTimer() {
-        clearInterval(tid);
-    }
-    function voltar_timer(){
-        var time = 10000;
-        setInterval(mycode, time);
-
-    }
+        function fechar(){       
+            window.tid=setInterval(mycode, 5000);    
+        }
 </script>
 
 @stop
