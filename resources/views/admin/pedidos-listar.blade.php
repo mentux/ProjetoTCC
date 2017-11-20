@@ -66,7 +66,6 @@
                     : '<b class="text-warning">Aguardando atualização de status de pagamento</b>'
                 !!}
             </td>
-            <!-- to deixando por enquanto esses botoes pra quem sabe a gente reutilizar em outro lugar,pq o caixa ja marca como pago e finalizado,entao nao teria mais necessidade de ter esses botoes,domingo ou hoje mais a noite a gente decide o que fazer com eles :) -->
             <!--<td class="text-right small">
                 @if ($pedido->pago == false)
                     {{ Form::open (['route' => ['admin.pedido.pago', $pedido->id_venda], 'method' => 'PUT']) }}
@@ -79,7 +78,6 @@
                     {{ Form::close() }}
                 @endif
             </td>-->
-
             <td>
                 <a class='btn btn-primary' href="{{route('admin.pedidos', $pedido->id_venda)}}">Mais detalhes</a> 
             </td>

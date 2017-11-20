@@ -65,17 +65,17 @@
                                             @endforeach
                                             <li class="dropdown">
                                                 <a href="#">Sub Categorias</a>
-                                                    <ul class="dropdown-menu dropdownhover-right">
-                                                        @foreach ($listcategorias as $cat2)
-                                                        @if ($cat2->categoria_id!='')
-                                                        <li>
-                                                            <a href="{{route('categoria.listar', $cat2->id)}}">
-                                                                {{$cat2->nome}}
-                                                            </a>
-                                                        </li>
-                                                        @endif
-                                                        @endforeach
-                                                    </ul>
+                                                <ul class="dropdown-menu dropdownhover-right">
+                                                    @foreach ($listcategorias as $cat2)
+                                                    @if ($cat2->categoria_id!='')
+                                                    <li>
+                                                        <a href="{{route('categoria.listar', $cat2->id)}}">
+                                                            {{$cat2->nome}}
+                                                        </a>
+                                                    </li>
+                                                    @endif
+                                                    @endforeach
+                                                </ul>
                                             </li>
                                         </ul>
                                     </div>

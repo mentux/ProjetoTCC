@@ -113,7 +113,7 @@ class CozinhaController extends Controller{
         ////
         //// Cabeçalho do Pedido
         $cabecalho = Venda::where('id_venda',$id)->select('vendas.created_at AS data','vendas.id_venda','vendas.status AS venda_status','vendas.valor_venda','mesa.numero')->join('mesa','mesa.id_mesa','=','vendas.id_mesa')->get();
-        //fiz inner join com a mesa pra pegar o numero.
+        //inner join com a mesa pra pegar o numero.
         //// Retorno para o Modal
         return Response::json(array(["itens" => $itens, "cabecalho" => $cabecalho, "data" => $data_nova]));
     }  

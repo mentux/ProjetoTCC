@@ -308,9 +308,6 @@ $(function() {
                         });
                         $('.detalhes').on('click',function(){
                             clearInterval(tid);
-                            if($('.pron').size('')==0){
-                                $(".pron").remove();
-                            }
                             var id = $(this).attr('value');
                             if($('.itens').empty('tr:tabela_item')){
                                 $.ajax().abort();
@@ -357,7 +354,7 @@ $(function() {
             });
         };
         function fechar(){       
-            window.tid=setInterval(mycode, 5000);    
+            window.tid=setInterval(mycode,5000);    
         }
 </script>
 
