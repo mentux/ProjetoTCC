@@ -105,6 +105,7 @@ class AdminController extends Controller {
      public function getPagosHoje(){
         $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
         $models['tipoVisao'] = 'Pagos hoje';
+        $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->where('data_venda',$data_hoje)->paginate(10);
         return view('admin.pedidos-listar', $models);
     }
 

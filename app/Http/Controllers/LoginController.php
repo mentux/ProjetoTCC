@@ -63,7 +63,7 @@ class LoginController extends Controller{
     }
 
 
-    public function logout(){//logout da cozinha,retira todas essas infos da sessao e volta pro login
+    public function logout(){
         \Session::forget('cozinha');
         \Session::forget('id');
         \Session::forget('role');

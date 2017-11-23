@@ -95,7 +95,7 @@ $(function() {
                 success: function( msg ) {
                   elementToHide.hide();  
                   $("#alerta").hide();
-                  //$("#alerta").fadeIn().html("Avaliado com sucesso"); //vc ta tirando o ajax do mais detalhes do produtos../vou chamar a rota
+                  //$("#alerta").fadeIn().html("Avaliado com sucesso");
 
                     $("#alerta").html("Avaliado com sucesso").show().fadeOut(3000);
                 },

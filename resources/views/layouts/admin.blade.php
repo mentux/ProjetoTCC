@@ -81,7 +81,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-lg-10 col-md-10"><!-- coloquei 8 antes etava 10 somente lg-->
+                <div class="col-lg-10 col-md-10">
                     @include('layouts.messages')
 
                     @yield('conteudo')

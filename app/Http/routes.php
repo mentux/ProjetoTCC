@@ -26,8 +26,7 @@
 
 
 
-//middleware da recepção,seria só o index,onde fica a lista das mesas para serem reservadas
-//logout e a reserva da mesa.
+//middleware da recepção
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\recepcao'], function(){
 Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
 Route::get('/','FrenteLojaController@getIndex');
@@ -180,11 +179,16 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
 
 });
 
-//Quando o cara clica em sair da mesa,é acessado essa rota,onde a mesa fica esperando ser reservada novamente para voltar para o cardapio
-Route::get('volte_sempre','MesaController@MesaVolteSempre');
-//Rota que chama funcao de liberar a mesa quando é clicado no botão sair da mesa
-Route::get('volte_sempre_liberar/{id}','MesaController@VolteSempreLiberar');
-
+//Quando é clicado em sair da mesa,a mesa fica esperando ser reservada novamente para voltar para o cardapio
+Route::get('volte_sempre', [
+    'as' => 'volte.sempre',
+    'uses' => 'MesaController@MesaVolteSempre'
+]);
+//Libera a mesa quando é clicado no botão sair da mesa
+Route::get('volte_sempre_liberar/{id}', [
+    'as' => 'volte.sempre.liberar',
+    'uses' => 'MesaController@VolteSempreLiberar'
+]);
 //Ao clicar no botao mais detalhes na lista de produtos no cardapio,categorias e busca,abre o modal com mais infos do produto
 Route::GET('mesa/produto/{id}', [
     'as' => 'mesa.produto',
@@ -202,7 +206,10 @@ Route::any('remover/{id}', [
     'uses' => 'MesaController@Remover'
 ]);
 //Fecha o pedido quando é clicado no botao confirmar pedido no modal carrinho
-Route::any('finalizar_cardapio','MesaController@FecharPedido');
+Route::any('finalizar_cardapio', [
+    'as' => 'finalizar.cardapio',
+    'uses' => 'MesaController@FecharPedido'
+]);
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
@@ -240,13 +247,24 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'uses' => 'AdminController@getPedidos'
             ]);
 
-            //lista todos os pedidos pendentes,pagos,enviados(finalizados),todos(literalmente) de hoje
-            /*  MODIFICAR AS ROTAS PARA O PADRÃO JÁ FEITO EM MAIOR PARTES DAS OUTRAS ROTAS  */
-            Route::get('todosHoje','AdminController@getTodosHoje');
-            Route::get('pendentesHoje','AdminController@getPendentesHoje');
-            Route::get('pagosHoje','AdminController@getPagosHoje');
-            Route::get('enviadosHoje','AdminController@getPagosHoje');
+            //lista todos os pedidos pendentes,pagos,enviados(finalizados), de hoje
+            Route::get('todosHoje', [
+                'as' => 'admin.pedidos.hoje',
+                'uses' => 'AdminController@getTodosHoje'
+            ]);
+            Route::get('pendentesHoje', [
+                'as' => 'admin.pedidos.pendentes.hoje',
+                'uses' => 'AdminController@getPendentesHoje'
+            ]);
+            Route::get('pagosHoje', [
+                'as' => 'admin.pedidos.pagos.hoje',
+                'uses' => 'AdminController@getPagosHoje'
+            ]);
 
+            Route::get('enviadosHoje', [
+                'as' => 'admin.pedidos.enviados.hoje',
+                'uses' => 'AdminController@getFinalizadosHoje'
+            ]);
 
             /////-----Categorias-----/////
             Route::get('admin/categoria/listar', [
