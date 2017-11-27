@@ -127,7 +127,8 @@ $(document).ready(function () {
                     $('.confirmar').prop('disabled', false);
                 }
                 if ((troco_retorno.toFixed(2))==0) {
-                    //console.log($('.troco').text(0));
+                    console.log(troco_retorno);
+                    $('.troco').show().text('R$:'+troco_retorno);
                     $('.confirmar').prop('disabled', false);
                 }
                 if ((troco_retorno.toFixed(2))<0) {
@@ -143,6 +144,10 @@ $(document).ready(function () {
 $(document).ready(function () {
     $(".confirmar").click(function() {
         var id_pedido = '{{$pedido->id_venda}}';
+        
+        if($('.troco').text() == "R$:0"){
+            var troco = $('.troco').text('0');   
+        }
         var troco = $('.troco').text();
         var entrada = $('.entrada_valor').val();
         window.location.href =  '{{route("troco.salvar")}}'+'/'+id_pedido+'/'+troco+'/'+entrada;    

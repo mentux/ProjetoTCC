@@ -25,6 +25,12 @@ class CozinhaController extends Controller{
         $array = ['pendente'=>$pendente,'andamento'=>$andamento,'prontos'=>$prontos];
         return view('frente.cozinha.cozinha_dashboard',$array);
     }
+    public function Paginacao(){
+        $pendente = Venda::where('status',1)->where('data_venda',$data_hoje)->paginate(1);
+        $andamento = Venda::where('status',2)->where('data_venda',$data_hoje)->paginate(1);
+        $prontos = Venda::where('status',3)->where('data_venda',$data_hoje)->paginate(1);
+        return Response::json(array(["pendente"=>$pendente,"andamento"=>$andamento,"prontos"=>$prontos]));
+    }
 	public function getPendentes(){
 		$venda = Venda::orderBy('id_venda','DESC')->where('status',1)->paginate(5);
 		return view('frente.cozinha.pedido',['venda'=>$venda]);

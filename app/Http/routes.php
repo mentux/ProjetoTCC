@@ -115,7 +115,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
                 'as' => 'status_pendente',
                 'uses' => 'CozinhaController@putAndamento'
     ]);
-
     Route::any('muda_pendente/{id?}', [
                 'as' => 'status_muda_pendente',
                 'uses' => 'CozinhaController@putMudaPendente'
@@ -175,8 +174,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
         'as' => 'cliente.avaliar',
         'uses' => 'ClienteController@postAvaliar'
     ]);
-
-
 });
 
 //Quando é clicado em sair da mesa,a mesa fica esperando ser reservada novamente para voltar para o cardapio
@@ -213,19 +210,22 @@ Route::any('finalizar_cardapio', [
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
-
-    Route::any('troco/{id_pedido?}/{troco?}/{entrada?}', [
+            Route::any('troco/{id_pedido?}/{troco?}/{entrada?}', [
                 'as' => 'troco.salvar',
                 'uses' => 'AdminController@salvar_Troco'
-    ]);
+            ]);
 
-    Route::get('logout_admin','AdminController@logout_admin');
+            Route::get('logout_admin', [
+                'as'   => 'logout.admin',
+                'uses' => 'AdminController@logout_admin'
+            ]);
 
+            Route::get('excluir_imagem/{id}', [
+                'as'   => 'excluir.imagem',
+                'uses' => 'ProdutoController@excluir_imagem'
+            ]);
 
-    Route::get('excluir_imagem/{id}','ProdutoController@excluir_imagem');
-
-
-    Route::get('admin', [
+            Route::get('admin', [
                 'as' => 'admin',
                 'uses' => 'AdminController@getDashboard'
             ]);
@@ -246,7 +246,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.pedidos',
                 'uses' => 'AdminController@getPedidos'
             ]);
-
             //lista todos os pedidos pendentes,pagos,enviados(finalizados), de hoje
             Route::get('todosHoje', [
                 'as' => 'admin.pedidos.hoje',

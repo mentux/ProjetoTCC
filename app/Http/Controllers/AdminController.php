@@ -156,6 +156,7 @@ class AdminController extends Controller {
         $consulta = Venda::where('id_venda',$id_pedido)->count();
         
         $entrada = str_replace(',', '.',$entrada);
+        //dd($entrada,$troco);
         if($id_pedido == ''){
             return redirect()->back()->with('mensagens-danger','Erro');
         }
@@ -174,7 +175,16 @@ class AdminController extends Controller {
         if($entrada < 0){
            return redirect()->back()->with('mensagens-danger','A entrada não pode conter 0 ou numeros negativos.'); 
         }
-
+        if($entrada == $troco){
+            return redirect()->back()->with('mensagens-sucesso','Salvo com Sucesso');
+            $pedido = Venda::find($id_pedido);
+            $pedido->troco = $troco;
+            $pedido->entrada = str_replace(',','.',$entrada);
+            $pedido->pago = 1;
+            $pedido->enviado = 1;
+            $pedido->save();
+            return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com Sucesso');
+        }
         if($troco < 0){
            return redirect()->back()->with('mensagens-danger','O troco não pode conter 0 ou numeros negativos.'); 
         }
@@ -191,7 +201,7 @@ class AdminController extends Controller {
         $pedido->pago = 1;
         $pedido->enviado = 1;
         $pedido->save();
-        return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com sucesso');
+        return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com Sucesso');
 
     }
 
