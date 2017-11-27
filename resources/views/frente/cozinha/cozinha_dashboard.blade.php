@@ -147,7 +147,6 @@
             'X-CSRF-Token':$('input[name="_token"]').val()
         }
     });
-<<<<<<< HEAD
         $('.detalhes').click(function(){
 
             var id = $(this).attr('value');
