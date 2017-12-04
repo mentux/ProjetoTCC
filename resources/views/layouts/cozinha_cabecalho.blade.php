@@ -17,6 +17,7 @@
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <link href="{{asset('bootstrap/css/ie10-viewport-bug-workaround.css')}}" rel="stylesheet">
         <link href="{{asset('bootstrap/css/lightbox.css')}}" rel="stylesheet">
+        <link href="{{asset('bootstrap/css/jquery.paginate.css')}}" rel="stylesheet">
         {!! HTML::style('bootstrap/css/assets/css/style.css') !!}
         <!-- Custom styles for this template -->
         <link href="{{asset('bootstrap/css/nav-justified.css')}}" rel="stylesheet">
@@ -81,14 +82,11 @@
             <!-- Site footer -->
 
         </div>
-
-       
-
-
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/ie10-viewport-bug-workaround.js')}}"></script>
         <script src="{{asset('bootstrap/js/lightbox.js')}}"></script>
         <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{asset('bootstrap/js/jquery.paginate.js')}}"></script>
     </body>
 </html>
