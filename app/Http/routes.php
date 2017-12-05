@@ -30,7 +30,7 @@
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\recepcao'], function(){
 Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
 Route::get('/','FrenteLojaController@getIndex');
-Route::get('logout_recepcao', 'RecepcaoController@logout_recepcao');
+Route::get('logout_recepcao/{id}', 'RecepcaoController@logout_recepcao');
 });
 //lista os produtos relacionados a categoria selecionada
 Route::get('categoria/{id?}', [
@@ -215,6 +215,11 @@ Route::any('finalizar_cardapio', [
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
             ////Parametro Atualizado Venda
+            Route::get('logout_admin_caixa/{id}', [
+                'as'   => 'logout.admin.caixa',
+                'uses' => 'AdminController@logout_admin_caixa'
+            ]);
+            
             Route::any('troco/{id_pedido?}/{troco?}/{entrada?}/{desconto?}/{total_n?}/{troco_n?}', [
                 'as' => 'troco.salvar',
                 'uses' => 'AdminController@salvar_Troco'

@@ -31,6 +31,23 @@ class AdminController extends Controller {
         return redirect('login'); 
         }  
     }
+
+    public function logout_admin_caixa($id){
+        if($id != \Session::get('id_admin_caixa')){
+            die('aqui');
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }elseif($id == \Session::get('id_admin_caixa')){
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
+        \Session::forget('admin/caixa');
+        \Session::forget('id_admin_caixa');
+        \Session::forget('nome_admin_caixa');
+        \Session::forget('role_admin_caixa');
+        return redirect('login');
+        }
+    }
+    
     public function getDashboard() {
             $models['qtdePedidos']['total'] = Venda::count();
             $models['qtdePedidos']['pendentes-pagamento'] = Venda::naoPagas()->count();

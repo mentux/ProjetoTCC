@@ -61,7 +61,7 @@
                         </a>
                     </li>
                     <li class="small">
-                        <a href="{{url('logout_recepcao')}}">
+                        <a href="{{url('logout_recepcao',\Session::get('id_recepcao'))}}">
                             Sair
                         </a>
                     </li>
