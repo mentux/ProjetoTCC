@@ -71,7 +71,7 @@
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{url('logout_cliente')}}">
+                            <a href="{{url('logout_cliente',\Session::get('id_cliente'))}}">
                                 Logout
                             </a>
                         </li>

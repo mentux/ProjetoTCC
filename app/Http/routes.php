@@ -163,7 +163,7 @@ Route::any('login_cliente','ClienteController@login_cliente');
 ///////////Rotas usuário do tipo cliente
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
 
-    Route::get('logout_cliente','ClienteController@logout_cliente');
+    Route::get('logout_cliente/{id}','ClienteController@logout_cliente');
 
     Route::get('cliente/dashboard', [
         'as' => 'cliente.dashboard',
@@ -219,7 +219,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as'   => 'logout.admin.caixa',
                 'uses' => 'AdminController@logout_admin_caixa'
             ]);
-            
+
             Route::any('troco/{id_pedido?}/{troco?}/{entrada?}/{desconto?}/{total_n?}/{troco_n?}', [
                 'as' => 'troco.salvar',
                 'uses' => 'AdminController@salvar_Troco'
