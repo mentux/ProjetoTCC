@@ -13,10 +13,14 @@
             @if($pedido->user_id != '')
             <th style="color:#006400;">Cadastrado</th>
             @else
-            <th style="color: #8B0000;">Nao Cadastrado</th>
+            <th style="color: #8B0000;">Não Cadastrado</th>
             @endif
-            <th class="text-right hidden"></th>
+            
             <th class="text-right">Status</th>
+            @if($pedido->pagseguro_transaction_id != '')
+            <th></th>
+            <th class="text-right">Pagseguro</th>
+            @endif
         </tr>
     </thead>
     <tbody>
@@ -52,6 +56,11 @@
             <td class="text-right">
                 {{$pedido->status_pagamento}}
             </td>
+            @if($pedido->pagseguro_transaction_id != '')
+            <td class="text-right">
+                {{$pedido->pagseguro_transaction_id}}
+            </td>
+            @endif
         </tr>
     </tbody>
 </table>
@@ -63,7 +72,7 @@
             <th>Produto</th>
             <th class="text-right">Quantidade</th>
             <th class="text-right">Valor Unitário</th>
-            <th class="text-right">Total do Item</th>
+            <th class="text-right">Total do item</th>
         </tr>
     </thead>
     <tbody>
@@ -86,7 +95,22 @@
     </tbody>
 </table>
 <h3>Caixa</h3>
-<table class="table table-striped">
+@if($pedido->entrada == '' AND $pedido->troco == '')
+<div class="col-md-6">
+    <p>Formas de pagamento:</p>
+    <div class="form-group">
+        <label class="radio-inline">
+            <input checked  value="1" type="radio" name="pagamento">Dinheiro
+        </label>
+        <label class="radio-inline">
+            <input value="2" type="radio" name="pagamento">Cartão
+        </label>
+        <p class="mensagem_error">{{$errors->first('servico',':message')}}</p>
+    </div>
+</div>
+@endif
+<div id='pag_dinheiro'>
+    <table class="table table-striped">
     <thead>
         <tr>
             <th class="text-left">Entrada</th>
@@ -146,15 +170,38 @@
         </tr>
     </tbody>
 </table>
+</div>
+<div id='pag_cartao'>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Total</th>
+                <th class="col-md-3 col-sm-4 col-xs-5"></th>
+            
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{$pedido->valor_venda}}</td>
+                @if(isset($pagseguro))
+                
+                <td><a href="{{$pagseguro['info']->getLink()}}" class="btn btn-success pull-right">
+               
+                Pagar com PagSeguro
+                </a></td>
+                @else
+                <td>erro pagseguro
+                </td>
+                @endif
+            </tr>
+        </tbody>
+    </table>
+</div>
 @stop
 <!-- Troco Automático-->
 <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
 <script type="text/javascript">
-// Função onde excluir Letras
-/*var desc = '{{$pedido->pago}}';
-if(desc==1){
-    $('.desconto_input').remove();
-}*/
+// Funço onde excluir
 function somenteNumeros(num) {
         var er = /[^0-9.]/;
         er.lastIndex = 0;
@@ -163,7 +210,7 @@ function somenteNumeros(num) {
           campo.value = "";
         }
     }
-$(document).ready(function (somenteNumeros,verefica_user) {
+$(document).ready(function (somenteNumeros) {
     $(".entrada_valor").keyup('change', function(event) {
         var data = $(this).val();
         if(data<0){
@@ -246,7 +293,7 @@ $(document).ready(function () {
             });
         });
     });
-    $(".confirmar").click('change',function() {
+$(".confirmar").click('change',function() {
         var cad_sim = $('.sim').attr('value');
         var cad_nao = $('.nao').attr('value');
         ///*********************///
@@ -265,4 +312,41 @@ $(document).ready(function () {
         '{{route("troco.salvar")}}'+'/'+id_pedido+'/'+troco+'/'+entrada+'/'+desconto+'/'+total_n+'/'+troco_n+'/';    
     });
 });
+</script>
+
+<script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#pag_cartao').hide();
+   $('input[name="pagamento"]').click(function () {
+    if($('input[name="pagamento"]:checked').val() == '1') {
+        forma_pagamento_dinheiro()
+    }else{
+       forma_pagamento_cartao() 
+    }
+    });
+
+});
+function forma_pagamento_dinheiro(){
+
+    if($('input[name="pagamento"]:checked').val() == '1') {
+        $('#pag_dinheiro').fadeIn();
+        $('#pag_cartao').fadeOut();
+    }
+    else {
+        $('#pag_dinheiro').fadeOut();
+        $('#pag_cartao').fadeIn();
+    }
+}
+
+function forma_pagamento_cartao(){
+    if($('input[name="pagamento"]:checked').val() == '2') {
+        $('#pag_cartao').fadeIn();
+        $('#pag_dinheiro').fadeOut();
+    }
+    else {
+        $('#pag_dinheiro').fadeIn();
+        $('#pag_cartao').fadeOut();
+    }
+}
 </script>

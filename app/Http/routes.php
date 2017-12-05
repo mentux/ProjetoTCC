@@ -460,4 +460,14 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'desconto',
                 'uses' => 'AdminController@DescontoVenda'
             ]);
+
+            ///////////////pagseguro///////////////////
+            Route::post('/pagseguro/notification', [
+                'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
+                'as' => 'pagseguro.notification',
+            ]);
+            Route::get('pagseguro/checkout', [
+                'as' => 'pagseguro.checkout',
+                'uses' => 'AdminController@pagar_pagseguro'
+            ]);
 });

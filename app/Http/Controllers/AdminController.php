@@ -487,6 +487,115 @@ class AdminController extends Controller {
             return view('admin.usuario.form');
         }
     }
+    ///////////////////////////////////PAGSEGURO////////////////////////////////////////
+    public function pagar_pagseguro(Request $request){
+        $id_pedido = \Session::get('id_pedido');
+        if ($request->has('transaction_id') === FALSE) {
+            return back()->withErrors('Problemas ao receber a chave de trasação do Pagseguro, '
+                    . 'este pedido não foi gravado');
+        }
+        if($id_pedido == null){
+            return redirect()->back()->with('mensagens-danger','erro');
+        }
+        $pedido = Venda::find($id_pedido);
+        DB::beginTransaction();
+        $pedido->pagseguro_transaction_id = $request->transaction_id;
+        $pedido->pago = 1;
+        $pedido->enviado = 1;
+        $pedido->entrada = 0;
+        $pedido->troco = 0;
+        $pedido->desconto = 0;
+        $pedido->total_novo = 0;
+        $pedido->troco_novo = 0;
+        $pedido->save();
+        DB::commit(); 
+        return redirect('admin/pedidos/'.$id_pedido)->with('mensagens-sucesso','pagamento realizado com sucesso');
+    }
+    
+    protected function checkout($id_pedido = null){
+        $id_pedido = \Session::get('id_pedido');
+        $pedido = Venda::find($id_pedido);
+        $cliente = User::find($pedido->user_id);
+        $models = null;
+        if ($cliente) {
+
+            $itens_pedido = DB::table('itens_vendas')->select('produtos.preco_venda','produtos.nome','itens_vendas.produto_id','itens_vendas.venda_id','itens_vendas.qtde')->join('produtos','produtos.id','=','itens_vendas.produto_id')->where(['itens_vendas.venda_id' => $id_pedido])->get();
+
+            $itens = [];
+
+            foreach ($itens_pedido as $item) {
+                $itens[] = [
+                    'id' => $item->produto_id,
+                    'description' => $item->nome,
+                    'quantity' => $item->qtde,
+                    'amount' => $item->preco_venda,
+                ];
+            }
+
+
+            $dadosCompra = [
+                'items' => $itens,
+                'sender' => [
+                    'email' => $cliente->email,
+                    'name' => $cliente->name,
+                ]
+            ];
+
+            if ($cliente->cpf) {
+                $dadosCompra['sender']['documents'] = [
+                    [
+                        'number' => $cliente->cpf,
+                        'type' => 'cpf'
+                    ]
+                ];
+            }
+
+
+            $checkout = \PagSeguro::checkout()->createFromArray($dadosCompra);
+            $models['info'] = $checkout->send(\PagSeguro::credentials()->get());
+
+            try {
+
+                $models['info'] = $checkout->send(\PagSeguro::credentials()->get());
+            } catch (\Exception $e) {
+                \Log::error($e);
+                $models = null;
+            }
+        }else{
+            $itens_pedido = DB::table('itens_vendas')->select('produtos.preco_venda','produtos.nome','itens_vendas.produto_id','itens_vendas.venda_id','itens_vendas.qtde')->join('produtos','produtos.id','=','itens_vendas.produto_id')->where(['itens_vendas.venda_id' => $id_pedido])->get();
+
+            $itens = [];
+
+            foreach ($itens_pedido as $item) {
+                $itens[] = [
+                    'id' => $item->produto_id,
+                    'description' => $item->nome,
+                    'quantity' => $item->qtde,
+                    'amount' => $item->preco_venda,
+                ];
+            }
+
+
+            $dadosCompra = [
+                'items' => $itens,
+                
+            ];
+
+        
+
+            $checkout = \PagSeguro::checkout()->createFromArray($dadosCompra);
+            $models['info'] = $checkout->send(\PagSeguro::credentials()->get());
+
+            try {
+
+                $models['info'] = $checkout->send(\PagSeguro::credentials()->get());
+            } catch (\Exception $e) {
+                \Log::error($e);
+                $models = null;
+            }
+        }
+        return $models;
+    }
 
     
 }
