@@ -91,7 +91,7 @@
         </div>
         <div class="modal-footer">
                 <p class='text-left'>Quantidade</p>
-                <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant">
+                <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant" autocomplete="off">
                 <br/>
                 <br/>
                 <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
@@ -109,7 +109,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Carrinho</h4>
+            <h4 class="modal-title titulo">Carrinho</h4>
           </div>
           <div class="modal-body">
             <table style="display: block !important;" class="table table-responsive">
@@ -192,6 +192,16 @@ $(function() {
             'X-CSRF-Token':$('input[name="_token"]').val()
         }
     });
+        //console.log($('.titulo').size('Carrinho') ==0);
+        //Correçao bug H4 mantendo nome do produto apos click em "Mais Detalhes"
+        $( document ).ready(function() {
+           $('.carrinho').on('click',function(){
+            if($('.titulo').text('Carrinho') == false){
+                    alert('carrinho');
+                    $('.titulo').text('Carrinho');
+                }
+            }); 
+        });
         $('.getid').click(function(){
             var id = $(this).attr('value');
             $.ajax({
@@ -210,7 +220,7 @@ $(function() {
                 }else{
                   $('.avaliado').html(avaliado.toFixed(2));
                 }
-                console.log(id);
+                //console.log(id);
                 //console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },
