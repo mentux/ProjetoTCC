@@ -43,7 +43,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <a href="{{route('admin.dashboard')}}">
-                                Painel de Controle
+                                Painel de controle
                             </a>
                         </li>
                         <!--<li class="list-group-item">
@@ -71,9 +71,16 @@
                                 Pedidos finalizados
                             </a>
                         </li>
+                        @if(session('admin') != '')
                         <li class="list-group-item">
                             <a href="{{route('admin.cliente.listar')}}">
                                 Clientes
+                            </a>
+                        </li>
+                        @endif
+                        <li class="list-group-item">
+                            <a href="{{route('admin.usuarios')}}">
+                                Usuários
                             </a>
                         </li>
                         @if(session('admin') == '')

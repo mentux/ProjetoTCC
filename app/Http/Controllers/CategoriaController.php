@@ -22,34 +22,48 @@ class CategoriaController extends Controller {
         $models['categoria'] = \Shoppvel\Models\Categoria::find($id);
         //dd($models['categoria']);
         return view('frente.produtos-categoria', $models);
-    } 
+    }
+
     public function listar() {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $models['listcategorias'] = Categoria::Orderby('nome');
         $models['listcategorias'] = Categoria::paginate(10);
-        //dd($models);
             return view('admin.categoria.listar', $models);
         }
+    }
     public function criar() {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         return view('admin.categoria.form');
+        }
     }
     public function salvar(CategoriaFormRequest $request) {
-    	$categoria = new Categoria();
-        if($_REQUEST['categoria_id']!= ''){
-            $categoria->create($request->all());
-        \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
-            return redirect()->action('CategoriaController@listar');
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
         }else{
-            $categoria->categoria_id=null;
-            $categoria->nome = $_REQUEST['nome'];
-            $categoria->save();
+        $categoria = new Categoria();
+            if($_REQUEST['categoria_id']!= ''){
+                $categoria->create($request->all());
             \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
-            return redirect()->action('CategoriaController@listar');
+                return redirect()->action('CategoriaController@listar');
+            }else{
+                $categoria->categoria_id=null;
+                $categoria->nome = $_REQUEST['nome'];
+                $categoria->save();
+                \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
+                return redirect()->action('CategoriaController@listar');
+            }
         }
-
     }
-    	
+        
     
     public function editar($id) {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $models['categoria'] = \Shoppvel\Models\Categoria::find($id);
             if($models['categoria']->categoria_id != ''){
                 return view('admin.categoria.form', $models);
@@ -58,37 +72,47 @@ class CategoriaController extends Controller {
                 return view('admin.categoria.form', $models);
             }
         }
+    }
 
     public function atualizar(CategoriaUpdateRequest $request, $id) {
         
-        //dd($request);
-        if($_REQUEST['categoria_id']!= ''){
-            $categoria = Categoria::find($id);
-            $categoria->nome = $_REQUEST['nome'];
-            $categoria->categoria_id = $_REQUEST['categoria_id'];
-            $categoria->save();
-           return redirect()->action('CategoriaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso');
-        }else {
-            $categoria = Categoria::find($id);
-            $categoria->categoria_id = null;
-            $categoria->nome = $_REQUEST['nome'];
-            $categoria->save();
-            return redirect()->action('CategoriaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso');
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            if($_REQUEST['categoria_id']!= ''){
+                $categoria = Categoria::find($id);
+                $categoria->nome = $_REQUEST['nome'];
+                $categoria->categoria_id = $_REQUEST['categoria_id'];
+                $categoria->save();
+               return redirect()->action('CategoriaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso');
+            }else{
+                $categoria = Categoria::find($id);
+                $categoria->categoria_id = null;
+                $categoria->nome = $_REQUEST['nome'];
+                $categoria->save();
+                return redirect()->action('CategoriaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso');
+            }
         }
-
     }
-    public function excluir($id) {
+    public function excluir($id){
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $models['categoria'] = \Shoppvel\Models\Categoria::find($id);
         if($id != -1){
             return view('admin.categoria.excluir', $models);
         }
-            return redirect()->back()->with('mensagens-danger', 'Não é possível excluir, Há Produto(s) associado(s)');
-            
+            return redirect()->back()->with('mensagens-danger', 'Não é possível excluir, Há Produto(s) associado(s)');  
         }
+    }
     
     public function delete($id) {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $models['categoria'] = \Shoppvel\Models\Categoria::find($id)->delete();
         \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
             return redirect()->action('CategoriaController@listar');
         }
+    }
 }

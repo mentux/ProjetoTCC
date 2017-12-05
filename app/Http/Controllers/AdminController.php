@@ -351,4 +351,142 @@ class AdminController extends Controller {
         return Response::json(array(['desconto'=>$venda,'total'=>$total2,'novo_desc'=>$novo_desc]));
 
     }
+
+    ///////////////////////////CRUD usuários//////////////////////////////////////////
+    public function listarUsuarios(){
+        $usuarios = User::where('role','admin')->orWhere('role','cozinha')->orWhere('role','recepcao')->orWhere('role','admin/caixa')->orderBy('id')->paginate(10);
+        return view('admin.usuario.listar',['usuarios'=>$usuarios]);
+
+    }
+
+    public function atualizar_usuario(Request $request,$id){
+        if($_SERVER['REQUEST_METHOD']=='POST'){
+            $user = User::find($id);
+            if($user->role == 'admin' OR $user->role == 'admin/caixa'){
+                $this->validate($request,[
+                    'name'=>'required|min:3',
+                    'endereco'=>'required|min:5',
+                ],[
+                    'name.required'=>'É Nescessário Preeencher o Campo Nome',
+                    'name.min'=>'O Campo Nome não Pode ser Inferiror á 3 caracteres',
+                    'endereco.required'=>'É Nescessário Preencher o Campo Endereço',
+                    'endereco.min'=>'O Campo Endereço Não pode ser Inferiror 3 Caractares',
+                ]);
+            }else{
+                $this->validate($request,[
+                    'name'=>'required|min:3',
+                    'endereco'=>'required|min:5',
+                    'tipo_user'=>'required',
+                ],[
+                    'name.required'=>'É Nescessário Preeencher o Campo Nome',
+                    'name.min'=>'O Campo Nome não Pode ser Inferiror á 3 caracteres',
+                    'endereco.required'=>'É Nescessário Preencher o Campo Endereço',
+                    'endereco.min'=>'O Campo Endereço Não pode ser Inferiror 3 Caractares',
+                    'tipo_user.required'=>'erro',
+                ]);
+            }
+            $tipos = ['tipo'=>$request->input('tipo_user')];
+            if(in_array("cozinha", $tipos) OR in_array("recepcao", $tipos) OR $user->role == 'admin' OR in_array("admin/caixa", $tipos) ){
+                $form_infos = $request->all();
+                if($user->role == 'admin'){
+                \Session::put('nome',$request->input('name'));
+                $user->role = 'admin';
+                }else{
+                $user->role = $request->input('tipo_user');    
+                }
+                $user->update($form_infos);
+                return redirect('admin/usuarios')->with('mensagens-sucesso','Atualizado com sucesso');
+            }else{
+             return redirect()->back()->with('mensagens-danger','erro');
+            }
+        }
+        if(\Session::get('id_admin_caixa') == $id){
+
+         $usuario = User::find($id);
+        return view('admin.usuario.form',['usuario'=>$usuario]);
+
+        }elseif(\Session::get('role') == ''){
+
+        return redirect('admin/usuarios')->with('mensagens-danger','Acesso negado');
+        }else{
+
+            $usuario = User::find($id);
+        return view('admin.usuario.form',['usuario'=>$usuario]);
+        }
+    }
+
+
+    public function excluir_user($id){
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            if($id == \Session::get('id')){
+                return redirect()->route('admin.usuarios')->with('mensagens-danger','Não pode deletar a si mesmo');
+            }else{
+                $usuario = User::find($id);
+                return view('admin.usuario.excluir',["usuario"=>$usuario]);
+            }
+        }   
+    }
+
+    public function deletar_user($id){
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            $usuario = User::find($id);
+            if($usuario->status == 2){
+                return redirect()->route('admin.usuarios')->with('mensagens-danger','Usuário esta conectado,não é possivel deletar.');
+            }
+            if($usuario->id == \Session::get('id')){
+                return redirect()->route('admin.usuarios')->with('mensagens-danger','Não pode deletar a si mesmo');
+            }
+            $usuario->delete();
+            return redirect()->route('admin.usuarios')->with('mensagens-sucesso','Deletado com sucesso');
+        }
+    }
+
+    public function cadastrar_novo_usuario(Request $request){
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            if($_SERVER['REQUEST_METHOD'] == 'POST'){
+               $this->validate($request,[
+                'name'=>'required|min:3',
+                'email'=>'required|email|unique:users',
+                'password'=>'required|min:3',
+                'cpf'=>'required|min:11|max:11|unique:users',
+                'endereco'=>'required|min:5',
+                'tipo_user'=>'required',
+                ],[
+                    'name.required'=>'É Nescessário Preeencher o Campo Nome',
+                    'name.min'=>'O Campo Nome não Pode ser Inferiror á 3 caracteres',
+                    'email.required'=>'É Nescessário Preeencher o Campo E-mail',
+                    'email.email'=>'O E-mail não é um E-mail Válido',
+                    'email.unique:users'=>'Este E-mail já está Cadastrado',
+                    'password.required'=>'A Senha é Obrigatória',
+                    'password.min'=>'Número Mínimo de Caracteres é 3',
+                    'cpf.required'=>'O Campo de CPF precisa ser Preeenchido',
+                    'cpf.min'=>'O Campo CPF Não pode ser Inferior a 11 Caractares',
+                    'cpf.max'=>'O Campo CPF Não pode ser Posterior a 11 Caractares',
+                    'endereco.required'=>'É Nescessário Preencher o Campo Endereço',
+                    'endereco.min'=>'O Campo Endereço Não pode ser Inferiror 3 Caractares',
+                    'tipo_user.required'=>'erro',
+                ]);
+                $tipos = ['tipo'=>$request->input('tipo_user')];
+                if(in_array("cozinha", $tipos) OR in_array("recepcao", $tipos) OR in_array("admin/caixa", $tipos) ){
+                    $infos = $request->all();
+                    $usuario = new User($infos);
+                    $usuario->role = $tipos['tipo'];
+                    $usuario->password = Crypt::encrypt($request->input('password'));
+                    $usuario->save();
+                    return redirect()->route('admin.usuarios')->with('mensagens-sucesso','cadastrado com sucesso');
+                }else{
+                 return redirect()->back()->with('mensagens-danger','erro');
+                }    
+            }
+            return view('admin.usuario.form');
+        }
+    }
+
+    
 }

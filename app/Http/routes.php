@@ -430,6 +430,31 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.cliente.deletar',
                 'uses' => 'AdminController@deletarCliente'
             ]);
+            //////---Usuários---////////
+            Route::get('admin/usuarios', [
+                'as' => 'admin.usuarios',
+                'uses' => 'AdminController@listarUsuarios'
+            ]);
+
+            Route::any('admin/usuario/form',[
+                'as'=>'admin.usuario.form',
+                'uses'=>'AdminController@cadastrar_novo_usuario'
+            ]);
+
+            Route::any('admin/usuario/form/atualizar{id?}',[
+                'as'=>'admin.usuario.form.atualizar',
+                'uses'=>'AdminController@atualizar_usuario'
+            ]);
+
+            Route::get('admin/usuario/excluir/{id?}',[
+                'as'=>'admin.usuario.excluir',
+                'uses'=>'AdminController@excluir_user'
+            ]);
+
+            Route::delete('admin/usuario/{id?}/deletar/',[
+                'as'=>'admin.usuario.deletar',
+                'uses'=>'AdminController@deletar_user'
+            ]);
             ///////Desconto Venda
             Route::get('desconto_venda/{id?}', [
                 'as' => 'desconto',
