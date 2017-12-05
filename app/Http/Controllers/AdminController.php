@@ -12,6 +12,7 @@ use Shoppvel\User;
 use Shoppvel\Models\VendaItem ;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller {
 
@@ -56,7 +57,6 @@ class AdminController extends Controller {
             }
             return view('admin.pedidos-listar', $models);
         }
-
         $models['pedido'] = Venda::find($id);
         return view('admin.pedido-detalhes', $models);
     }
@@ -151,12 +151,33 @@ class AdminController extends Controller {
         
     }
 
-    public function salvar_Troco($id_pedido = null,$troco = null ,$entrada = null){
-
+    public function salvar_Troco($id_pedido = null,$troco = null ,$entrada = null,$desconto = null, $total_n = null, $troco_n = null){
         $consulta = Venda::where('id_venda',$id_pedido)->count();
-        
         $entrada = str_replace(',', '.',$entrada);
-        //dd($entrada,$troco);
+        if($desconto == ''){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }
+        if($total_n == ''){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }
+        if($troco_n == ''){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }
+        if($id_pedido == ''){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }
+        if(!is_numeric($desconto)) {
+            return redirect()->back()->with('mensagens-danger','É necessário digitar apenas numeros no campo(Desconto)');
+        }
+        if(!is_numeric($total_n)) {
+            return redirect()->back()->with('mensagens-danger','Apenas Numeros no Campo(Novo Total)');
+        }
+        if(!is_numeric($troco_n)) {
+            return redirect()->back()->with('mensagens-danger','Apenas Numeros no Campo(Novo Total)');
+        }
+        if(!is_numeric($entrada)){
+            return redirect()->back()->with('mensagens-danger','É necessário digitar apenas numeros no campo(entrada)');
+        }
         if($id_pedido == ''){
             return redirect()->back()->with('mensagens-danger','Erro');
         }
@@ -172,8 +193,14 @@ class AdminController extends Controller {
         if($consulta != 1 ){
             return redirect()->back()->with('mensagens-danger','Pedido não encontrado');
         }
-        if($entrada < 0){
-           return redirect()->back()->with('mensagens-danger','A entrada não pode conter 0 ou numeros negativos.'); 
+        if($desconto < 0){
+           return redirect()->back()->with('mensagens-danger','O Desconto Não Pode Conter 0 ou Numeros Negativos.'); 
+        }
+        if($total_n < 0){
+           return redirect()->back()->with('mensagens-danger','O Desconto Não Pode Conter Numeros Negativos.'); 
+        }
+        if($troco_n < 0){
+           return redirect()->back()->with('mensagens-danger','O Novo Troco Não Pode Conter Numeros Negativos.'); 
         }
         if($entrada == $troco){
             return redirect()->back()->with('mensagens-sucesso','Salvo com Sucesso');
@@ -196,15 +223,38 @@ class AdminController extends Controller {
             return redirect()->back()->with('mensagens-danger','O troco deve conter somente numeros');
         }
         $pedido = Venda::find($id_pedido);
-        $pedido->troco = $troco;
-        $pedido->entrada = str_replace(',','.',$entrada);
-        $pedido->pago = 1;
-        $pedido->enviado = 1;
-        $pedido->save();
-        return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com Sucesso');
+        if($pedido->user_id != ''){
+            $pedido->desconto    = number_format($desconto, 2, '.','');
+            $pedido->total_novo  =  number_format($total_n, 2, '.','');
+            $pedido->troco_novo  =    number_format($troco_n, 2, '.','');
+            $pedido->troco = number_format($troco, 2,'.','');
+            $pedido->entrada = str_replace(',','.',$entrada);
+            $pedido->pago = 1;
+            $pedido->enviado = 1;
+            $pedido->save();
+            return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com Sucesso');    
+        }else{
+            $pedido->troco = $troco;
+            $pedido->entrada = str_replace(',','.',$entrada);
+            $pedido->pago = 1;
+            $pedido->enviado = 1;
+            $pedido->save();
+            return redirect('admin/pedidos/'.$pedido->id_venda)->with('mensagens-sucesso','Salvo com Sucesso');
+        }
+        
+    }
+    public function DescontoVenda(Request $request, $id){
+        $entrada = $request->input('val_entrada');
+        $desconto = $request->input('desconto');
+        
+        $venda = Venda::find($id);
+        $total = $venda->valor_venda;
+        $venda->valor_venda = $venda->valor_venda * $desconto / 100;
+        $venda = number_format($venda->valor_venda, 2,'.', '');
+        $total2 = $total-$venda;
+        $novo_desc = number_format($total2 * $desconto / 100, 2, '.','');
+        $total_novo = $total-$novo_desc;
+        return Response::json(array(['desconto'=>$venda,'total'=>$total2,'novo_desc'=>$novo_desc]));
 
     }
-
-
-
 }

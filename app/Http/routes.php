@@ -103,7 +103,11 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     'as' => 'cozinha.detalhes',
     'uses' => 'CozinhaController@getCozinhaDetalhes'
     ]);
-
+    Route::get('pagina', [
+    'as' => 'pedidos.pagina',
+    'uses' => 'CozinhaController@PaginacaoPedidos'
+    ]);
+    
     Route::get('cozinha_dashboard','CozinhaController@dashboard');
     Route::get('pedidos_pendentes','CozinhaController@getPendentes');
     Route::get('pedidos_pendentes_hoje','CozinhaController@getPendentesHoje');
@@ -210,7 +214,8 @@ Route::any('finalizar_cardapio', [
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
-            Route::any('troco/{id_pedido?}/{troco?}/{entrada?}', [
+            ////Parametro Atualizado Venda
+            Route::any('troco/{id_pedido?}/{troco?}/{entrada?}/{desconto?}/{total_n?}/{troco_n?}', [
                 'as' => 'troco.salvar',
                 'uses' => 'AdminController@salvar_Troco'
             ]);
@@ -419,5 +424,10 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
             Route::delete('admin/cliente/{id}/deletar', [
                 'as' => 'admin.cliente.deletar',
                 'uses' => 'AdminController@deletarCliente'
+            ]);
+            ///////Desconto Venda
+            Route::get('desconto_venda/{id?}', [
+                'as' => 'desconto',
+                'uses' => 'AdminController@DescontoVenda'
             ]);
 });
