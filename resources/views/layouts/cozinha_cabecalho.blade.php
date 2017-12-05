@@ -51,17 +51,17 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('pedidos_pendentes')}}">
+                            <a href="{{url('pedidos_pendentes?data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
                                 Pedidos Pendentes
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('pedidos_andamento')}}">
+                            <a href="{{url('pedidos_andamento?data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
                                 Pedidos em Andamento
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('pedidos_pronto')}}">
+                            <a href="{{url('pedidos_pronto?data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
                                 Pedidos Prontos
                             </a>
                         </li>
@@ -84,9 +84,10 @@
         </div>
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <script src="{{asset('bootstrap/js/jquery.min.js')}}"></script>
+        <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
+        <script type='text/javascript' src="{{ asset('bootstrap/js/jquery-ui.js') }}"></script>
         <script src="{{asset('bootstrap/js/ie10-viewport-bug-workaround.js')}}"></script>
         <script src="{{asset('bootstrap/js/lightbox.js')}}"></script>
-        <script src="{{asset('bootstrap/js/bootstrap.min.js')}}"></script>
         <script src="{{asset('bootstrap/js/jquery.paginate.js')}}"></script>
     </body>
 </html>

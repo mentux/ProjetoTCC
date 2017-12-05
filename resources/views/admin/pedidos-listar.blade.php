@@ -1,21 +1,36 @@
 @extends('layouts.admin')
 
 @section('conteudo')
-@if($tipoVisao == 'Todos' OR $tipoVisao == 'Todos os pedidos de hoje')
-<a class="btn btn-primary" href="{{url('todosHoje')}}">Hoje</a>
-<a class="btn btn-primary" href="{{route('admin.pedidos')}}">Todos</a>
-@elseif($tipoVisao == 'Pagos' OR $tipoVisao == 'Pagos hoje' )
-<a class="btn btn-primary" href="{{url('pagosHoje')}}">Hoje</a>
-<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=pagos')}}">Todos</a>
-@elseif($tipoVisao == 'Finalizados/Enviados' OR $tipoVisao == 'Finalizados/Enviados Hoje')
-<a class="btn btn-primary" href="{{url('enviadosHoje')}}">Hoje</a>
-<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=finalizados')}}">Todos</a>
-@elseif($tipoVisao == 'Não Pagos' OR $tipoVisao == 'Não Pagos hoje')
-<a class="btn btn-primary" href="{{url('pendentesHoje')}}">Hoje</a>
-<a class="btn btn-primary" href="{{route('admin.pedidos', '?status=nao-pagos')}}">Todos</a>
-@endif
-
-<h2>Pedidos - {{$tipoVisao}} - {{$pedidos->count()}} </h2>
+<script type='text/javascript' src="{{ asset('bootstrap/js/jquery-ui.js') }}"></script>
+<link href="{{ asset('bootstrap/css/jquery-ui.css') }}" rel="stylesheet">
+  <script>
+  $( function() {
+    var dates = $('.datepickers').datepicker({ dateFormat: 'dd/mm/yy' }).val();
+  });
+  </script> 
+<h2>Pedidos - {{$tipoVisao}} @if(isset($pedidos))- {{$pedidos->count()}} @endif</h2>
+<form action="" method="GET">
+    <div class="form-group">
+        @if(!\Request::has('status'))
+        @elseif($tipoVisao == 'Não Pagos')
+        <input id="1" type="hidden" name="status" value="nao-sdasdasdass">
+        @elseif($tipoVisao == 'Pagos')
+        <input id="2" type="hidden" name="status" value="pagos">
+        @else
+        <input id="3" type="hidden" name="status" value="finalizados">
+        @endif
+        <label class="control-label">Data Inicial</label>
+         <input placeholder="dia/mes/ano"  type="text" class="form-control datepickers" name="data_inicial" value="">
+    </div>
+    <div class="form-group">
+        <label class="control-label">Data Final</label>
+         <input placeholder="dia/mes/ano" type="text" class="form-control datepickers" name="data_final" value="">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Pesquisar</button>
+    </div>
+</form>
+@if(isset($pedidos))
 <table class="table table-striped">
     <thead>
         <tr>
@@ -71,7 +86,7 @@
                     {{ Form::open (['route' => ['admin.pedido.pago', $pedido->id_venda], 'method' => 'PUT']) }}
                         {{ Form::submit('Baixa de Pagamento', ['class'=>'btn btn-success btn-sm col-sm-12']) }}
                     {{ Form::close() }}
-                @endif
+                @endif é pq quando vc acessa essas listagens,ele manda as infos por get,por isso tem um segundo if la,se vc tirar,da erro dizendo que as datas iniciais e finais estao mandando vazio,nao sei pq da isso,ele ta mandando get toda hora nn seria post ? post perde os parametros de busca put?nao testei,mas deve ser mesma coisa,pq vc ta mandando info
                 @if ($pedido->pago && $pedido->enviado == false)
                     {{ Form::open (['route' => ['admin.pedido.finalizado', $pedido->id_venda], 'method' => 'PUT']) }}
                         {{ Form::submit('Marcar Finalizado', ['class'=>'btn btn-warning btn-sm col-sm-12']) }}
@@ -91,5 +106,27 @@
         @endforelse
     </tbody>
 </table>
-{{ $pedidos->render() }}
+@endif
+@if(isset($pedidos))
+
+@if(!\Request::has('status'))
+
+{{ $pedidos->appends(["data_inicial" => $_REQUEST['data_inicial'], "data_final" => $_REQUEST['data_final']])->links() }}
+
+@elseif(\Request::has('status') == 'nao-pagos')
+
+{{ $pedidos->appends(["status"=>'nao-pagos',"data_inicial" => $_REQUEST['data_inicial'], "data_final" => $_REQUEST['data_final']])->links() }}
+
+@elseif(\Request::has('status') == 'pagos')
+
+{{ $pedidos->appends(["status"=>'pagos',"data_inicial" => $_REQUEST['data_inicial'], "data_final" => $_REQUEST['data_final']])->links() }}
+
+@else
+
+{{ $pedidos->appends(["status"=>'finalizados',"data_inicial" => $_REQUEST['data_inicial'], "data_final" => $_REQUEST['data_final']])->links() }}
+
+@endif
+
+@endif
+
 @stop

@@ -52,23 +52,23 @@
                             </a>
                         </li>-->
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos')}}">
-                                Todos os Pedidos
+                            <a href="{{url('admin/pedidos/?data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Todos os pedidos
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=nao-pagos')}}">
-                                Pedidos Pendentes de Pagamento
+                            <a href="{{route('admin.pedidos', '?status=nao-pagos&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos pendentes de pagamento
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=pagos')}}">
-                                Pedidos Pagos
+                            <a href="{{route('admin.pedidos', '?status=pagos&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos pagos
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=finalizados')}}">
-                                Pedidos Finalizados
+                            <a href="{{route('admin.pedidos', '?status=finalizados&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos finalizados
                             </a>
                         </li>
                         <li class="list-group-item">

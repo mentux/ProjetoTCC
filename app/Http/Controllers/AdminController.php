@@ -61,27 +61,97 @@ class AdminController extends Controller {
         return view('admin.perfil');
     }
     
-    public function getPedidos(Request $req, $id = null) {
-        //alterado aqui 13/10 19:38
+    public function getPedidos(Request $req, $id = null){
         if ($id == null) {
+            $data_inicial = null;
+            $data_final = null;
             if ($req->has('status') == false) {
                 $models['tipoVisao'] = 'Todos';
-                $models['pedidos'] = Venda::orderBy('data_venda','DESC')->paginate(10);
-            } else {
-                if ($req->status == 'nao-pagos') {
-                    $models['tipoVisao'] = 'Não Pagos';
-                    $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','DESC')->paginate(10);
-                } else if ($req->status == 'pagos') {
-                    $models['tipoVisao'] = 'Pagos';
-                    $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','DESC')->paginate(10);
-                } else if ($req->status == 'finalizados') {
-                    $models['tipoVisao'] = 'Finalizados/Enviados';
-                    $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','DESC')->paginate(10);
+                if($_SERVER['REQUEST_METHOD'] == 'GET'){
+                $this->validate($req,[
+                    'data_inicial'=>'required|date_format:d/m/Y',
+                    'data_final'=>'required|date_format:d/m/Y',
+                ],[
+                    'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                    'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    'data_final.required'=>'É Nescessário Colocar a Data Final',
+                    'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                ]);
+                
+                $models['pedidos'] = Venda::orderBy('data_venda','ASC')->where('data_venda','>=',$req->input('data_inicial'))->where('data_venda','<=',$req->input('data_final'))->where('status',3)->paginate(10);
                 }
+            }elseif($req->status == 'nao-pagos'){
+                    $models['tipoVisao'] = 'Não Pagos';
+                    if($_SERVER['REQUEST_METHOD'] == 'GET'){
+                    $this->validate($req,[
+                        'data_inicial'=>'required|date_format:d/m/Y',
+                        'data_final'=>'required|date_format:d/m/Y',
+                        'status'=>'in:nao-pagos'
+                    ],[
+                        'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                        'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                        'data_final.required'=>'É Nescessário Colocar a Data Final',
+                        'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    ]);
+                        $data_inicial = str_replace(' ', '', $req->input('data_inicial'));
+                        $data_final =   str_replace(' ', '', $req->input('data_final'));
+                        $req->status = $req->input('status');
+                        if($data_inicial != '' AND $data_final != ''){
+                        $models['pedidos'] = Venda::where('pago',null)->orderBy('data_venda','ASC')->where('data_venda','>=',$data_inicial)
+                    ->where('data_venda','<=',$data_final)->where('status',3)->paginate(10);
+                        }
+
+                    }
+
+            }elseif($req->status == 'pagos'){
+                $models['tipoVisao'] = 'Pagos';
+                    if($_SERVER['REQUEST_METHOD'] == 'GET'){
+                       $this->validate($req,[
+                        'data_inicial'=>'required|date_format:d/m/Y',
+                        'data_final'=>'required|date_format:d/m/Y',
+                    ],[
+                        'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                        'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                        'data_final.required'=>'É Nescessário Colocar a Data Final',
+                        'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    ]);
+                        $data_inicial = str_replace(' ', '', $req->input('data_inicial'));
+                        $data_final =   str_replace(' ', '', $req->input('data_final'));
+                        $req->status = $req->input('status');
+                        if($data_inicial != '' AND $data_final != ''){
+                            $models['pedidos'] = Venda::where('pago',1)->orderBy('data_venda','ASC')->where('data_venda','>=',$data_inicial)
+                    ->where('data_venda','<=',$data_final)->where('status',3)->paginate(10);
+                        }
+                    }
+            }elseif($req->status == 'finalizados'){
+                $models['tipoVisao'] = 'Finalizados';
+                    if($_SERVER['REQUEST_METHOD'] == 'GET'){
+                        $this->validate($req,[
+                        'data_inicial'=>'required|date_format:d/m/Y',
+                        'data_final'=>'required|date_format:d/m/Y',
+                    ],[
+                        'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                        'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                        'data_final.required'=>'É Nescessário Colocar a Data Final',
+                        'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    ]);
+                        $data_inicial = str_replace(' ', '', $req->input('data_inicial'));
+                        $data_final =   str_replace(' ', '', $req->input('data_final'));
+                        $req->status = $req->input('status');
+                        if($data_inicial != '' AND $data_final != ''){
+                            $models['pedidos'] = Venda::where('enviado',1)->orderBy('data_venda','ASC')->where('data_venda','>=',$data_inicial)
+                            ->where('data_venda','<=',$data_final)->where('status',3)->paginate(10);
+                        }
+                    }       
+            }else{ 
+                return redirect()->back();
             }
             return view('admin.pedidos-listar', $models);
         }
+
         $models['pedido'] = Venda::find($id);
+        \Session::put('id_pedido',$models['pedido']->id_venda);
+        $models['pagseguro'] = $this->checkout();
         return view('admin.pedido-detalhes', $models);
     }
     

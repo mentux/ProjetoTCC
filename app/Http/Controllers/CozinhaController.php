@@ -47,33 +47,62 @@ class CozinhaController extends Controller{
         $prontos = Venda::where('status',3)->where('data_venda',$data_hoje)->paginate(1);
         return Response::json(array(["pendente"=>$pendente,"andamento"=>$andamento,"prontos"=>$prontos]));
     }
-	public function getPendentes(){
-		$venda = Venda::orderBy('id_venda','DESC')->where('status',1)->paginate(5);
-		return view('frente.cozinha.pedido',['venda'=>$venda]);
-	}
-    public function getPendentesHoje(){
-        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',1)->paginate(5);
+	public function getPendentes(Request $request){
+        $venda = null;
+        if($_SERVER['REQUEST_METHOD'] == 'GET'){
+            $this->validate($request,[
+                    'data_inicial'=>'required|date_format:d/m/Y',
+                    'data_final'=>'required|date_format:d/m/Y',
+                ],[
+                    'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                    'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    'data_final.required'=>'É Nescessário Colocar a Data Final',
+                    'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                ]);
+            $data_inicial = $request->input('data_inicial') ? $request->input('data_inicial') : \Carbon\Carbon::today()->format('d/m/Y');
+            $data_final = $request->input('data_final') ? $request->input('data_final') : \Carbon\Carbon::today()->format('d/m/Y');;
+            $venda = Venda::orderBy('id_venda','DESC')->where('data_venda','>=',$data_inicial)->where('data_venda','<=',$data_final)->where('status',1)->paginate(10);
+        }
         return view('frente.cozinha.pedido',['venda'=>$venda]);
     }
-	public function getAndamentos(){
-		$venda = Venda::orderBy('id_venda','DESC')->where('status',2)->paginate(5);
-		return view('frente.cozinha.pedido',['venda'=>$venda]);
-	}
-    public function getAndamentosHoje(){
-        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y');
-        $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',2)->paginate(5);
+
+    public function getAndamentos(Request $request){
+        $venda = null;
+        if($_SERVER['REQUEST_METHOD'] == 'GET'){
+            $this->validate($request,[
+                    'data_inicial'=>'required|date_format:d/m/Y',
+                    'data_final'=>'required|date_format:d/m/Y',
+                ],[
+                    'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                    'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    'data_final.required'=>'É Nescessário Colocar a Data Final',
+                    'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                ]);
+            $data_inicial = $request->input('data_inicial') ? $request->input('data_inicial') : \Carbon\Carbon::today()->format('d/m/Y');
+            $data_final = $request->input('data_final') ? $request->input('data_final') : \Carbon\Carbon::today()->format('d/m/Y');;
+             $venda = Venda::orderBy('id_venda','DESC')->where('data_venda','>=',$data_inicial)->where('data_venda','<=',$data_final)->where('status',2)->paginate(10);
+        }
         return view('frente.cozinha.pedido',['venda'=>$venda]);
     }
-	public function getProntos(){
-		$venda = Venda::orderBy('id_venda','DESC')->where('status',3)->paginate(5);
-		return view('frente.cozinha.pedido',['venda'=>$venda]);
-	}
-    public function getProntosHoje(){
-        $data_hoje = \Carbon\Carbon::today()->parse()->format('d/m/Y : H:i');
-        $venda = Venda::orderBy('id_venda','DESC')->where('data_venda',$data_hoje)->where('status',3)->paginate(5);
+    public function getProntos(Request $request){
+        $venda = null;
+        if($_SERVER['REQUEST_METHOD'] == 'GET'){
+            $this->validate($request,[
+                    'data_inicial'=>'required|date_format:d/m/Y',
+                    'data_final'=>'required|date_format:d/m/Y',
+                ],[
+                    'data_inicial.required'=>'É Nescessário Colocar a Data Inicial',
+                    'data_inicial.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                    'data_final.required'=>'É Nescessário Colocar a Data Final',
+                    'data_final.date_format'=>'O Formato da Data deve ser dia/mes/ano',
+                ]);
+            $data_inicial = $request->input('data_inicial') ? $request->input('data_inicial') : \Carbon\Carbon::today()->format('d/m/Y');
+            $data_final = $request->input('data_final') ? $request->input('data_final') : \Carbon\Carbon::today()->format('d/m/Y');;
+             $venda = Venda::orderBy('id_venda','DESC')->where('data_venda','>=',$data_inicial)->where('data_venda','<=',$data_final)->where('status',3)->paginate(10);
+        }
         return view('frente.cozinha.pedido',['venda'=>$venda]);
     }
+
 	public function putAndamento(Request $request, $id) {
 
         
