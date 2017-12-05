@@ -220,7 +220,7 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'uses' => 'AdminController@salvar_Troco'
             ]);
 
-            Route::get('logout_admin', [
+            Route::get('logout_admin/{id}', [
                 'as'   => 'logout.admin',
                 'uses' => 'AdminController@logout_admin'
             ]);

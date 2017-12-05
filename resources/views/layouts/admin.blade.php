@@ -76,9 +76,15 @@
                                 Clientes
                             </a>
                         </li>
+                        @if(session('admin') == '')
                         <li class="list-group-item">
-                            <a href="{{url('logout_admin')}}">Sair</a>
+                            <a href="{{url('logout_admin_caixa',\Session::get('id_admin_caixa'))}}">Sair</a>
                         </li>
+                        @else
+                        <li class="list-group-item">
+                            <a href="{{url('logout_admin',\Session::get('id'))}}">Sair</a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="col-lg-10 col-md-10">

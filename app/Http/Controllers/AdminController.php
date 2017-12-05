@@ -16,14 +16,21 @@ use Illuminate\Support\Facades\Response;
 
 class AdminController extends Controller {
 
-    public function logout_admin(){
+    public function logout_admin($id){
+        if($id != \Session::get('id')){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }elseif($id == \Session::get('id') ){
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
         \Session::forget('admin');
         \Session::forget('id');
         \Session::forget('role');
         \Session::forget('nome');
-        return redirect('login');
+        \Session::flush();
+        return redirect('login'); 
+        }  
     }
-
     public function getDashboard() {
             $models['qtdePedidos']['total'] = Venda::count();
             $models['qtdePedidos']['pendentes-pagamento'] = Venda::naoPagas()->count();
