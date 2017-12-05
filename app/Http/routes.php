@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth']], function () {
 Route::any('/login','LoginController@login_form');
 ////////Rotas do usuario de cozinha
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
-    Route::get('logout_cozinha','LoginController@logout');
+    Route::get('logout_cozinha/{id}','CozinhaController@logout');
 
     Route::get('cozinha_pedido_detalhes/{id}', [
     'as' => 'cozinha.detalhes',

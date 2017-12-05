@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{url('logout_cozinha')}}">
+                            <a href="{{url('logout_cozinha',\Session::get('id'))}}">
                                 Logout
                             </a>
                         </li>

@@ -9,9 +9,25 @@ use Shoppvel\Models\VendaItem;
 use Illuminate\Support\Facades\Response;
 use DB;
 use DateTime;
+use Shoppvel\User;
 
 
 class CozinhaController extends Controller{
+
+    public function logout($id){
+        if($id != \Session::get('id')){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }elseif($id == \Session::get('id')){
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
+        \Session::forget('cozinha');
+        \Session::forget('id');
+        \Session::forget('role');
+        \Session::forget('nome');
+        return redirect('login');
+        }
+    }
 
     public function getCozinhaDetalhes($id){
         $venda = Venda::find($id);
