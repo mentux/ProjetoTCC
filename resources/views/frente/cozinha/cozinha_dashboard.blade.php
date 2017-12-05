@@ -51,7 +51,7 @@
                             <tr class="{{$a->id_venda}}">
                                 <td>{{$a->id_venda}}</td>
                                 <td>{{$a->mesa->numero}}</td>
-                                <td><button class='btn btn-primary btn-xs detalhes' value="{{$a->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
+                                <td><button class='btn btn-primary btn-xs detalhes' value="{{$a->id_venda}}" data-toggle="modal" data-target="#myModal" onclick="zeraTime()">Detalhes</button></td>
                             </tr>
                         </tbody>
                         @endforeach
@@ -80,7 +80,7 @@
                         <tbody class='pron'>
                             <td>{{$pron->id_venda}}</td>
                             <td>{{$pron->mesa->numero}}</td>
-                            <td><button class='btn btn-primary btn-xs detalhes' value="{{$pron->id_venda}}" data-toggle="modal" data-target="#myModal" >Detalhes</button></td>
+                            <td><button class='btn btn-primary btn-xs detalhes' value="{{$pron->id_venda}}" data-toggle="modal" data-target="#myModal" onclick="zeraTime()">Detalhes</button></td>
                         </tbody>
                         @endforeach
                     </table>
@@ -272,7 +272,7 @@ $(function() {
                 if($('.cabecalho_mesa').empty('tr:tabela_item')){
                     $.ajax().abort();
                 }
-                if($('.novos_pendente').empty()) {
+                if($('.novos_pendente').empty('tbody:and')) {
                     $.ajax().abort();
                 }
                 $.ajax({
@@ -280,7 +280,8 @@ $(function() {
                     url: '{{route("novos_pedidos_pendente")}}',
                     data: {},
                     success: function(venda) {
-                        console.log(venda);
+                        //$(".novos_pendente").empty();
+                        //$(".novos_pendente tbody").empty();
                         if($('.novos_pendente').length == 0){
                             $('.txt_pendente').removeClass('hidden');
                             $('.novos_pendente').addClass('hidden');
@@ -295,10 +296,10 @@ $(function() {
                         $(".novos_pendente").append("<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>");
                         $.each(venda[0].venda,function(key, value){
 
-                            $(".novos_pendente").append("<tbody class='pend'>" +value.id_venda+ "<tr class="+value.id_venda+">" + "<td>" + value.id_venda + "</td>" + "<td>" + value.numero+ "</td>" + "<td>" + "<button class='btn btn-primary btn-xs detalhes' value='"+ value.id_venda+" ' data-toggle='modal' data-target='#myModal'>" + 'Detalhes' + "</button>" + "</td>" + "</tr>" + "</tbody>");
+                            $(".novos_pendente").append("<tbody class='pend'>" +value.id_venda+ "<tr class="+value.id_venda+">" + "<td>" + value.id_venda + "</td>" + "<td>" + value.numero+ "</td>" + "<td>" + "<button class='btn btn-primary btn-xs detalhes' value='"+ value.id_venda+" ' data-toggle='modal' data-target='#myModal' onclick='zeraTime()'>" + 'Detalhes' + "</button>" + "</td>" + "</tr>" + "</tbody>");
                         });
                         $('.detalhes').on('click',function(){
-                            clearInterval(tid);
+                            
                             var id = $(this).attr('value');
                             if($('.itens').empty('tr:tabela_item')){
                                 $.ajax().abort();
@@ -341,6 +342,18 @@ $(function() {
                                         });
                                         $('.pendente').on("click",function(){
                                             var id = $(this).attr('value');
+                                            console.log($('.and'));
+                                            if($('.novos_pendente').size('')==0){
+                                                alert('vazio');
+                                                $('.txt_pendente').removeClass('hidden');
+                                                $('.novos_pendente').addClass('hidden');
+                                                //$('.tab').addClass('hidden');
+                                                //$('.txt_pendente').removeClass('hidden');
+                                            }else{
+                                                $('.txt_pendente').addClass('hidden');
+                                                $('.novos_pendente').removeClass('hidden');
+                                                $('.novos_pendente').attr('style', 'display: block !important');
+                                            }
                                             $.ajax({
                                                 type: "GET",
                                                 url: '{{route("status_muda_pendente")}}'+'/'+id,
@@ -362,7 +375,7 @@ $(function() {
                                                         }else{
                                                             $(".and").last().append(tr);
                                                         }
-                                                    } 
+                                                    }
                                                 },
                                             });
                                             
@@ -416,8 +429,11 @@ $(function() {
                 });
                 
             });
-        };
-        function fechar(){       
+        };   
+        function zeraTime(){
+            clearInterval(tid);
+        }
+        function fechar(){
             window.tid=setInterval(mycode,5000);    
         }
 </script>
