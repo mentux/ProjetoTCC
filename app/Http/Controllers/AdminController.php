@@ -248,6 +248,9 @@ class AdminController extends Controller {
     public function salvar_Troco($id_pedido = null,$troco = null ,$entrada = null,$desconto = null, $total_n = null, $troco_n = null){
         $consulta = Venda::where('id_venda',$id_pedido)->count();
         $entrada = str_replace(',', '.',$entrada);
+        $pedido_validacao = Venda::find($id_pedido);
+
+        
         if($desconto == ''){
             return redirect()->back()->with('mensagens-danger','Erro');
         }
@@ -259,6 +262,11 @@ class AdminController extends Controller {
         }
         if($id_pedido == ''){
             return redirect()->back()->with('mensagens-danger','Erro');
+        }
+        if($pedido_validacao->user_id == ''){
+            $desconto = 0;
+            $total_n = 0;
+            $troco_n = 0;
         }
         if(!is_numeric($desconto)) {
             return redirect()->back()->with('mensagens-danger','É necessário digitar apenas numeros no campo(Desconto)');

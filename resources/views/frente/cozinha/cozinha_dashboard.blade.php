@@ -40,7 +40,7 @@
                     @if(count($andamento) == 0)
                     <p class='text-info text-center txt_andamen'><strong>Nenhum pedido em andamento  no momento</strong></p>
                     @else
-                    <table id="andamento_pag" class="table table-responsive">
+                    <table id="andamento_pag" class="table table-responsive hidden">
                         <thead id="th_andamen">
                             <th>Pedido</th>
                             <th>Mesa</th>
@@ -207,7 +207,7 @@ $(function() {
                                             if($(".and").size('')==0){
                                                 $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" +''+ "</th>" + "</thead>" + "<tbody class='and'>" + "</tbody" + "</table>");
                                                 $(".and").append(tr);
-                                                $(".txt_andamen").remove();
+                                                $(".txt_andamen").addClass('hidden');
                                                 $(".pend").find('.'+id).remove();
                                             // Caso já contenha um Pedido, somente adiciona-o na tabela
                                             }else{
@@ -241,9 +241,9 @@ $(function() {
                                         $('.andamento').attr("class",'btn btn-success pronto');
                                         $('.pronto').text("Pronto");
                                         if($(".pron").size('')==0){
-                                            $(".pronto_tab").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>" + "<tbody class='pront_din'>" + "</tbody>" + "</table>");
+                                            $(".pronto_tab").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead class='th_andamen'>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>" + "<tbody class='pront_din'>" + "</tbody>" + "</table>");
                                             $(".pront_din").append(tr);
-                                            $(".txt_andamen").remove();
+                                            $(".txt_andamen").addClass('hidden');
                                             $(".pronto_texto").remove();
                                             $(".primei").find('.'+id).remove();
                                         }else{
@@ -275,6 +275,21 @@ $(function() {
                 if($('.novos_pendente').empty('tbody:and')) {
                     $.ajax().abort();
                 }
+
+                if($('.and').length == 1){                         
+                    $('.txt_andamen').addClass('hidden');
+                    $('#andamento_pag').removeClass('hidden');
+                    $('.tb_andamen').removeClass('hidden');
+                    $('#tb_andamen').removeClass('hidden');
+                    //$('.tab').addClass('hidden');
+                    //$('.txt_pendente').removeClass('hidden');
+                }else{
+                    $('.txt_andamen').removeClass('hidden');
+                    $('#andamento_pag').addClass('hidden');
+                    $('.tb_andamen').addClass('hidden');
+                    $('#tb_andamen').addClass('hidden');
+                    //$('#andamento_pag').attr('style', 'display: block !important');
+                }
                 $.ajax({
                     type: "GET",
                     url: '{{route("novos_pedidos_pendente")}}',
@@ -293,7 +308,7 @@ $(function() {
                             $('.novos_pendente').attr('style', 'display: block !important');
                         }
                         
-                        $(".novos_pendente").append("<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>");
+                        $(".novos_pendente").append("<thead class='pendente_thead'>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>");
                         $.each(venda[0].venda,function(key, value){
 
                             $(".novos_pendente").append("<tbody class='pend'>" +value.id_venda+ "<tr class="+value.id_venda+">" + "<td>" + value.id_venda + "</td>" + "<td>" + value.numero+ "</td>" + "<td>" + "<button class='btn btn-primary btn-xs detalhes' value='"+ value.id_venda+" ' data-toggle='modal' data-target='#myModal' onclick='zeraTime()'>" + 'Detalhes' + "</button>" + "</td>" + "</tr>" + "</tbody>");
@@ -343,15 +358,17 @@ $(function() {
                                         $('.pendente').on("click",function(){
                                             var id = $(this).attr('value');
                                             console.log($('.and'));
-                                            if($('.novos_pendente').size('')==0){
-                                                alert('vazio');
+                                            if($('.novos_pendente').length == true){
+                                                                                    
                                                 $('.txt_pendente').removeClass('hidden');
                                                 $('.novos_pendente').addClass('hidden');
+                                                $('.pendente_thead').addClass('hidden');
                                                 //$('.tab').addClass('hidden');
                                                 //$('.txt_pendente').removeClass('hidden');
                                             }else{
                                                 $('.txt_pendente').addClass('hidden');
                                                 $('.novos_pendente').removeClass('hidden');
+                                                $('.novos_pendente').empty();
                                                 $('.novos_pendente').attr('style', 'display: block !important');
                                             }
                                             $.ajax({
@@ -367,9 +384,9 @@ $(function() {
                                                         $('.pendente').attr("class",'btn btn-info andamento');
                                                         $('.andamento').text("Em Andamento");
                                                         if($(".and").size('')==0){
-                                                            $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" +''+ "</th>" + "</thead>" + "<tbody class='and'>" + "</tbody" + "</table>");
+                                                            $(".andamen").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead class='tb_andamen'>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" +''+ "</th>" + "</thead>" + "<tbody class='and'>" + "</tbody" + "</table>");
                                                             $(".and").append(tr);
-                                                            $(".txt_andamen").remove();
+                                                            $(".txt_andamen").addClass('hidden');
                                                             $(".pend").find('.'+id).remove();
                                                         // Caso já contenha um Pedido, somente adiciona-o na tabela
                                                         }else{
@@ -398,13 +415,27 @@ $(function() {
                                                     var botao_classe = '';
 
                                                     if(status_pronto == 3){
+                                                        if($('.andamen').length == true){                         
+                                                            $('.txt_andamen').removeClass('hidden');
+                                                            $('#andamento_pag').addClass('hidden');
+                                                            $('.tb_andamen').addClass('hidden');
+                                                            $('#tb_andamen').addClass('hidden');
+                                                            //$('.tab').addClass('hidden');
+                                                            //$('.txt_pendente').removeClass('hidden');
+                                                        }else{
+                                                            $('.txt_andamen').addClass('hidden');
+                                                            $('#andamento_pag').removeClass('hidden');
+                                                            $('.tb_andamen').removeClass('hidden');
+                                                            $('#tb_andamen').removeClass('hidden');
+                                                            //$('#andamento_pag').attr('style', 'display: block !important');
+                                                        }
                                                         var tr = $(".and").find('.'+id);
                                                         $('.andamento').attr("class",'btn btn-success pronto');
                                                         $('.pronto').text("Pronto");
                                                         if($(".pron").size('')==0){
                                                             $(".pronto_tab").append("<table style='display: block !important;' class='table table-responsive'>" + "<thead>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>" + "<tbody class='pront_din'>" + "</tbody>" + "</table>");
                                                             $(".pront_din").append(tr);
-                                                            $(".txt_andamen").remove();
+                                
                                                             $(".pronto_texto").remove();
                                                             $(".primei").find('.'+id).remove();
                                                         }else{
@@ -416,7 +447,7 @@ $(function() {
                                             
                                         });
                                     });
-                                    $('.itens').children().remove();
+                                    //$('.itens').children().remove();
                                     $.each(itens[0]['itens'],function(key, value){
                                     
                                     $('.itens').append("<tr class='tabela_item'>" + "<td>" + "<img style='width: 50px;' src='/uploads/"+ value.imagem_nome +"' data-lightbox='roadtrip'/>" + "</td>" +"<td>" + value.nome +  "</td>" + "<td>" + value.qtde + "</td>" + "</tr>");
@@ -436,25 +467,5 @@ $(function() {
         function fechar(){
             window.tid=setInterval(mycode,5000);    
         }
-</script>
-<script src="{{asset('bootstrap/js/jquery.paginate.js')}}"></script>
-<script type="text/javascript">
-        $(this).click('change',function(){
-            console.log($('#th_andamen').css('display', ''));
-        }); 
-        $('#andamento_pag').paginate({ 'perPage': 2 });
-        $('#andamento_pag').paginate({ 'scope': $('tbody:and') });
-        $('#andamento_pag').data('paginate').switchPage('next');
-        $('#andamento_pag').data('paginate').switchPage('prev');
-</script>
-<script src="{{asset('bootstrap/js/jquery.paginate.js')}}"></script>
-<script type="text/javascript">
-        $(this).click('change',function(){
-            console.log($('#th_pronto').css('display', ''));
-        });
-        $('#pronto_pag').paginate({ 'perPage': 2 });
-        $('#pronto_pag').paginate({ 'scope': $('tbody') });
-        $('#pronto_pag').data('paginate').switchPage('next');
-        $('#pronto_pag').data('paginate').switchPage('prev');
 </script>
 @stop
