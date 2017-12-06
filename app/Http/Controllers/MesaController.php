@@ -144,10 +144,9 @@ class MesaController extends Controller{
 
     public function ReservarMesa($id){
         $mesa = Mesa::find($id);
-        $mesa->status = 2;
+        $mesa->reservar_numero = TRUE;
         $mesa->save();
-        return redirect('/')->with('mensagens-sucesso','Mesa reservada com sucesso');
-        
+        return redirect('/')->with('mensagens-sucesso','Numero da mesa reservado');
         
     }
 
@@ -342,8 +341,37 @@ class MesaController extends Controller{
         $id = \Session::get('id_mesa');
         $mesa = Mesa::find($id);
         $mesa->status = 1;
+        $mesa->reservar_numero = FALSE;
         $mesa->save();
         return redirect('volte_sempre');
+    }
 
+    public function liberar_cardapio_form(){
+        return view('frente.form_liberar_cardapio');
+    }
+
+    public function liberar_cardapio_post(Request $request){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $this->validate($request,[
+                    'numero'=>'required|numeric',
+                ],[
+                    'numeric.required'=>'Campo obrigatório',
+                    'numeric.numeric' =>'Campo só aceita numeros',
+                ]);
+            $numero = $request->input('numero');
+            $consulta = Mesa::where('numero',$numero)->first();
+            if($consulta ==  null){
+                return redirect()->back()->with('mensagens-danger','erro');
+            }elseif($consulta->numero == $numero){
+                if($consulta->reservar_numero == TRUE){
+                    $consulta->status = 2;
+                    $consulta->save();
+                    return redirect('getmesa/'.$consulta->id_mesa)->with('mensagens-sucesso','Bem vindo ao cardápio');
+                }elseif($consulta->reservar_numero == FALSE OR $consulta->status == 1){
+                    return redirect('liberar_cardapio')->with('mensagens-danger','Erro');
+                }
+            }
+
+        }
     }
 }

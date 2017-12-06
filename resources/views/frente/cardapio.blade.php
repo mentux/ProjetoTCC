@@ -1,9 +1,20 @@
 @extends('layouts.frente-loja')
 @section('conteudo')
+<style>
+/* https://bootsnipp.com/snippets/featured/animation-loading-state   Author: Kosmom.ru*/.loading,.loading>td,.loading>th,.nav li.loading.active>a,.pagination li.loading,.pagination>li.active.loading>a,.pager>li.loading>a{
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-size: 40px 40px;
+animation: 2s linear 0s normal none infinite progress-bar-stripes;
+-webkit-animation: progress-bar-stripes 2s linear infinite;
+}
+.btn.btn-default.loading,input[type="text"].loading,select.loading,textarea.loading,.well.loading,.list-group-item.loading,.pagination>li.active.loading>a,.pager>li.loading>a{
+background-image: linear-gradient(45deg, rgba(235, 235, 235, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(235, 235, 235, 0.15) 50%, rgba(235, 235, 235, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+}
+</style>
 <br/>
     @if(\Session::get('cliente')=='')
         <div class="alert alert-info alert-dismissable text-center">
-            <strong>Ola!</strong>Gostaria de se cadastrar no nosso sistema?<br/><a class='btn btn-primary btn-sm'  href="{{url('cadastrar_cliente')}}">Cadastrar</a> <br/> Ou acessar sua conta?<br/><a href="{{url('login_cliente')}}" class='btn btn-info btn-sm'>Acessar</a> 
+            <strong>Ola!</strong>Se Você se cadastrar no nosso Sistema, Suas compras terão <strong>Desconto</strong>, Faça seu cadastro clicando no botão abaixo:<br/><a class='btn btn-primary btn-sm'  href="{{url('cadastrar_cliente')}}">Cadastrar</a> <br/> Ou acesse sua conta<br/><a href="{{url('login_cliente')}}" class='btn btn-info btn-sm'>Acessar</a> 
         </div>
     @endif
     <a class="btn btn-info" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair da mesa</a>
@@ -24,6 +35,7 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="front">
                         <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}">
+                        <a style="width:99%;" class='btn btn-info btn-lg btn-block text-center loading disabled'>Clique Aqui Para Mais Informações</a>
                     </div>
                     <div class="back">
                         <div class="caption">
@@ -50,6 +62,7 @@
             <div class="col-sm-6 col-md-4 flip" style="margin-bottom: 30px;">
                 <div class="front">
                     <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+                    <a style="width:99%;" class='btn btn-info btn-lg btn-block text-center loading disabled'>Clique Aqui Para Mais Informações</a>
                 </div>
                 <div class="back">
                     <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
@@ -176,7 +189,8 @@
 <script type="text/javascript">
     $(function(){
     $(".flip").flip({
-        trigger: 'hover'
+        axis: 'x',
+        trigger: 'click'
     });
     $(".teste").flip({
         axis: 'x',
@@ -197,7 +211,6 @@ $(function() {
         $( document ).ready(function() {
            $('.carrinho').on('click',function(){
             if($('.titulo').text('Carrinho') == false){
-                    alert('carrinho');
                     $('.titulo').text('Carrinho');
                 }
             }); 

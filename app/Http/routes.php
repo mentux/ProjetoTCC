@@ -144,6 +144,17 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     ]);
 
 });
+///Rotas para liberar o cardapio/Reservar numero e liberar cardapio
+Route::get('liberar_cardapio', [
+    'as' => 'liberar.cardapio',
+    'uses' => 'MesaController@liberar_cardapio_form'
+]);
+
+Route::post('liberar_cardapio_form_post', [
+    'as' => 'reservar.numero.form.post',
+    'uses' => 'MesaController@liberar_cardapio_post'
+]);
+
 
 //Rota onde mostra o status de andamento do pedido após a emissão do pedido
 Route::get('mesa_pedido/{id_pedido}','MesaController@MesaPedido');

@@ -40,7 +40,7 @@
                     @if(count($andamento) == 0)
                     <p class='text-info text-center txt_andamen'><strong>Nenhum pedido em andamento  no momento</strong></p>
                     @else
-                    <table id="andamento_pag" class="table table-responsive hidden">
+                    <table id="andamento_pag" class="table table-responsive">
                         <thead id="th_andamen">
                             <th>Pedido</th>
                             <th>Mesa</th>
@@ -275,21 +275,6 @@ $(function() {
                 if($('.novos_pendente').empty('tbody:and')) {
                     $.ajax().abort();
                 }
-
-                if($('.and').length == 1){                         
-                    $('.txt_andamen').addClass('hidden');
-                    $('#andamento_pag').removeClass('hidden');
-                    $('.tb_andamen').removeClass('hidden');
-                    $('#tb_andamen').removeClass('hidden');
-                    //$('.tab').addClass('hidden');
-                    //$('.txt_pendente').removeClass('hidden');
-                }else{
-                    $('.txt_andamen').removeClass('hidden');
-                    $('#andamento_pag').addClass('hidden');
-                    $('.tb_andamen').addClass('hidden');
-                    $('#tb_andamen').addClass('hidden');
-                    //$('#andamento_pag').attr('style', 'display: block !important');
-                }
                 $.ajax({
                     type: "GET",
                     url: '{{route("novos_pedidos_pendente")}}',
@@ -307,7 +292,15 @@ $(function() {
                             $('.novos_pendente').removeClass('hidden');
                             $('.novos_pendente').attr('style', 'display: block !important');
                         }
-                        
+                        if($('.and').length == true){                         
+                            $('.txt_andamen').removeClass('hidden');
+                            //$('#andamento_pag').removeClass('hidden');
+                            //$('.tb_andamen').removeClass('hidden');
+                            $('.th_andamen').addClass('hidden');
+                            //$('#tb_andamen').removeClass('hidden');
+                            //$('.tab').addClass('hidden');
+                            //$('.txt_pendente').removeClass('hidden');
+                        }
                         $(".novos_pendente").append("<thead class='pendente_thead'>" + "<th>" + 'Pedido' + "</th>"+ "<th>" + 'Mesa' + "</th>" + "<th>" + "</th>" + "</thead>");
                         $.each(venda[0].venda,function(key, value){
 
@@ -395,7 +388,20 @@ $(function() {
                                                     }
                                                 },
                                             });
-                                            
+                                            if($('.and').length == false){                      
+                                                $('.txt_andamen').removeClass('hidden');
+                                                $('#andamento_pag').addClass('hidden');
+                                                $('.tb_andamen').addClass('hidden');
+                                                $('#tb_andamen').addClass('hidden');
+                                                //$('.tab').addClass('hidden');
+                                                //$('.txt_pendente').removeClass('hidden');
+                                            }else{
+                                                $('.txt_andamen').addClass('hidden');
+                                                $('#andamento_pag').removeClass('hidden');
+                                                $('.tb_andamen').removeClass('hidden');
+                                                $('#tb_andamen').removeClass('hidden');
+                                                //$('#andamento_pag').attr('style', 'display: block !important');
+                                            }
                                         });
                                     });
                                     $(function(){
@@ -442,6 +448,20 @@ $(function() {
                                                             $(".pron").last().append(tr);
                                                         }   
                                                     }
+                                                    if($('.and').length == true){                         
+                                                            $('.txt_andamen').removeClass('hidden');
+                                                            $('#andamento_pag').addClass('hidden');
+                                                            $('.tb_andamen').addClass('hidden');
+                                                            $('#tb_andamen').addClass('hidden');
+                                                            //$('.tab').addClass('hidden');
+                                                            //$('.txt_pendente').removeClass('hidden');
+                                                        }else{
+                                                            $('.txt_andamen').addClass('hidden');
+                                                            $('#andamento_pag').removeClass('hidden');
+                                                            $('.tb_andamen').removeClass('hidden');
+                                                            $('#tb_andamen').removeClass('hidden');
+                                                            //$('#andamento_pag').attr('style', 'display: block !important');
+                                                        }
                                                 },
                                             });
                                             
