@@ -56,7 +56,7 @@ class MesaController extends Controller{
             $consulta = Mesa::where('numero',$_REQUEST['numero'])->count();
             if($consulta == 1){
                 return redirect()->back()
-               ->with('mensagens-danger', 'Erro ao Atualizar a Mesa, Já Existe!!!')
+               ->with('mensagens-danger', 'Mesa, Já Existe!!!')
                ->withInput();
             }else{
                 $mesa = new Mesa();
