@@ -146,7 +146,7 @@ class MesaController extends Controller{
         $mesa = Mesa::find($id);
         $mesa->reservar_numero = TRUE;
         $mesa->save();
-        return redirect('/')->with('mensagens-sucesso','Numero da mesa reservado');
+        return redirect('/')->with('mensagens-sucesso','Número da mesa reservado');
         
     }
 
@@ -334,6 +334,8 @@ class MesaController extends Controller{
         \Session::forget('id_cliente');
         \Session::forget('role_cliente');
         \Session::forget('nome_cliente');
+        \Session::forget('id_mesa_numero');
+        \Session::forget('mesa_numero');
         return view('frente.volte_sempre',compact('pegar_mesa'));
     }
 
@@ -347,7 +349,11 @@ class MesaController extends Controller{
     }
 
     public function liberar_cardapio_form(){
-        return view('frente.form_liberar_cardapio');
+        if(\Session::get('mesa_numero') == ''){
+        return view('frente.form_liberar_cardapio');   
+        }else{
+         return redirect('getmesa/'.\Session::get('id_mesa'));  
+        }  
     }
 
     public function liberar_cardapio_post(Request $request){
@@ -360,16 +366,16 @@ class MesaController extends Controller{
                 ]);
             $numero = $request->input('numero');
             $consulta = Mesa::where('numero',$numero)->first();
-            if($consulta ==  null){
-                return redirect()->back()->with('mensagens-danger','erro');
-            }elseif($consulta->numero == $numero){
-                if($consulta->reservar_numero == TRUE){
-                    $consulta->status = 2;
-                    $consulta->save();
-                    return redirect('getmesa/'.$consulta->id_mesa)->with('mensagens-sucesso','Bem vindo ao cardápio');
-                }elseif($consulta->reservar_numero == FALSE OR $consulta->status == 1){
-                    return redirect('liberar_cardapio')->with('mensagens-danger','Erro');
-                }
+            if($consulta == null){
+                return redirect()->back()->with('mensagens-danger','Erro');
+            }elseif($consulta->numero == $numero AND $consulta->reservar_numero == TRUE){
+                \Session::put('id_mesa_numero',$consulta->id_mesa);
+                \Session::put('mesa_numero',$consulta->numero);
+                $consulta->status = 2;
+                $consulta->save();
+                return redirect('getmesa/'.$consulta->id_mesa)->with('mensagens-sucesso','Bem vindo ao cardápio');
+            }elseif($consulta->reservar_numero == FALSE OR $consulta->status == 1){
+               return redirect('liberar_cardapio')->with('mensagens-danger','Erro');
             }
 
         }

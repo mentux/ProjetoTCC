@@ -29,7 +29,7 @@
                 {{$pedido->mesa->numero}}
             </td>
             <td>
-                {{$pedido->data_venda->format('d/m/Y : H:i')}}
+                {{$pedido->created_at->format('d/m/Y - H:i:s')}}
             </td>
             <td>
                 
@@ -125,10 +125,18 @@
                 <th></th>
                 <th class="text-center">Desconto</th>
                 <th style="margin-left: 30px;">Troco</th>
-            @elseif($pedido->user_id=='' and $pedido->pago == 1)
+            @elseif($pedido->user_id=='' and $pedido->pagseguro_transaction_id != '')
                 <th>Troco</th>
+                <th class="text-center">Desconto</th>
+                <th class="text-center">Novo Total</th>
+                <th class="text-center">Novo Troco</th>
+            @elseif($pedido->user_id =='' and $pedido->pago ==1)
+            <th>Troco</th>
             @endif
             @if($pedido->user_id =='' and $pedido->pago=='')
+                <th></th>
+                <th></th>
+                <th></th>
             @elseif($pedido->user_id !='' and $pedido->pago==1)
                 <th class="text-center ">Novo Total</th>
                 <th class="text-center ">Novo Troco</th>
@@ -330,23 +338,23 @@ $(document).ready(function () {
 function forma_pagamento_dinheiro(){
 
     if($('input[name="pagamento"]:checked').val() == '1') {
-        $('#pag_dinheiro').fadeIn();
-        $('#pag_cartao').fadeOut();
+        $('#pag_dinheiro').show();
+        $('#pag_cartao').hide();
     }
     else {
-        $('#pag_dinheiro').fadeOut();
-        $('#pag_cartao').fadeIn();
+        $('#pag_dinheiro').hide();
+        $('#pag_cartao').show();
     }
 }
 
 function forma_pagamento_cartao(){
     if($('input[name="pagamento"]:checked').val() == '2') {
-        $('#pag_cartao').fadeIn();
-        $('#pag_dinheiro').fadeOut();
+        $('#pag_cartao').show();
+        $('#pag_dinheiro').hide();
     }
     else {
-        $('#pag_dinheiro').fadeIn();
-        $('#pag_cartao').fadeOut();
+        $('#pag_dinheiro').show();
+        $('#pag_cartao').hide();
     }
 }
 </script>

@@ -197,7 +197,7 @@ Route::get('volte_sempre', [
     'uses' => 'MesaController@MesaVolteSempre'
 ]);
 //Libera a mesa quando é clicado no botão sair da mesa
-Route::get('volte_sempre_liberar/{id}', [
+Route::get('volte_sempre_liberar/{id?}', [
     'as' => 'volte.sempre.liberar',
     'uses' => 'MesaController@VolteSempreLiberar'
 ]);

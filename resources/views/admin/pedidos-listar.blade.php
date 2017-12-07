@@ -53,7 +53,7 @@
                 
             </td>
             <td>
-                {{$pedido->data_venda->format('d/m/Y : H:i')}}
+                {{$pedido->created_at->format('d/m/Y - H:i:s')}}
             </td>
             <td class="text-center">
                 {{$pedido->mesa->numero}}
