@@ -15,12 +15,12 @@ class admin {
      */
     public function handle($request, Closure $next){
         
-        if(\Session::get('admin') == false){
+        if(\Session::get('admin') != false OR \Session::get('admin/caixa')){
     
-            return redirect('login');
+            return $next($request);
+
         }
-            
-        return $next($request);
+        return redirect('login');
     }
 
 }

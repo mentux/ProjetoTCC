@@ -30,7 +30,7 @@
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\recepcao'], function(){
 Route::get('reservar_mesa/{id}','MesaController@ReservarMesa');
 Route::get('/','FrenteLojaController@getIndex');
-Route::get('logout_recepcao', 'RecepcaoController@logout_recepcao');
+Route::get('logout_recepcao/{id}', 'RecepcaoController@logout_recepcao');
 });
 //lista os produtos relacionados a categoria selecionada
 Route::get('categoria/{id?}', [
@@ -97,13 +97,17 @@ Route::group(['middleware' => ['auth']], function () {
 Route::any('/login','LoginController@login_form');
 ////////Rotas do usuario de cozinha
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
-    Route::get('logout_cozinha','LoginController@logout');
+    Route::get('logout_cozinha/{id}','CozinhaController@logout');
 
     Route::get('cozinha_pedido_detalhes/{id}', [
     'as' => 'cozinha.detalhes',
     'uses' => 'CozinhaController@getCozinhaDetalhes'
     ]);
-
+    Route::get('pagina', [
+    'as' => 'pedidos.pagina',
+    'uses' => 'CozinhaController@PaginacaoPedidos'
+    ]);
+    
     Route::get('cozinha_dashboard','CozinhaController@dashboard');
     Route::get('pedidos_pendentes','CozinhaController@getPendentes');
     Route::get('pedidos_pendentes_hoje','CozinhaController@getPendentesHoje');
@@ -115,7 +119,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
                 'as' => 'status_pendente',
                 'uses' => 'CozinhaController@putAndamento'
     ]);
-
     Route::any('muda_pendente/{id?}', [
                 'as' => 'status_muda_pendente',
                 'uses' => 'CozinhaController@putMudaPendente'
@@ -141,6 +144,17 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cozinha'], function(){
     ]);
 
 });
+///Rotas para liberar o cardapio/Reservar numero e liberar cardapio
+Route::get('liberar_cardapio', [
+    'as' => 'liberar.cardapio',
+    'uses' => 'MesaController@liberar_cardapio_form'
+]);
+
+Route::post('liberar_cardapio_form_post', [
+    'as' => 'reservar.numero.form.post',
+    'uses' => 'MesaController@liberar_cardapio_post'
+]);
+
 
 //Rota onde mostra o status de andamento do pedido após a emissão do pedido
 Route::get('mesa_pedido/{id_pedido}','MesaController@MesaPedido');
@@ -160,7 +174,7 @@ Route::any('login_cliente','ClienteController@login_cliente');
 ///////////Rotas usuário do tipo cliente
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
 
-    Route::get('logout_cliente','ClienteController@logout_cliente');
+    Route::get('logout_cliente/{id}','ClienteController@logout_cliente');
 
     Route::get('cliente/dashboard', [
         'as' => 'cliente.dashboard',
@@ -175,8 +189,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\cliente'], function(){
         'as' => 'cliente.avaliar',
         'uses' => 'ClienteController@postAvaliar'
     ]);
-
-
 });
 
 //Quando é clicado em sair da mesa,a mesa fica esperando ser reservada novamente para voltar para o cardapio
@@ -185,7 +197,7 @@ Route::get('volte_sempre', [
     'uses' => 'MesaController@MesaVolteSempre'
 ]);
 //Libera a mesa quando é clicado no botão sair da mesa
-Route::get('volte_sempre_liberar/{id}', [
+Route::get('volte_sempre_liberar/{id?}', [
     'as' => 'volte.sempre.liberar',
     'uses' => 'MesaController@VolteSempreLiberar'
 ]);
@@ -213,19 +225,28 @@ Route::any('finalizar_cardapio', [
 
 Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
 
+            ////Parametro Atualizado Venda
+            Route::get('logout_admin_caixa/{id}', [
+                'as'   => 'logout.admin.caixa',
+                'uses' => 'AdminController@logout_admin_caixa'
+            ]);
 
-    Route::any('troco/{id_pedido?}/{troco?}/{entrada?}', [
+            Route::any('troco/{id_pedido?}/{troco?}/{entrada?}/{desconto?}/{total_n?}/{troco_n?}', [
                 'as' => 'troco.salvar',
                 'uses' => 'AdminController@salvar_Troco'
-    ]);
+            ]);
 
-    Route::get('logout_admin','AdminController@logout_admin');
+            Route::get('logout_admin/{id}', [
+                'as'   => 'logout.admin',
+                'uses' => 'AdminController@logout_admin'
+            ]);
 
+            Route::get('excluir_imagem/{id}', [
+                'as'   => 'excluir.imagem',
+                'uses' => 'ProdutoController@excluir_imagem'
+            ]);
 
-    Route::get('excluir_imagem/{id}','ProdutoController@excluir_imagem');
-
-
-    Route::get('admin', [
+            Route::get('admin', [
                 'as' => 'admin',
                 'uses' => 'AdminController@getDashboard'
             ]);
@@ -246,7 +267,6 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
                 'as' => 'admin.pedidos',
                 'uses' => 'AdminController@getPedidos'
             ]);
-
             //lista todos os pedidos pendentes,pagos,enviados(finalizados), de hoje
             Route::get('todosHoje', [
                 'as' => 'admin.pedidos.hoje',
@@ -420,5 +440,45 @@ Route::group(['middleware'=>'Shoppvel\Http\Middleware\admin'], function(){
             Route::delete('admin/cliente/{id}/deletar', [
                 'as' => 'admin.cliente.deletar',
                 'uses' => 'AdminController@deletarCliente'
+            ]);
+            //////---Usuários---////////
+            Route::get('admin/usuarios', [
+                'as' => 'admin.usuarios',
+                'uses' => 'AdminController@listarUsuarios'
+            ]);
+
+            Route::any('admin/usuario/form',[
+                'as'=>'admin.usuario.form',
+                'uses'=>'AdminController@cadastrar_novo_usuario'
+            ]);
+
+            Route::any('admin/usuario/form/atualizar{id?}',[
+                'as'=>'admin.usuario.form.atualizar',
+                'uses'=>'AdminController@atualizar_usuario'
+            ]);
+
+            Route::get('admin/usuario/excluir/{id?}',[
+                'as'=>'admin.usuario.excluir',
+                'uses'=>'AdminController@excluir_user'
+            ]);
+
+            Route::delete('admin/usuario/{id?}/deletar/',[
+                'as'=>'admin.usuario.deletar',
+                'uses'=>'AdminController@deletar_user'
+            ]);
+            ///////Desconto Venda
+            Route::get('desconto_venda/{id?}', [
+                'as' => 'desconto',
+                'uses' => 'AdminController@DescontoVenda'
+            ]);
+
+            ///////////////pagseguro///////////////////
+            Route::post('/pagseguro/notification', [
+                'uses' => '\laravel\pagseguro\Platform\Laravel5\NotificationController@notification',
+                'as' => 'pagseguro.notification',
+            ]);
+            Route::get('pagseguro/checkout', [
+                'as' => 'pagseguro.checkout',
+                'uses' => 'AdminController@pagar_pagseguro'
             ]);
 });

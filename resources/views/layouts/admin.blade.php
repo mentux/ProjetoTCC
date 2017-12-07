@@ -43,7 +43,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <a href="{{route('admin.dashboard')}}">
-                                Painel de Controle
+                                Painel de controle
                             </a>
                         </li>
                         <!--<li class="list-group-item">
@@ -52,33 +52,46 @@
                             </a>
                         </li>-->
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos')}}">
-                                Todos os Pedidos
+                            <a href="{{url('admin/pedidos/?data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Todos os pedidos
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=nao-pagos')}}">
-                                Pedidos Pendentes de Pagamento
+                            <a href="{{route('admin.pedidos', '?status=nao-pagos&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos pendentes de pagamento
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=pagos')}}">
-                                Pedidos Pagos
+                            <a href="{{route('admin.pedidos', '?status=pagos&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos pagos
                             </a>
                         </li>
                         <li class="list-group-item">
-                            <a href="{{route('admin.pedidos', '?status=finalizados')}}">
-                                Pedidos Finalizados
+                            <a href="{{route('admin.pedidos', '?status=finalizados&data_inicial='.\Carbon\Carbon::today()->format('d/m/Y').'&data_final='.\Carbon\Carbon::today()->format('d/m/Y').'')}}">
+                                Pedidos finalizados
                             </a>
                         </li>
+                        @if(session('admin') != '')
                         <li class="list-group-item">
                             <a href="{{route('admin.cliente.listar')}}">
                                 Clientes
                             </a>
                         </li>
+                        @endif
                         <li class="list-group-item">
-                            <a href="{{url('logout_admin')}}">Sair</a>
+                            <a href="{{route('admin.usuarios')}}">
+                                Usuários
+                            </a>
                         </li>
+                        @if(session('admin') == '')
+                        <li class="list-group-item">
+                            <a href="{{url('logout_admin_caixa',\Session::get('id_admin_caixa'))}}">Sair</a>
+                        </li>
+                        @else
+                        <li class="list-group-item">
+                            <a href="{{url('logout_admin',\Session::get('id'))}}">Sair</a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="col-lg-10 col-md-10">

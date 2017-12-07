@@ -18,8 +18,8 @@
 				{!! Form::open(['route' => 'admin.categoria.salvar', 'class'=>'form-horizontal']) !!}
 			@endif
 
-			        {!! Form::label('categoria_id', 'Categorias', ['class'=>'col-sm-2 control-label']) !!}
-			        {!! Form::select('categoria_id', $listcategorias->lists('nome','id'),['' => 'sele'], ['class'=>'form-control', 'placeholder'=>'Categoria Principal']) !!}
+			        {!! Form::label('categoria_id', 'Categorias', ['class'=>'control-label']) !!}
+			        {!! Form::select('categoria_id', $listcategorias->lists('nome','id'),['$id' => 'selected'], ['class'=>'form-control', 'placeholder'=>'Categoria Principal']) !!}
 
 					{!! Form::label('nome', 'Categoria', ['class'=>'input-group']) !!}
 					{!! Form::input('text', 'nome', null, ['class'=>'form-control', 'autofocus', 'placeholder'=>'Nome']) !!}

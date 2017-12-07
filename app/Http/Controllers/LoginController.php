@@ -27,6 +27,7 @@ class LoginController extends Controller{
             $senha_descriptografada = Crypt::decrypt($dados->password);
             if($senha_descriptografada == $_REQUEST['password']){
                 $dados->password = Crypt::encrypt($senha_descriptografada);
+                $dados->status = 2;
                 $dados->save();
                     if($dados->role == 'cozinha'){
                     \Session::put('cozinha',$dados);
@@ -50,6 +51,14 @@ class LoginController extends Controller{
                     \Session::put('role_recepcao',$dados->role);
                     return redirect('/')->with("mensagens-sucesso",'Seja Bem vindo');    
                     }
+
+                    if($dados->role == 'admin/caixa'){
+                    \Session::put('admin/caixa',$dados);
+                    \Session::put('id_admin_caixa',$dados->id);
+                    \Session::put('nome_admin_caixa',$dados->name);
+                    \Session::put('role_admin_caixa',$dados->role);
+                    return redirect('admin/dashboard')->with("mensagens-sucesso",'Seja Bem vindo');    
+                    }
                 }else{
                    return redirect('login')->with("erro",'Login ou senha incorretos,tente novamente.'); 
                 }
@@ -60,15 +69,6 @@ class LoginController extends Controller{
         
         }
         return view('frente.login_form');
-    }
-
-
-    public function logout(){
-        \Session::forget('cozinha');
-        \Session::forget('id');
-        \Session::forget('role');
-        \Session::forget('nome');
-        return redirect('login');
     }
 		
 }

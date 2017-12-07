@@ -1,10 +1,20 @@
 @extends('layouts.frente-loja')
-
 @section('conteudo')
+<style>
+/* https://bootsnipp.com/snippets/featured/animation-loading-state   Author: Kosmom.ru*/.loading,.loading>td,.loading>th,.nav li.loading.active>a,.pagination li.loading,.pagination>li.active.loading>a,.pager>li.loading>a{
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+    background-size: 40px 40px;
+animation: 2s linear 0s normal none infinite progress-bar-stripes;
+-webkit-animation: progress-bar-stripes 2s linear infinite;
+}
+.btn.btn-default.loading,input[type="text"].loading,select.loading,textarea.loading,.well.loading,.list-group-item.loading,.pagination>li.active.loading>a,.pager>li.loading>a{
+background-image: linear-gradient(45deg, rgba(235, 235, 235, 0.15) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, rgba(235, 235, 235, 0.15) 50%, rgba(235, 235, 235, 0.15) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
+}
+</style>
 <br/>
     @if(\Session::get('cliente')=='')
         <div class="alert alert-info alert-dismissable text-center">
-            <strong>Ola!</strong>Gostaria de se cadastrar no nosso sistema?<br/><a class='btn btn-primary btn-sm'  href="{{url('cadastrar_cliente')}}">Cadastrar</a> <br/> Ou acessar sua conta?<br/><a href="{{url('login_cliente')}}" class='btn btn-info btn-sm'>Acessar</a> 
+            <strong>Ola!</strong>Se Você se cadastrar no nosso Sistema, Suas compras terão <strong>Desconto</strong>, Faça seu cadastro clicando no botão abaixo:<br/><a class='btn btn-primary btn-sm'  href="{{url('cadastrar_cliente')}}">Cadastrar</a> <br/> Ou acesse sua conta<br/><a href="{{url('login_cliente')}}" class='btn btn-info btn-sm'>Acessar</a> 
         </div>
     @endif
     <a class="btn btn-info" href="{{url('volte_sempre_liberar',\Session::get('id_mesa'))}}">Sair da mesa</a>
@@ -25,6 +35,7 @@
                 <div class="col-sm-6 col-md-4">
                     <div class="front">
                         <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto_destacado->imagem_nome)}}" alt="{{$produto_destacado->imagem_nome}}">
+                        <a style="width:99%;" class='btn btn-info btn-lg btn-block text-center loading disabled'>Clique Aqui Para Mais Informações</a>
                     </div>
                     <div class="back">
                         <div class="caption">
@@ -51,6 +62,7 @@
             <div class="col-sm-6 col-md-4 flip" style="margin-bottom: 30px;">
                 <div class="front">
                     <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
+                    <a style="width:99%;" class='btn btn-info btn-lg btn-block text-center loading disabled'>Clique Aqui Para Mais Informações</a>
                 </div>
                 <div class="back">
                     <img style='height:300px; width:300px;' src="{{asset('uploads/'.$produto->imagem_nome)}}" alt="">
@@ -92,7 +104,7 @@
         </div>
         <div class="modal-footer">
                 <p class='text-left'>Quantidade</p>
-                <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant">
+                <input style="width: 60px; margin-right: 10px;" type="numeric" value="1" name="quant" class="col-xs-1 form-control text-center quant" autocomplete="off">
                 <br/>
                 <br/>
                 <button type="submit" name="botao" value="" class="btn btn-primary btn-lg  pull-left add_carrinho" > Adicionar ao carrinho</button>
@@ -110,7 +122,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Carrinho</h4>
+            <h4 class="modal-title titulo">Carrinho</h4>
           </div>
           <div class="modal-body">
             <table style="display: block !important;" class="table table-responsive">
@@ -139,9 +151,9 @@
                         <td class="text-center quant_item col-md-6 col-sm-6 col-xs-5"> 
                              <input style="width: 27px; height: 25px; margin-right: 1px;" type="numeric" value="{{$item->qtde}}" name="quant" disabled class="col-sm-1 col-xs-1 form-control btn-xs text-center quant">
                                 
-                                <button style="margin-right: 2px; margin-left: 1px; width: 10px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 text-center increment" type="submit" value="{{$item->produto->id}}">+ </button>
+                                <button style="margin-right: 2px; margin-left: 1px; width: 10px; text-indent: -3px;" class="btn btn-primary btn-sm col-md-2 col-sm-2 col-xs-2 increment" type="submit" value="{{$item->produto->id}}"><strong style="text-indent: 50px;">+</button>
 
-                                <button name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> - </button>
+                                <button style="text-indent: -3px;" name="teste" class="btn btn-primary btn-sm col-md-1 col-sm-1 col-xs-1 decrement" type="submit" value="{{$item->produto->id}}"> - </button>
                         </td>
                         <td> 
                         <a href="{{route('remover', $item->produto->id, $item->qtde)}}" 
@@ -177,7 +189,8 @@
 <script type="text/javascript">
     $(function(){
     $(".flip").flip({
-        trigger: 'hover'
+        axis: 'x',
+        trigger: 'click'
     });
     $(".teste").flip({
         axis: 'x',
@@ -193,6 +206,15 @@ $(function() {
             'X-CSRF-Token':$('input[name="_token"]').val()
         }
     });
+        //console.log($('.titulo').size('Carrinho') ==0);
+        //Correçao bug H4 mantendo nome do produto apos click em "Mais Detalhes"
+        $( document ).ready(function() {
+           $('.carrinho').on('click',function(){
+            if($('.titulo').text('Carrinho') == false){
+                    $('.titulo').text('Carrinho');
+                }
+            }); 
+        });
         $('.getid').click(function(){
             var id = $(this).attr('value');
             $.ajax({
@@ -211,7 +233,7 @@ $(function() {
                 }else{
                   $('.avaliado').html(avaliado.toFixed(2));
                 }
-                console.log(id);
+                //console.log(id);
                 //console.log($('.add_carrinho').val());
                 //console.log(id.id);
                 },

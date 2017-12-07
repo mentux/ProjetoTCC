@@ -26,73 +26,101 @@ class MesaController extends Controller{
 
     
     function listar() {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $mesas['mesas'] = Mesa::paginate(10);
             return view('admin.mesas.mesa-listar', $mesas);
+        }
     }
-    public function mesa_form(){ 
-    	return view('admin.mesas.mesa');
+    public function mesa_form(){
+    if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{ 
+           return view('admin.mesas.mesa');
+        }
     }
     public function salvar(Request $request){
-         $this->validate($request,[
-        'numero'=>'required|numeric',
-        ],[
-                'numero.required'=>'É nescessário preencher o campo Número',
-                'numero.numeric'=>'O campo Número deve ser númerico',
-        ]);
-        if($request->numero < 0){
-            return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
-        }
-        $consulta = Mesa::where('numero',$_REQUEST['numero'])->count();
-        if($consulta == 1){
-            return redirect()->back()
-           ->with('mensagens-danger', 'Erro ao Atualizar a Mesa, Já Existe!!!')
-           ->withInput();
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
         }else{
-            $mesa = new Mesa();
-            $mesa->create($request->all());
-            \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
-            return $this->listar();
+             $this->validate($request,[
+            'numero'=>'required|numeric',
+            ],[
+                    'numero.required'=>'É nescessário preencher o campo Número',
+                    'numero.numeric'=>'O campo Número deve ser númerico',
+            ]);
+            if($request->numero < 0){
+                return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
+            }
+            $consulta = Mesa::where('numero',$_REQUEST['numero'])->count();
+            if($consulta == 1){
+                return redirect()->back()
+               ->with('mensagens-danger', 'Mesa, Já Existe!!!')
+               ->withInput();
+            }else{
+                $mesa = new Mesa();
+                $mesa->create($request->all());
+                \Session::flash('mensagens-sucesso', 'Cadastrado com Sucesso');
+                return $this->listar();
+            }
         }
     }
     function editar($id) {
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
         $mesas['mesa'] = Mesa::find($id);
             return view('admin.mesas.mesa', $mesas);
-    }
-    public function atualizar(Request $request, $id) {
-        $data = $request->all();
-        $this->validate($request,[
-        'numero'=>'required|numeric',
-        ],[
-                'numero.required'=>'É nescessário preencher o campo Número',
-                'numero.numeric'=>'O campo Número deve ser númerico',
-        ]);
-        if($request->numero < 0){
-            return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
         }
+    }
+    public function atualizar(Request $request, $id){
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            $data = $request->all();
+            $this->validate($request,[
+            'numero'=>'required|numeric',
+            ],[
+                    'numero.required'=>'É nescessário preencher o campo Número',
+                    'numero.numeric'=>'O campo Número deve ser númerico',
+            ]);
+            if($request->numero < 0){
+                return redirect()->back()->with('mensagens-danger', 'Não é possível deixar o campo Número com valor negativo.');
+            }
 
-        if(Mesa::find($id)->update($data)){
-           return redirect()->action('MesaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso!');
-        } else {
-           return redirect()->back()
-           ->with('mensagens-erro', 'Erro!!!')
-           ->withInput();
+            if(Mesa::find($id)->update($data)){
+               return redirect()->action('MesaController@listar')->with('mensagens-sucesso', 'Atualizado com Sucesso!');
+            } else {
+               return redirect()->back()
+               ->with('mensagens-erro', 'Erro!!!')
+               ->withInput();
+            }
         }
     }
     function excluir($id) {
-        $mesa = Mesa::find($id);
-        if($mesa->status == 2){
-            return redirect('admin/mesa/listar')->with('mensagens-danger','A mesa esta reservada');
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
         }else{
-            $mesa->delete();
-            \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
-            return redirect()->action('MesaController@listar');
+            $mesa = Mesa::find($id);
+            if($mesa->status == 2){
+                return redirect('admin/mesa/listar')->with('mensagens-danger','A mesa esta reservada');
+            }else{
+                $mesa->delete();
+                \Session::flash('mensagens-sucesso', 'Excluido com Sucesso');
+                return redirect()->action('MesaController@listar');
+            }
         }
         
     }
 
     public function excluir_mesa_selecionar($id){
-        $mesa = Mesa::find($id);
-        return view('admin.mesas.mesa-excluir',['mesa'=>$mesa]);
+        if(\Session::get('admin') == null){
+            return redirect('admin/dashboard')->with('mensagens-danger','Acesso negado');
+        }else{
+            $mesa = Mesa::find($id);
+            return view('admin.mesas.mesa-excluir',['mesa'=>$mesa]);
+        }
     }
 
     public function getMesaId(Request $request,$id){
@@ -116,10 +144,9 @@ class MesaController extends Controller{
 
     public function ReservarMesa($id){
         $mesa = Mesa::find($id);
-        $mesa->status = 2;
+        $mesa->reservar_numero = TRUE;
         $mesa->save();
-        return redirect('/')->with('mensagens-sucesso','Mesa reservada com sucesso');
-        
+        return redirect('/')->with('mensagens-sucesso','Número da mesa reservado');
         
     }
 
@@ -307,6 +334,8 @@ class MesaController extends Controller{
         \Session::forget('id_cliente');
         \Session::forget('role_cliente');
         \Session::forget('nome_cliente');
+        \Session::forget('id_mesa_numero');
+        \Session::forget('mesa_numero');
         return view('frente.volte_sempre',compact('pegar_mesa'));
     }
 
@@ -314,8 +343,41 @@ class MesaController extends Controller{
         $id = \Session::get('id_mesa');
         $mesa = Mesa::find($id);
         $mesa->status = 1;
+        $mesa->reservar_numero = FALSE;
         $mesa->save();
         return redirect('volte_sempre');
+    }
 
+    public function liberar_cardapio_form(){
+        if(\Session::get('mesa_numero') == ''){
+        return view('frente.form_liberar_cardapio');   
+        }else{
+         return redirect('getmesa/'.\Session::get('id_mesa'));  
+        }  
+    }
+
+    public function liberar_cardapio_post(Request $request){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $this->validate($request,[
+                    'numero'=>'required|numeric',
+                ],[
+                    'numeric.required'=>'Campo obrigatório',
+                    'numeric.numeric' =>'Campo só aceita numeros',
+                ]);
+            $numero = $request->input('numero');
+            $consulta = Mesa::where('numero',$numero)->first();
+            if($consulta == null){
+                return redirect()->back()->with('mensagens-danger','Erro');
+            }elseif($consulta->numero == $numero AND $consulta->reservar_numero == TRUE){
+                \Session::put('id_mesa_numero',$consulta->id_mesa);
+                \Session::put('mesa_numero',$consulta->numero);
+                $consulta->status = 2;
+                $consulta->save();
+                return redirect('getmesa/'.$consulta->id_mesa)->with('mensagens-sucesso','Bem vindo ao cardápio');
+            }elseif($consulta->reservar_numero == FALSE OR $consulta->status == 1){
+               return redirect('liberar_cardapio')->with('mensagens-danger','Erro');
+            }
+
+        }
     }
 }

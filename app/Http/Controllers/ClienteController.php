@@ -123,12 +123,19 @@ class ClienteController extends Controller {
         return view('frente.cliente.cadastrar_form');
     }
 
-    public function logout_cliente(){
+    public function logout_cliente($id){
+        if($id != \Session::get('id_cliente')){
+            return redirect()->back()->with('mensagens-danger','Erro');
+        }elseif($id == \Session::get('id_cliente')){
+        $user = User::find($id);
+        $user->status = 1;
+        $user->save();
         \Session::forget('cliente');
         \Session::forget('id_cliente');
         \Session::forget('role_cliente');
         \Session::forget('nome_cliente');
         return redirect('getmesa/'.\Session::get('id_mesa'));
+        }
     }
 
     public function login_cliente(Request $request){
@@ -148,6 +155,7 @@ class ClienteController extends Controller {
             $senha_descriptografada = Crypt::decrypt($dados->password);
             if($senha_descriptografada == $_REQUEST['password']){
                 $dados->password = Crypt::encrypt($senha_descriptografada);
+                $dados->status = 2;
                 $dados->save();
                 if($dados->role == 'cliente'){
                     \Session::put('cliente',$dados);
